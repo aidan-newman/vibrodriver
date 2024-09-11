@@ -3,13 +3,35 @@
   <POU Name="MAIN" Id="{3fa504f6-db2b-4889-a5d5-d9357cd86edc}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
-	coupling : BOOL;
+	axes : ARRAY[0..3] OF AXIS_REF; // [BL BR TL TR] (linked in MOTION)
+	
+	//AxisBL : AXIS_REF;
+	//AxisBR : AXIS_REF;
+	//AxisTL : AXIS_REF;
+	//AxisTR : AXIS_REF;
+	
+	exec : BOOL;
+	McMoveAbs : MC_MoveAbsolute;
+	McReset : MC_Reset;
+	McPower : MC_Power;
+	i: INT;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[
+
+FOR i := 0 TO 3 DO
+	McPower(Axis:=axes[i],Enable:= TRUE ,Enable_Positive:=TRUE,Enable_Negative:=TRUE, Override := 100);
+	McReset(Axis:=axes[i]);
+	McMoveAbs(Axis:=axes[i],Position:=1000,Velocity:=2000,Acceleration:=500,Jerk:=100000,Execute:=TRUE);
+END_FOR]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
-      <LineId Id="2" Count="0" />
+      <LineId Id="58" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="56" Count="1" />
+      <LineId Id="53" Count="0" />
+      <LineId Id="36" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
