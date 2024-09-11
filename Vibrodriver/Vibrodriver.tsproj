@@ -1634,12 +1634,13 @@ External Setpoint Generation:
 					</Vars>
 				</Axis>
 				<Axis Id="2" CreateSymbols="true" AxisType="1">
-					<Name>BR</Name>
+					<Name>AxísBR</Name>
 					<AxisPara>
+						<Dynamic DelayTime="0.006"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
 					<Encoder Name="Enc" EncType="19">
-						<EncPara MaxCount="#xffffffff"/>
+						<EncPara ScaleFactorNumerator="0.006135" MaxCount="#xffffffff"/>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -1698,7 +1699,7 @@ External Setpoint Generation:
 					</Encoder>
 					<Drive Name="Drive" DrvType="16">
 						<DrvPara MaxCount="#xffffffff" DriveControlDWord="#x00020000">
-							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
+							<Analog VeloScale="0.4577" TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
@@ -1754,6 +1755,8 @@ External Setpoint Generation:
 					</Drive>
 					<Controller Name="Ctrl" CtrType="1">
 						<CtrPara PriorControlFactor="1">
+							<PosDiffControl Range="15"/>
+							<PID PosKp="0.5"/>
 							<Observer BandWidth="20"/>
 						</CtrPara>
 					</Controller>
@@ -1773,12 +1776,13 @@ External Setpoint Generation:
 					</Vars>
 				</Axis>
 				<Axis Id="3" CreateSymbols="true" AxisType="1">
-					<Name>TL</Name>
+					<Name>AxisTL</Name>
 					<AxisPara>
+						<Dynamic DelayTime="0.006"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
 					<Encoder Name="Enc" EncType="19">
-						<EncPara MaxCount="#xffffffff"/>
+						<EncPara ScaleFactorNumerator="0.006135" MaxCount="#xffffffff"/>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -1837,7 +1841,7 @@ External Setpoint Generation:
 					</Encoder>
 					<Drive Name="Drive" DrvType="16">
 						<DrvPara MaxCount="#xffffffff" DriveControlDWord="#x00020000">
-							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
+							<Analog VeloScale="0.4577" TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
@@ -1893,6 +1897,8 @@ External Setpoint Generation:
 					</Drive>
 					<Controller Name="Ctrl" CtrType="1">
 						<CtrPara PriorControlFactor="1">
+							<PosDiffControl Range="15"/>
+							<PID PosKp="0.5"/>
 							<Observer BandWidth="20"/>
 						</CtrPara>
 					</Controller>
@@ -1912,12 +1918,13 @@ External Setpoint Generation:
 					</Vars>
 				</Axis>
 				<Axis Id="4" CreateSymbols="true" AxisType="1">
-					<Name>TR</Name>
+					<Name>AxisTR</Name>
 					<AxisPara>
+						<Dynamic DelayTime="0.006"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
 					<Encoder Name="Enc" EncType="19">
-						<EncPara MaxCount="#xffffffff"/>
+						<EncPara ScaleFactorNumerator="0.006135" MaxCount="#xffffffff"/>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -1976,7 +1983,7 @@ External Setpoint Generation:
 					</Encoder>
 					<Drive Name="Drive" DrvType="16">
 						<DrvPara MaxCount="#xffffffff" DriveControlDWord="#x00020000">
-							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
+							<Analog VeloScale="0.4577" TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
@@ -2032,6 +2039,8 @@ External Setpoint Generation:
 					</Drive>
 					<Controller Name="Ctrl" CtrType="1">
 						<CtrPara PriorControlFactor="1">
+							<PosDiffControl Range="15"/>
+							<PID PosKp="0.5"/>
 							<Observer BandWidth="20"/>
 						</CtrPara>
 					</Controller>
@@ -27449,28 +27458,7 @@ External Setpoint Generation:
 				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
 			</OwnerB>
 		</OwnerA>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^BR">
-			<OwnerB Name="TIID^Motors^BR">
-				<Link VarA="Drive^Inputs^In^nDataIn3[0]" VarB="Module 1 (CSP Mode)^CSP Inputs^Torque actual value"/>
-				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="Module 1 (CSP Mode)^CSP Inputs^Statusword"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="Module 1 (CSP Mode)^CSP Inputs^Statusword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Inputs^In^nState5" VarB="Module 1 (CSP Mode)^CSP Inputs^Mode of operation display"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="Module 1 (CSP Mode)^CSP Outputs^Controlword"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="Module 1 (CSP Mode)^CSP Outputs^Controlword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl5" VarB="Module 1 (CSP Mode)^CSP Outputs^Mode of operation"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="Module 1 (CSP Mode)^CSP Outputs^Target position"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut3[0]" VarB="Module 1 (CSP Mode)^CSP Outputs^Torque offset"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="Module 1 (CSP Mode)^CSP Inputs^Position actual value"/>
-				<Link VarA="Enc^Inputs^In^nDataIn7" VarB="Module 1 (CSP Mode)^CSP Inputs^Velocity actual value"/>
-				<Link VarA="Enc^Inputs^In^nDcInputTime" VarB="InfoData^DcInputShift"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-			</OwnerB>
-		</OwnerA>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^TL">
+		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^AxisTL">
 			<OwnerB Name="TIID^Motors^TL">
 				<Link VarA="Drive^Inputs^In^nDataIn3[0]" VarB="Module 1 (CSP Mode)^CSP Inputs^Torque actual value"/>
 				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
@@ -27491,8 +27479,29 @@ External Setpoint Generation:
 				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
 			</OwnerB>
 		</OwnerA>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^TR">
+		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^AxisTR">
 			<OwnerB Name="TIID^Motors^TR">
+				<Link VarA="Drive^Inputs^In^nDataIn3[0]" VarB="Module 1 (CSP Mode)^CSP Inputs^Torque actual value"/>
+				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
+				<Link VarA="Drive^Inputs^In^nState1" VarB="Module 1 (CSP Mode)^CSP Inputs^Statusword"/>
+				<Link VarA="Drive^Inputs^In^nState2" VarB="Module 1 (CSP Mode)^CSP Inputs^Statusword" Size="8" OffsB="8"/>
+				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
+				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
+				<Link VarA="Drive^Inputs^In^nState5" VarB="Module 1 (CSP Mode)^CSP Inputs^Mode of operation display"/>
+				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="Module 1 (CSP Mode)^CSP Outputs^Controlword"/>
+				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="Module 1 (CSP Mode)^CSP Outputs^Controlword" Size="8" OffsB="8"/>
+				<Link VarA="Drive^Outputs^Out^nCtrl5" VarB="Module 1 (CSP Mode)^CSP Outputs^Mode of operation"/>
+				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="Module 1 (CSP Mode)^CSP Outputs^Target position"/>
+				<Link VarA="Drive^Outputs^Out^nDataOut3[0]" VarB="Module 1 (CSP Mode)^CSP Outputs^Torque offset"/>
+				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="Module 1 (CSP Mode)^CSP Inputs^Position actual value"/>
+				<Link VarA="Enc^Inputs^In^nDataIn7" VarB="Module 1 (CSP Mode)^CSP Inputs^Velocity actual value"/>
+				<Link VarA="Enc^Inputs^In^nDcInputTime" VarB="InfoData^DcInputShift"/>
+				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
+				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
+			</OwnerB>
+		</OwnerA>
+		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^AxísBR">
+			<OwnerB Name="TIID^Motors^BR">
 				<Link VarA="Drive^Inputs^In^nDataIn3[0]" VarB="Module 1 (CSP Mode)^CSP Inputs^Torque actual value"/>
 				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
 				<Link VarA="Drive^Inputs^In^nState1" VarB="Module 1 (CSP Mode)^CSP Inputs^Statusword"/>
