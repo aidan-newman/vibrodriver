@@ -18,6 +18,8 @@ VAR
 	mode : INT := 2; // 0 = move abs, 1 = move rel, 2 = move vel
 	targetPos : INT := 1000;
 	targetRel : INT := 1000;
+	
+	modeOptions : ARRAY[0..3] OF STRING := ['Absolute Position', 'Relative Position', 'Velocity'];
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF startup THEN
