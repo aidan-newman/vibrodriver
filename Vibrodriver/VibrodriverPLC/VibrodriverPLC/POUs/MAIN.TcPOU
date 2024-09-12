@@ -3,35 +3,79 @@
   <POU Name="MAIN" Id="{3fa504f6-db2b-4889-a5d5-d9357cd86edc}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
-	axes : ARRAY[0..3] OF AXIS_REF; // [BL BR TL TR] (linked in MOTION)
-	
-	//AxisBL : AXIS_REF;
-	//AxisBR : AXIS_REF;
-	//AxisTL : AXIS_REF;
-	//AxisTR : AXIS_REF;
-	
-	exec : BOOL;
-	McMoveAbs : MC_MoveAbsolute;
-	McReset : MC_Reset;
-	McPower : MC_Power;
+	// [BL BR TL TR] 
+	axes : ARRAY[0..3] OF AXIS_REF; // (linked in MOTION)
+	mcResets : ARRAY [0..3] OF MC_Reset;
+	mcPowers : ARRAY[0..3] OF MC_Power;
+	mcSetPositions : ARRAY[0..3] OF MC_SetPosition;
+	mcMoveAbsolutes : ARRAY[0..3] OF MC_MoveAbsolute;
+	mcMoveRelatives : ARRAY[0..3] OF MC_MoveRelative;
+	mcMoveVelocitys : ARRAY[0..3] OF MC_MoveVelocity;
+
 	i: INT;
+	startup : BOOL := TRUE;
+	ready : BOOL := FALSE;
+	mode : INT := 2; // 0 = move abs, 1 = move rel, 2 = move vel
+	targetPos : INT := 1000;
+	targetRel : INT := 1000;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[IF startup THEN
+	FOR i := 0 TO 3 DO
+		mcResets[i](Axis:=axes[i]);
+		mcPowers[i](Axis:=axes[i], Enable:= TRUE, Enable_Positive:=TRUE, Enable_Negative:=TRUE);
+		axes[i].ReadStatus();
+	END_FOR
+END_IF
 
-FOR i := 0 TO 3 DO
-	McPower(Axis:=axes[i],Enable:= TRUE ,Enable_Positive:=TRUE,Enable_Negative:=TRUE, Override := 100);
-	McReset(Axis:=axes[i]);
-	McMoveAbs(Axis:=axes[i],Position:=1000,Velocity:=2000,Acceleration:=500,Jerk:=100000,Execute:=TRUE);
-END_FOR]]></ST>
+// if all motors powered up
+IF NOT ready THEN
+	IF mcPowers[0].Status AND mcPowers[1].Status AND mcPowers[2].Status AND mcPowers[3].Status THEN
+		ready := TRUE;
+	END_IF
+ELSE
+	FOR i := 0 TO 3 DO
+		CASE mode OF
+			0:
+				mcMoveAbsolutes[i](Axis:=axes[i], Execute:=TRUE, Position:=targetPos, Velocity:=2000, Acceleration:=500, Deceleration:=500);
+			1:
+				mcMoveRelatives[i](Axis:=axes[i], Execute:=TRUE, Distance:=targetRel, Velocity:=2000, Acceleration:=500, Deceleration:=500);
+			2:
+				mcMoveVelocitys[i](Axis:=axes[i], Execute:=TRUE, Velocity:=2000, Acceleration:=500, Deceleration:=500);
+				
+			ELSE ADSLOGSTR(msgCtrlMask:=ADSLOG_MSGTYPE_ERROR,msgFmtStr:='invalid motor run mode%s',strArg:='');
+		END_CASE
+	END_FOR
+END_IF
+
+]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
-      <LineId Id="58" Count="0" />
-      <LineId Id="42" Count="0" />
-      <LineId Id="23" Count="0" />
-      <LineId Id="56" Count="1" />
-      <LineId Id="53" Count="0" />
-      <LineId Id="36" Count="0" />
+      <LineId Id="119" Count="0" />
+      <LineId Id="134" Count="0" />
+      <LineId Id="180" Count="0" />
+      <LineId Id="130" Count="0" />
+      <LineId Id="183" Count="0" />
+      <LineId Id="135" Count="0" />
+      <LineId Id="174" Count="1" />
+      <LineId Id="136" Count="1" />
+      <LineId Id="176" Count="0" />
+      <LineId Id="138" Count="0" />
+      <LineId Id="178" Count="0" />
+      <LineId Id="131" Count="0" />
+      <LineId Id="146" Count="0" />
+      <LineId Id="156" Count="1" />
+      <LineId Id="159" Count="0" />
+      <LineId Id="161" Count="0" />
+      <LineId Id="164" Count="0" />
+      <LineId Id="166" Count="1" />
+      <LineId Id="172" Count="0" />
+      <LineId Id="170" Count="0" />
+      <LineId Id="158" Count="0" />
+      <LineId Id="147" Count="0" />
+      <LineId Id="144" Count="0" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="140" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
