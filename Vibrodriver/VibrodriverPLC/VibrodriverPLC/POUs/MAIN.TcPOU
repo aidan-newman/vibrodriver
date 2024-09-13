@@ -16,41 +16,54 @@ VAR
 	startup : BOOL := TRUE;
 	ready : BOOL := FALSE;
 	mode : INT := 2; // 0 = move abs, 1 = move rel, 2 = move vel
-	targetPos : INT := 1000;
-	targetRel : INT := 1000;
 	
-	modeOptions : ARRAY[0..3] OF STRING := ['Absolute Position', 'Relative Position', 'Velocity'];
+	togStart : BOOL := FALSE;
+	togStop : BOOL := TRUE;
+	
+	togAbsPos : BOOL := TRUE;
+	togRelPos : BOOL := FALSE;
+	togVel : BOOL := FALSE;
+	
+	txtPos : INT;
+	txtVel : INT;
+	txtAcc : INT;
+	
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF startup THEN
-	FOR i := 0 TO 3 DO
-		mcResets[i](Axis:=axes[i]);
-		mcPowers[i](Axis:=axes[i], Enable:= TRUE, Enable_Positive:=TRUE, Enable_Negative:=TRUE);
-		axes[i].ReadStatus();
-	END_FOR
-END_IF
+      <ST><![CDATA[//IF startup THEN
+//	FOR i := 0 TO 3 DO
+//		mcResets[i](Axis:=axes[i]);
+//		mcPowers[i](Axis:=axes[i], Enable:= TRUE, Enable_Positive:=TRUE, Enable_Negative:=TRUE);
+//		axes[i].ReadStatus();
+//	END_FOR
+//END_IF
 
-// if all motors powered up
-IF NOT ready THEN
-	IF mcPowers[0].Status AND mcPowers[1].Status AND mcPowers[2].Status AND mcPowers[3].Status THEN
-		ready := TRUE;
-	END_IF
-ELSE
-	FOR i := 0 TO 3 DO
-		CASE mode OF
-			0:
-				mcMoveAbsolutes[i](Axis:=axes[i], Execute:=TRUE, Position:=targetPos, Velocity:=2000, Acceleration:=500, Deceleration:=500);
-			1:
-				mcMoveRelatives[i](Axis:=axes[i], Execute:=TRUE, Distance:=targetRel, Velocity:=2000, Acceleration:=500, Deceleration:=500);
-			2:
-				mcMoveVelocitys[i](Axis:=axes[i], Execute:=TRUE, Velocity:=2000, Acceleration:=500, Deceleration:=500);
+//// if all motors powered up
+//IF NOT ready THEN
+//	IF mcPowers[0].Status AND mcPowers[1].Status AND mcPowers[2].Status AND mcPowers[3].Status THEN
+//		ready := TRUE;
+//	END_IF
+//ELSE
+//	FOR i := 0 TO 3 DO
+//		CASE mode OF
+//			0:
+//				mcMoveAbsolutes[i](Axis:=axes[i], Execute:=TRUE, Position:=targetPos, Velocity:=2000, Acceleration:=500, Deceleration:=500);
+//			1:
+//				mcMoveRelatives[i](Axis:=axes[i], Execute:=TRUE, Distance:=targetRel, Velocity:=2000, Acceleration:=500, Deceleration:=500);
+//			2:
+//				mcMoveVelocitys[i](Axis:=axes[i], Execute:=TRUE, Velocity:=2000, Acceleration:=500, Deceleration:=500);
 				
-			ELSE ADSLOGSTR(msgCtrlMask:=ADSLOG_MSGTYPE_ERROR,msgFmtStr:='invalid motor run mode%s',strArg:='');
-		END_CASE
-	END_FOR
-END_IF
+//			ELSE ADSLOGSTR(msgCtrlMask:=ADSLOG_MSGTYPE_ERROR,msgFmtStr:='invalid motor run mode%s',strArg:='');
+//		END_CASE
+//	END_FOR
+//END_IF
 
-]]></ST>
+IF togStop THEN
+	togStart := FALSE;
+END_IF
+IF togStart THEN
+	togStop := FALSE;
+END_IF]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
       <LineId Id="119" Count="0" />
@@ -76,8 +89,9 @@ END_IF
       <LineId Id="158" Count="0" />
       <LineId Id="147" Count="0" />
       <LineId Id="144" Count="0" />
-      <LineId Id="141" Count="0" />
-      <LineId Id="140" Count="0" />
+      <LineId Id="252" Count="0" />
+      <LineId Id="254" Count="2" />
+      <LineId Id="258" Count="2" />
     </LineIds>
   </POU>
 </TcPlcObject>

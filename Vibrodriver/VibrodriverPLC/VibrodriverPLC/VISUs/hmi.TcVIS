@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <Visu Name="Visualization" Id="{871559c6-b0ee-4414-8ee3-84a32fbb96ef}">
+  <Visu Name="hmi" Id="{871559c6-b0ee-4414-8ee3-84a32fbb96ef}">
     <XmlArchive>
       <Data>
         <o xml:space="preserve" t="VisualObject">
           <n n="LastVisuLanguageModelEntry" />
-          <v n="UniqueIdGenerator">"3"</v>
+          <v n="UniqueIdGenerator">"5"</v>
           <o n="VisualElemList" t="VisualElemList">
             <l n="VisualElementList" t="VisualElemCollection" cet="GenericVisualElem">
               <o>
@@ -252,6 +252,10 @@
                       <v n="Value">false</v>
                     </o>
                     <o>
+                      <v n="Id">743958181L</v>
+                      <v n="Value">"MAIN.togStart"</v>
+                    </o>
+                    <o>
                       <v n="Id">3438453433L</v>
                       <v n="Value">"792"</v>
                     </o>
@@ -344,6 +348,10 @@
                     <o>
                       <v n="Id">2597686782L</v>
                       <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">743958181L</v>
+                      <v n="Value">"MAIN.togStart"</v>
                     </o>
                   </l>
                 </o>
@@ -444,6 +452,10 @@
                       <v n="Value">false</v>
                     </o>
                     <o>
+                      <v n="Id">743958181L</v>
+                      <v n="Value">"MAIN.togStop"</v>
+                    </o>
+                    <o>
                       <v n="Id">3438453433L</v>
                       <v n="Value">"174"</v>
                     </o>
@@ -536,6 +548,10 @@
                     <o>
                       <v n="Id">2597686782L</v>
                       <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">743958181L</v>
+                      <v n="Value">"MAIN.togStop"</v>
                     </o>
                   </l>
                 </o>
@@ -952,6 +968,10 @@
                           <v n="Value">false</v>
                         </o>
                         <o>
+                          <v n="Id">2477733581L</v>
+                          <v n="Value">"MAIN.txtVel"</v>
+                        </o>
+                        <o>
                           <v n="Id">823443203L</v>
                           <v n="Value">"196"</v>
                         </o>
@@ -1109,6 +1129,10 @@
                           <v n="Value">false</v>
                         </o>
                         <o>
+                          <v n="Id">2477733581L</v>
+                          <v n="Value">"MAIN.txtPos"</v>
+                        </o>
+                        <o>
                           <v n="Id">823443203L</v>
                           <v n="Value">"196"</v>
                         </o>
@@ -1264,6 +1288,10 @@
                         <o>
                           <v n="Id">2597686782L</v>
                           <v n="Value">false</v>
+                        </o>
+                        <o>
+                          <v n="Id">2477733581L</v>
+                          <v n="Value">"MAIN.txtAcc"</v>
                         </o>
                         <o>
                           <v n="Id">823443203L</v>
@@ -2067,6 +2095,10 @@
                           <v n="Id">2597686782L</v>
                           <v n="Value">false</v>
                         </o>
+                        <o>
+                          <v n="Id">743958181L</v>
+                          <v n="Value">"MAIN.togAbsPos"</v>
+                        </o>
                       </l>
                     </o>
                     <v n="VisualElementName">"PushSwitch"</v>
@@ -2165,6 +2197,10 @@
                           <v n="Id">2597686782L</v>
                           <v n="Value">false</v>
                         </o>
+                        <o>
+                          <v n="Id">743958181L</v>
+                          <v n="Value">"MAIN.togRelPos"</v>
+                        </o>
                       </l>
                     </o>
                     <v n="VisualElementName">"PushSwitch"</v>
@@ -2262,6 +2298,10 @@
                         <o>
                           <v n="Id">2597686782L</v>
                           <v n="Value">false</v>
+                        </o>
+                        <o>
+                          <v n="Id">743958181L</v>
+                          <v n="Value">"MAIN.togVel"</v>
                         </o>
                       </l>
                     </o>
@@ -2609,12 +2649,12 @@
           <o n="TextDocument" t="TextDocument">
             <a n="TextLines" cet="TextLine">
               <o>
-                <v n="Id">2L</v>
+                <v n="Id">4L</v>
                 <n n="Tag" />
                 <v n="Text">"VAR_IN_OUT"</v>
               </o>
               <o>
-                <v n="Id">3L</v>
+                <v n="Id">5L</v>
                 <n n="Tag" />
                 <v n="Text">"	"</v>
               </o>
