@@ -6,17 +6,21 @@ VAR
 	// [BL BR TL TR] 
 	axes : ARRAY[0..3] OF AXIS_REF; // (linked in MOTION)
 	
-	mcResets : ARRAY [0..3] OF MC_Reset;
-	mcPowers : ARRAY[0..3] OF MC_Power;
-	mcSetPositions : ARRAY[0..3] OF MC_SetPosition;
+	mcResets        : ARRAY[0..3] OF MC_Reset;
+	mcPowers        : ARRAY[0..3] OF MC_Power;
+	mcSetPositions  : ARRAY[0..3] OF MC_SetPosition;
 	mcMoveAbsolutes : ARRAY[0..3] OF MC_MoveAbsolute;
 	mcMoveRelatives : ARRAY[0..3] OF MC_MoveRelative;
 	mcMoveVelocitys : ARRAY[0..3] OF MC_MoveVelocity;
-	mcHalts : ARRAY[0..3] OF MC_Halt;
+	mcHalts         : ARRAY[0..3] OF MC_Halt;
+	mcGearIns       : ARRAY[1..3] OF MC_GearIn;
+	mcGearOuts      : ARRAY[1..3] OF MC_GearOut;
 
 	i: INT;
-	startup : BOOL := TRUE;
-	ready : BOOL := FALSE;
+	j: INT;
+	endIdx : INT;
+	started : BOOL := FALSE;
+	coupled : BOOL := FALSE;
 	mode : INT := 1; // 0 = move abs, 1 = move rel, 2 = move vel
 	
 	relsDone : ARRAY[0..3] OF BOOL; // keep track of if each motor is done its relative movement
@@ -29,7 +33,6 @@ VAR
 	togRelPos : BOOL := FALSE;
 	togVel : BOOL := TRUE;
 	
-	
 	prevPos : INT := 0;
 	prevVel : INT := 200;
 	prevAcc : INT := 100;
@@ -39,8 +42,6 @@ VAR
 	txtVel : INT := 200;
 	txtAcc : INT := 100;
 	txtPhs : INT := 0;
-	
-	j: INT;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
@@ -81,8 +82,18 @@ ELSIF togVel AND mode <> 2 THEN
 	mode := 2;
 END_IF
 
+// COUPLE GEARS
+IF togCoup AND NOT coupled THEN
+	mcGearIns[1](Master:=axes[0], Slave:=axes[1], Execute:=TRUE, RatioNumerator:=-1); // reverse gear BR with BL
+	mcGearIns[2](Master:=axes[0], Slave:=axes[2], Execute:=TRUE, RatioNumerator:=1); // gear TL with BL
+	mcGearIns[3](Master:=axes[2], Slave:=axes[3], Execute:=TRUE, RatioNumerator:=-1); // reverse gear TR with TL
+	endIdx := 0;
+ELSIF NOT togCoup THEN
+	endIdx := 3;
+END_IF
+
 // startup
-IF NOT ready THEN
+IF NOT started THEN
 	FOR i := 0 TO 3 DO
 		// default to OFF despite variable values (safety)
 		togStart := FALSE;
@@ -90,18 +101,22 @@ IF NOT ready THEN
 		runState := FALSE;
 		mcResets[i](Axis:=axes[i]);
 		mcPowers[i](Axis:=axes[i], Enable:= TRUE, Enable_Positive:=TRUE, Enable_Negative:=TRUE);
-		
-		// if all motors powered, set to ready
+			
+		// if all motors powered, set to started
 		IF mcPowers[0].Status AND mcPowers[1].Status AND mcPowers[2].Status AND mcPowers[3].Status THEN
-			ready := TRUE;
+			started := TRUE;
 		END_IF
 	END_FOR
 END_IF
 
 // if all motors powered up, enter main loop
-IF ready THEN
+IF started THEN
+	
 	FOR i := 0 TO 3 DO
 		axes[i].ReadStatus();
+	END_FOR
+	
+	FOR i := 0 TO endIdx DO
 		
 		// if values have been updated, unexecute relevant functions so that they can restart with correct values
 		IF (prevVel <> txtVel) OR (prevAcc <> txtAcc) THEN
@@ -112,7 +127,6 @@ IF ready THEN
 			mcMoveAbsolutes[i](Axis:=axes[i], Execute:=FALSE);
 			mcMoveRelatives[i](Axis:=axes[i], Execute:=FALSE);
 		END_IF
-		
 		
 		// check done states section 
 		IF mcMoveRelatives[i].Done  THEN
@@ -131,7 +145,7 @@ IF ready THEN
 		END_IF
 		
 		// run main operations, execute values based on various bools
-		mcSetPositions[i](Axis:= axes[i], Execute:= TRUE, Position:= 0.0);
+		mcSetPositions[i](Axis:= axes[i], Execute:= TRUE, Position:= 0);
 		mcMoveAbsolutes[i](Axis:=axes[i], Execute:=togAbsPos AND runState, Position:=txtPos, Velocity:=txtVel, Acceleration:=txtAcc, Deceleration:=txtAcc);
 		mcMoveRelatives[i](Axis:=axes[i], Execute:=togRelPos AND runState AND NOT relsDone[i], Distance:=txtPos, Velocity:=txtVel, Acceleration:=txtAcc, Deceleration:=txtAcc);
 		mcMoveVelocitys[i](Axis:=axes[i], Execute:=togVel AND runState, Velocity:=txtVel, Acceleration:=txtAcc, Deceleration:=txtAcc);
@@ -171,45 +185,31 @@ END_IF
       <LineId Id="317" Count="0" />
       <LineId Id="326" Count="0" />
       <LineId Id="320" Count="0" />
+      <LineId Id="814" Count="2" />
+      <LineId Id="833" Count="2" />
+      <LineId Id="820" Count="2" />
+      <LineId Id="813" Count="0" />
       <LineId Id="550" Count="0" />
       <LineId Id="443" Count="0" />
       <LineId Id="442" Count="0" />
       <LineId Id="445" Count="0" />
       <LineId Id="552" Count="1" />
       <LineId Id="556" Count="1" />
-      <LineId Id="446" Count="2" />
+      <LineId Id="446" Count="1" />
+      <LineId Id="830" Count="0" />
       <LineId Id="551" Count="0" />
       <LineId Id="449" Count="2" />
       <LineId Id="410" Count="0" />
       <LineId Id="444" Count="0" />
       <LineId Id="355" Count="1" />
-      <LineId Id="376" Count="0" />
-      <LineId Id="424" Count="0" />
-      <LineId Id="473" Count="1" />
-      <LineId Id="476" Count="0" />
-      <LineId Id="487" Count="1" />
-      <LineId Id="483" Count="1" />
-      <LineId Id="469" Count="2" />
-      <LineId Id="514" Count="0" />
-      <LineId Id="510" Count="0" />
-      <LineId Id="515" Count="0" />
-      <LineId Id="511" Count="0" />
-      <LineId Id="505" Count="0" />
-      <LineId Id="509" Count="0" />
-      <LineId Id="533" Count="5" />
-      <LineId Id="540" Count="0" />
-      <LineId Id="542" Count="1" />
-      <LineId Id="539" Count="0" />
-      <LineId Id="532" Count="0" />
-      <LineId Id="521" Count="0" />
-      <LineId Id="516" Count="0" />
-      <LineId Id="477" Count="0" />
-      <LineId Id="428" Count="0" />
-      <LineId Id="490" Count="1" />
-      <LineId Id="489" Count="0" />
-      <LineId Id="493" Count="0" />
-      <LineId Id="379" Count="0" />
-      <LineId Id="383" Count="0" />
+      <LineId Id="725" Count="0" />
+      <LineId Id="765" Count="0" />
+      <LineId Id="806" Count="0" />
+      <LineId Id="805" Count="0" />
+      <LineId Id="807" Count="0" />
+      <LineId Id="804" Count="0" />
+      <LineId Id="767" Count="0" />
+      <LineId Id="769" Count="34" />
       <LineId Id="353" Count="0" />
       <LineId Id="452" Count="0" />
     </LineIds>
