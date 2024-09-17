@@ -18,7 +18,7 @@ VAR
 
 	i: INT;
 	j: INT;
-	endIdx : INT;
+	endIdx : INT := 3;
 	started : BOOL := FALSE;
 	coupled : BOOL := FALSE;
 	mode : INT := 1; // 0 = move abs, 1 = move rel, 2 = move vel
@@ -82,15 +82,27 @@ ELSIF togVel AND mode <> 2 THEN
 	mode := 2;
 END_IF
 
-// COUPLE GEARS
-IF togCoup AND NOT coupled THEN
-	mcGearIns[1](Master:=axes[0], Slave:=axes[1], Execute:=TRUE, RatioNumerator:=-1); // reverse gear BR with BL
-	mcGearIns[2](Master:=axes[0], Slave:=axes[2], Execute:=TRUE, RatioNumerator:=1); // gear TL with BL
-	mcGearIns[3](Master:=axes[2], Slave:=axes[3], Execute:=TRUE, RatioNumerator:=-1); // reverse gear TR with TL
-	endIdx := 0;
-ELSIF NOT togCoup THEN
-	endIdx := 3;
+// disallow coupling while in motion
+IF (axes[0].Status.Moving OR axes[1].Status.Moving OR axes[2].Status.Moving OR axes[3].Status.Moving) AND togCoup AND NOT coupled THEN
+	togCoup := FALSE;
 END_IF
+
+// COUPLE/UNCOUPLE GEARS
+mcGearOuts[1](Slave:=axes[1], Execute:=NOT togCoup AND coupled);
+mcGearOuts[2](Slave:=axes[2], Execute:=NOT togCoup AND coupled);
+mcGearOuts[3](Slave:=axes[3], Execute:=NOT togCoup AND coupled);
+mcGearIns[1](Master:=axes[0], Slave:=axes[1], Execute:=togCoup AND NOT coupled, RatioNumerator:=-1); // reverse gear BR with BL
+mcGearIns[2](Master:=axes[0], Slave:=axes[2], Execute:=togCoup AND NOT coupled, RatioNumerator:=1); // gear TL with BL
+mcGearIns[3](Master:=axes[2], Slave:=axes[3], Execute:=togCoup AND NOT coupled, RatioNumerator:=-1); // reverse gear TR with TL
+IF (NOT togCoup AND coupled) AND (mcGearOuts[1].Done AND mcGearOuts[2].Done AND mcGearOuts[3].Done) THEN
+	endIdx := 3;
+	coupled := FALSE;
+END_IF
+IF (togCoup AND NOT coupled) AND (mcGearIns[1].InGear AND mcGearIns[2].InGear AND mcGearIns[3].InGear) THEN
+	endIdx := 0;
+	coupled := TRUE;
+END_IF
+
 
 // startup
 IF NOT started THEN
@@ -108,6 +120,7 @@ IF NOT started THEN
 		END_IF
 	END_FOR
 END_IF
+
 
 // if all motors powered up, enter main loop
 IF started THEN
@@ -185,10 +198,19 @@ END_IF
       <LineId Id="317" Count="0" />
       <LineId Id="326" Count="0" />
       <LineId Id="320" Count="0" />
-      <LineId Id="814" Count="2" />
+      <LineId Id="915" Count="4" />
+      <LineId Id="814" Count="1" />
+      <LineId Id="891" Count="0" />
+      <LineId Id="893" Count="0" />
+      <LineId Id="896" Count="0" />
       <LineId Id="833" Count="2" />
-      <LineId Id="820" Count="2" />
-      <LineId Id="813" Count="0" />
+      <LineId Id="909" Count="2" />
+      <LineId Id="908" Count="0" />
+      <LineId Id="878" Count="0" />
+      <LineId Id="881" Count="0" />
+      <LineId Id="879" Count="0" />
+      <LineId Id="904" Count="0" />
+      <LineId Id="822" Count="0" />
       <LineId Id="550" Count="0" />
       <LineId Id="443" Count="0" />
       <LineId Id="442" Count="0" />
@@ -201,6 +223,7 @@ END_IF
       <LineId Id="449" Count="2" />
       <LineId Id="410" Count="0" />
       <LineId Id="444" Count="0" />
+      <LineId Id="903" Count="0" />
       <LineId Id="355" Count="1" />
       <LineId Id="725" Count="0" />
       <LineId Id="765" Count="0" />

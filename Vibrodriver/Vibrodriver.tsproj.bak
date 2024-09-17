@@ -2040,7 +2040,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{54D122D8-D4A2-435D-82A0-6E32046A178C}" Name="VibrodriverPLC" PrjFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.plcproj" TmcFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{04790C82-D989-F8DF-7554-EB715551BBD9}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{0BAF9D1A-AA5C-B4B2-2BFB-5E3D968CBBD6}">
 					<Name>VibrodriverPLC Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -2177,7 +2177,7 @@ External Setpoint Generation:
 							<ModuleIdent>1778384906</ModuleIdent>
 							<Module Id="#x03090001" Type="CSP Mode" Class="">
 								<Name>Module 1 (CSP Mode)</Name>
-								<ImageId>408</ImageId>
+								<ImageId>405</ImageId>
 								<ModuleData>fb0000000a000068000004000000000000000000000000000000000000000000</ModuleData>
 								<PdoIndex>6656</PdoIndex>
 								<PdoIndex>5632</PdoIndex>
@@ -2252,7 +2252,7 @@ External Setpoint Generation:
 							<ModuleIdent>1778384906</ModuleIdent>
 							<Module Id="#x03090002" Type="CSP Mode" Class="">
 								<Name>Module 1 (CSP Mode)</Name>
-								<ImageId>408</ImageId>
+								<ImageId>405</ImageId>
 								<ModuleData>fb0000000a000068000004000000000000000000000000000000000000000000</ModuleData>
 								<PdoIndex>6656</PdoIndex>
 								<PdoIndex>5632</PdoIndex>
@@ -2327,7 +2327,7 @@ External Setpoint Generation:
 							<ModuleIdent>1778384906</ModuleIdent>
 							<Module Id="#x03090003" Type="CSP Mode" Class="">
 								<Name>Module 1 (CSP Mode)</Name>
-								<ImageId>408</ImageId>
+								<ImageId>405</ImageId>
 								<ModuleData>fb0000000a000068000004000000000000000000000000000000000000000000</ModuleData>
 								<PdoIndex>6656</PdoIndex>
 								<PdoIndex>5632</PdoIndex>
@@ -2402,7 +2402,7 @@ External Setpoint Generation:
 							<ModuleIdent>1778384906</ModuleIdent>
 							<Module Id="#x03090004" Type="CSP Mode" Class="">
 								<Name>Module 1 (CSP Mode)</Name>
-								<ImageId>408</ImageId>
+								<ImageId>405</ImageId>
 								<ModuleData>fb0000000a000068000004000000000000000000000000000000000000000000</ModuleData>
 								<PdoIndex>6656</PdoIndex>
 								<PdoIndex>5632</PdoIndex>
