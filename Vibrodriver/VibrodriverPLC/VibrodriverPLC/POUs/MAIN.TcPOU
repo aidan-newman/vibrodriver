@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
   <POU Name="MAIN" Id="{3fa504f6-db2b-4889-a5d5-d9357cd86edc}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
@@ -138,6 +138,7 @@ IF NOT started THEN
 	END_FOR
 END_IF
 
+simulink_testing();
 
 // if all motors powered up, enter main loop
 IF started THEN
@@ -252,6 +253,7 @@ END_IF
       <LineId Id="449" Count="2" />
       <LineId Id="410" Count="0" />
       <LineId Id="444" Count="0" />
+      <LineId Id="995" Count="0" />
       <LineId Id="903" Count="0" />
       <LineId Id="355" Count="1" />
       <LineId Id="725" Count="0" />
