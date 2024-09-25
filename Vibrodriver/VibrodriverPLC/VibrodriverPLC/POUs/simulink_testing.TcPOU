@@ -4,15 +4,20 @@
     <Declaration><![CDATA[PROGRAM simulink_testing
 
 VAR
+	// linked variables to TcCOM object
 	setTemp AT%Q*: LREAL;
 	fdbkTemp AT%Q*: LREAL;
 	power AT%I*: LREAL;
+	
+	// using function block
+	tempCtrl: FB_SimpleTempCtrl;
+	pwr : LREAL;
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[tempCtrl(fSetpointTemp:=12, fFeedbackTemp:=16, fHeaterPower => pwr);]]></ST>
     </Implementation>
     <LineIds Name="simulink_testing">
-      <LineId Id="5" Count="0" />
+      <LineId Id="13" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

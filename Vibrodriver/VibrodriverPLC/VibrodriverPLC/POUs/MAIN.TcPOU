@@ -15,20 +15,27 @@ VAR
 	mcHalts         : ARRAY[0..3] OF MC_Halt;
 	mcGearIns       : ARRAY[1..3] OF MC_GearIn;
 	mcGearOuts      : ARRAY[1..3] OF MC_GearOut;
-	mcPhaseAbs : MC_PhasingAbsolute;
+	mcPhaseAbss     : ARRAY[1..3] OF MC_PhasingAbsolute;
+	
+	readAcc : read_accelerometer;
+	
+	tempCtrl : FB_SimpleTempCtrl;
 
 	i: INT;
 	j: INT;
 	endIdx : INT := 3;
 	started : BOOL := FALSE;
 	coupled : BOOL := FALSE;
-	inPhase : BOOL := FALSE;
-	prevPhase : INT := 0;
+	inCPhase : BOOL := FALSE;
+	inUCPhase : BOOL := FALSE;
 	mode : INT := 1; // 0 = move abs, 1 = move rel, 2 = move vel
 	
 	relsDone : ARRAY[0..3] OF BOOL; // keep track of if each motor is done its relative movement
 	
+	// MAIN BOOL
 	runState : BOOL := FALSE;
+	
+	// toggles
 	togStart : BOOL := FALSE;
 	togStop : BOOL := TRUE;
 	togCoup : BOOL := FALSE;
@@ -36,33 +43,44 @@ VAR
 	togRelPos : BOOL := FALSE;
 	togVel : BOOL := TRUE;
 	
-	prevPos : INT := 0;
-	prevVel : INT := 200;
-	prevAcc : INT := 100;
-	prevPhs : INT := 0;
-	
+	// values in HMI
 	txtPos : INT := 0;
 	txtVel : INT := 200;
 	txtAcc : INT := 100;
 	txtPhs : INT := 0;
+	
+	// keep track of changes
+	prevPos : INT := txtPos;
+	prevVel : INT := txtVel;
+	prevAcc : INT := txtAcc;
+	prevPhs : INT := txtPhs;
+	
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[FOR i := 0 TO 3 DO
 	axes[i].ReadStatus();
 END_FOR
-	
+
+readAcc();
+
 // on off logic
-IF runState AND togStop THEN
-	togStart := FALSE;
-	runState := FALSE;
-ELSIF runState AND NOT togStop THEN
+// prevent turning off a button, only swapping allowed
+IF runState AND NOT togStop THEN
 	togStart := TRUE;
-ELSIF NOT runState AND togStart THEN 
-	togStop := FALSE;
-	runState := TRUE;
 ELSIF NOT runState AND NOT togStart THEN
 	togStop := TRUE;
 END_IF
+
+IF NOT runState AND togStart THEN 
+	togStop := FALSE;
+	runState := TRUE;
+END_IF
+// always have stop check last
+IF runState AND togStop THEN
+	togStart := FALSE;
+	runState := FALSE;
+END_IF
+
 
 // prevent no mode selection
 IF NOT togAbsPos AND mode = 0 THEN
@@ -88,6 +106,7 @@ ELSIF togVel AND mode <> 2 THEN
 	mode := 2;
 END_IF
 
+
 // disallow coupling while in motion
 IF (axes[0].Status.Moving OR axes[1].Status.Moving OR axes[2].Status.Moving OR axes[3].Status.Moving) AND togCoup AND NOT coupled THEN
 	togCoup := FALSE;
@@ -100,26 +119,18 @@ mcGearOuts[3](Slave:=axes[3], Execute:=NOT togCoup AND coupled);
 mcGearIns[1](Master:=axes[0], Slave:=axes[1], Execute:=togCoup AND NOT coupled, RatioNumerator:=-1); // reverse gear BR with BL
 mcGearIns[2](Master:=axes[0], Slave:=axes[2], Execute:=togCoup AND NOT coupled, RatioNumerator:=1); // gear TL with BL
 mcGearIns[3](Master:=axes[2], Slave:=axes[3], Execute:=togCoup AND NOT coupled, RatioNumerator:=-1); // reverse gear TR with TL
+
+// check if uncoupling done
 IF (NOT togCoup AND coupled) AND (mcGearOuts[1].Done AND mcGearOuts[2].Done AND mcGearOuts[3].Done) THEN
 	endIdx := 3;
 	coupled := FALSE;
 END_IF
+// check if coupling done
 IF (togCoup AND NOT coupled) AND (mcGearIns[1].InGear AND mcGearIns[2].InGear AND mcGearIns[3].InGear) THEN
 	endIdx := 0;
 	coupled := TRUE;
 END_IF
 
-// set phase master = BL slave = TL
-IF coupled THEN
-	mcPhaseAbs(Master:=axes[0], Slave:=axes[2], Execute:=NOT inPhase, PhaseShift:=txtPhs, Velocity:=txtVel+200);
-	IF mcPhaseAbs.Done THEN
-		inPhase := TRUE;
-		prevPhase := txtPhs;
-	END_IF
-	IF prevPhase <> txtPhs THEN
-		inPhase := FALSE;
-	END_IF
-END_IF
 
 // startup
 IF NOT started THEN
@@ -138,10 +149,22 @@ IF NOT started THEN
 	END_FOR
 END_IF
 
-simulink_testing();
 
 // if all motors powered up, enter main loop
 IF started THEN
+	// set phase, master = BL, slave = TL
+
+	// if uncoupled, allign the axes AT 0 phase again
+	IF runState AND coupled THEN
+		mcPhaseAbss[1](Master:=axes[0], Slave:=axes[1], Execute:=TRUE, PhaseShift:=0, Velocity:=txtVel+200); // set phase of BR w BL
+		mcPhaseAbss[2](Master:=axes[0], Slave:=axes[2], Execute:=TRUE, PhaseShift:=txtPhs, Velocity:=txtVel+200); // set phase of top w bottom
+		mcPhaseAbss[3](Master:=axes[2], Slave:=axes[3], Execute:=TRUE, PhaseShift:=0, Velocity:=txtVel+200); // set phase of TR w TL
+	ELSIF runState AND NOT coupled THEN
+		mcPhaseAbss[1](Master:=axes[0], Slave:=axes[1], Execute:=TRUE, PhaseShift:=0, Velocity:=txtVel+200);
+		mcPhaseAbss[2](Master:=axes[0], Slave:=axes[2], Execute:=TRUE, PhaseShift:=0, Velocity:=txtVel+200);
+		mcPhaseAbss[3](Master:=axes[2], Slave:=axes[3], Execute:=TRUE, PhaseShift:=0, Velocity:=txtVel+200);
+	END_IF
+	
 	
 	FOR i := 0 TO endIdx DO
 		
@@ -154,13 +177,14 @@ IF started THEN
 			mcMoveAbsolutes[i](Axis:=axes[i], Execute:=FALSE);
 			mcMoveRelatives[i](Axis:=axes[i], Execute:=FALSE);
 		END_IF
+		// if last index then set the previous values for change checks above ^
 		IF i = endIdx THEN
 			prevPos := txtPos;
 			prevVel := txtVel;
 			prevAcc := txtAcc;
 		END_IF
 		
-		// check done states section 
+		// check if relative movement is done, set to stop
 		IF mcMoveRelatives[i].Done  THEN
 			relsDone[i] := TRUE;
 			FOR j := 0 TO 3 DO
@@ -177,96 +201,39 @@ IF started THEN
 		END_IF
 		
 		// run main operations, execute values based on various bools
-		mcSetPositions[i](Axis:= axes[i], Execute:= TRUE, Position:= 0);
+		mcSetPositions[i](Axis:= axes[i], Execute:= TRUE, Position:= 0); // is this needed?
 		mcMoveAbsolutes[i](Axis:=axes[i], Execute:=togAbsPos AND runState, Position:=txtPos, Velocity:=txtVel, Acceleration:=txtAcc, Deceleration:=txtAcc);
 		mcMoveRelatives[i](Axis:=axes[i], Execute:=togRelPos AND runState AND NOT relsDone[i], Distance:=txtPos, Velocity:=txtVel, Acceleration:=txtAcc, Deceleration:=txtAcc);
 		mcMoveVelocitys[i](Axis:=axes[i], Execute:=togVel AND runState, Velocity:=txtVel, Acceleration:=txtAcc, Deceleration:=txtAcc);
 		
 		mcHalts[i](Axis:=axes[i],Execute:=NOT runState);
 	END_FOR
+	
+	// always perform halt last, nothing should ever override halt command
+//	mcHalts[1](Axis:=axes[1],Execute:=NOT runState);
+//	mcHalts[2](Axis:=axes[2],Execute:=NOT runState);
+//	mcHalts[3](Axis:=axes[3],Execute:=NOT runState);
 END_IF
 ]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
-      <LineId Id="948" Count="1" />
-      <LineId Id="403" Count="0" />
-      <LineId Id="950" Count="0" />
-      <LineId Id="252" Count="0" />
-      <LineId Id="254" Count="1" />
-      <LineId Id="290" Count="0" />
-      <LineId Id="292" Count="1" />
-      <LineId Id="258" Count="1" />
-      <LineId Id="291" Count="0" />
-      <LineId Id="295" Count="1" />
-      <LineId Id="260" Count="0" />
-      <LineId Id="301" Count="0" />
-      <LineId Id="298" Count="0" />
-      <LineId Id="297" Count="0" />
-      <LineId Id="299" Count="1" />
-      <LineId Id="547" Count="0" />
-      <LineId Id="549" Count="0" />
-      <LineId Id="306" Count="0" />
-      <LineId Id="321" Count="0" />
-      <LineId Id="323" Count="0" />
-      <LineId Id="322" Count="0" />
-      <LineId Id="308" Count="0" />
-      <LineId Id="310" Count="1" />
-      <LineId Id="324" Count="0" />
-      <LineId Id="315" Count="1" />
-      <LineId Id="314" Count="0" />
-      <LineId Id="325" Count="0" />
-      <LineId Id="318" Count="1" />
-      <LineId Id="317" Count="0" />
-      <LineId Id="326" Count="0" />
-      <LineId Id="320" Count="0" />
-      <LineId Id="915" Count="4" />
-      <LineId Id="814" Count="1" />
-      <LineId Id="891" Count="0" />
-      <LineId Id="893" Count="0" />
-      <LineId Id="896" Count="0" />
-      <LineId Id="833" Count="2" />
-      <LineId Id="909" Count="2" />
-      <LineId Id="908" Count="0" />
-      <LineId Id="878" Count="0" />
-      <LineId Id="881" Count="0" />
-      <LineId Id="879" Count="0" />
-      <LineId Id="904" Count="0" />
-      <LineId Id="921" Count="0" />
-      <LineId Id="822" Count="0" />
-      <LineId Id="934" Count="0" />
-      <LineId Id="926" Count="0" />
-      <LineId Id="929" Count="1" />
-      <LineId Id="939" Count="0" />
-      <LineId Id="931" Count="0" />
-      <LineId Id="937" Count="0" />
-      <LineId Id="932" Count="1" />
-      <LineId Id="935" Count="0" />
-      <LineId Id="550" Count="0" />
-      <LineId Id="443" Count="0" />
-      <LineId Id="442" Count="0" />
-      <LineId Id="445" Count="0" />
-      <LineId Id="552" Count="1" />
-      <LineId Id="556" Count="1" />
-      <LineId Id="446" Count="1" />
-      <LineId Id="830" Count="0" />
-      <LineId Id="551" Count="0" />
-      <LineId Id="449" Count="2" />
-      <LineId Id="410" Count="0" />
-      <LineId Id="444" Count="0" />
-      <LineId Id="995" Count="0" />
-      <LineId Id="903" Count="0" />
-      <LineId Id="355" Count="1" />
-      <LineId Id="725" Count="0" />
-      <LineId Id="804" Count="0" />
-      <LineId Id="767" Count="0" />
-      <LineId Id="769" Count="9" />
-      <LineId Id="940" Count="0" />
-      <LineId Id="944" Count="0" />
-      <LineId Id="941" Count="0" />
-      <LineId Id="943" Count="0" />
-      <LineId Id="942" Count="0" />
-      <LineId Id="779" Count="24" />
-      <LineId Id="353" Count="0" />
+      <LineId Id="1218" Count="3" />
+      <LineId Id="1442" Count="0" />
+      <LineId Id="1222" Count="60" />
+      <LineId Id="1381" Count="0" />
+      <LineId Id="1284" Count="3" />
+      <LineId Id="1380" Count="0" />
+      <LineId Id="1289" Count="23" />
+      <LineId Id="1378" Count="0" />
+      <LineId Id="1315" Count="0" />
+      <LineId Id="1385" Count="0" />
+      <LineId Id="1388" Count="1" />
+      <LineId Id="1386" Count="1" />
+      <LineId Id="1316" Count="2" />
+      <LineId Id="1326" Count="41" />
+      <LineId Id="1382" Count="1" />
+      <LineId Id="1368" Count="2" />
+      <LineId Id="1372" Count="3" />
       <LineId Id="452" Count="0" />
     </LineIds>
   </POU>
