@@ -6,19 +6,25 @@ VAR_INPUT // input inputs to function
 	// none
 END_VAR
 VAR_OUTPUT // outputs of function
-	acceleration : LREAL;
+	accX : LREAL;
+	accY : LREAL;
+	accZ : LREAL;
 END_VAR
 VAR
-	state AT %I* : UINT; // input voltage from sesnsor
+	c1Sample AT %I* : DINT; // channel 1 voltage (mV)  -  x axis
+	c2Sample AT %I* : DINT; // channel 2 voltage (mV) -  y axis (+y = down)
+	c3Sample AT %I* : DINT; // channel 3 voltage (mV) -  z axis
+	
+	// voltage sensitivity: 100 ± 5%  mV/g
+	// range: -60 g  ->  60 g
+	g : REAL := 9.80665;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-]]></ST>
+      <ST><![CDATA[accY := DINT_TO_REAL(c2Sample) / (100 * g);]]></ST>
     </Implementation>
     <LineIds Name="read_accelerometer">
-      <LineId Id="16" Count="0" />
-      <LineId Id="9" Count="0" />
+      <LineId Id="37" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

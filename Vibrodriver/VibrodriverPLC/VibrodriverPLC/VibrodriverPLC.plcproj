@@ -27,6 +27,9 @@
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\read_geophone.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\read_accelerometer.TcPOU">
       <SubType>Code</SubType>
     </Compile>

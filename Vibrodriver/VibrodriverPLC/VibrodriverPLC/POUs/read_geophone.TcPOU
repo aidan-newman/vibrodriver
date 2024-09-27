@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="read_geophone" Id="{56b7d18b-71f0-4c3f-9840-fefa8f0a6997}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK read_geophone
+VAR_INPUT
+	// none
+END_VAR
+VAR_OUTPUT
+	velX : LREAL; // left -> right
+	velY : LREAL; // back -> front
+	velZ : LREAL; // top -> bottom
+END_VAR
+VAR
+	c1Sample AT %I* : DINT; // channel 1 voltage (mV) -  z axis
+	c2Sample AT %I* : DINT; // channel 2 voltage (mV) -  y axis
+	c3Sample AT %I* : DINT; // channel 3 voltage (mV) -  x axis
+	
+	sens : REAL := 78.9; // volts per meter per second
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[velX := DINT_TO_LREAL(c3Sample) / (sens * 1000);
+velY := DINT_TO_LREAL(c2Sample) / (sens * 1000);
+velZ := DINT_TO_LREAL(c1Sample) / (sens * 1000);
+]]></ST>
+    </Implementation>
+    <LineIds Name="read_geophone">
+      <LineId Id="9" Count="0" />
+      <LineId Id="27" Count="1" />
+      <LineId Id="26" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
