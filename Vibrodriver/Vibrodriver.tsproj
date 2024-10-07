@@ -1942,12 +1942,6 @@ External Setpoint Generation:
 				<Task Id="5" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
 					<Name>PlcTask</Name>
 				</Task>
-				<Task Id="6" Priority="21" CycleTime="100000" AmsPort="351" AdtTasks="true">
-					<Name>PlcTask1</Name>
-				</Task>
-				<Task Id="7" Priority="22" CycleTime="100000" AmsPort="352" AdtTasks="true">
-					<Name>PlcTask2</Name>
-				</Task>
 				<Task Id="8" Priority="30" CycleTime="2000000" AmsPort="353" DisableFpExceptions="true" AdtTasks="true">
 					<Name>VISU_TASK</Name>
 				</Task>
@@ -3305,7 +3299,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{54D122D8-D4A2-435D-82A0-6E32046A178C}" Name="VibrodriverPLC" PrjFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.plcproj" TmcFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{CD977E35-8744-E09F-ED25-A1D19256AEF7}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{77B1BAA4-B827-B1B2-085B-14C514CCDFFB}">
 					<Name>VibrodriverPLC Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -3408,9 +3402,9 @@ External Setpoint Generation:
 							<Id>0</Id>
 							<Name>PlcTask</Name>
 							<ManualConfig>
-								<OTCID>#x02010070</OTCID>
+								<OTCID>#x02010050</OTCID>
 							</ManualConfig>
-							<Priority>22</Priority>
+							<Priority>20</Priority>
 							<CycleTime>10000000</CycleTime>
 						</Context>
 					</Contexts>
@@ -3423,7 +3417,7 @@ External Setpoint Generation:
 						</InitSymbol>
 					</InitSymbols>
 					<TaskPouOids>
-						<TaskPouOid Prio="22" OTCID="#x08502001"/>
+						<TaskPouOid Prio="20" OTCID="#x08502001"/>
 					</TaskPouOids>
 				</Instance>
 			</Project>
