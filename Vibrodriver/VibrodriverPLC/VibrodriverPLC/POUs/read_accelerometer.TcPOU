@@ -15,16 +15,36 @@ VAR
 	c2Sample AT %I* : DINT; // channel 2 voltage (mV) -  y axis (+y = down)
 	c3Sample AT %I* : DINT; // channel 3 voltage (mV) -  z axis
 	
+	// ELM3604 defined resolution:
+	// FSV (10V) / 7812500
+	
+	// under/overrange (if bit set): FSV / 8388607 
+	
+	// NOTE:
+	//	The input voltage must NOT fall below -5 V with respect TO GND, the measuring accuracy is THEN no longer
+	//	given. THIS means a measurement down TO -10 V with respect TO GND is only possible IF AT the same TIME an
+	//	offset of at least +5 V is applied, as is usual with IEPE supply.
+	
 	// voltage sensitivity: 100 ± 5%  mV/g
 	// range: -60 g  ->  60 g
 	g : REAL := 9.80665;
+	peakVal : REAL := 10;
+	maxInt : REAL := 7812500;
+	sens : REAL := 0.1; //  V/g
+	mult : REAL := g * peakVal / maxInt / sens;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[accY := DINT_TO_REAL(c2Sample) / (100 * g);]]></ST>
+      <ST><![CDATA[
+accY := DINT_TO_REAL(c2Sample) * mult; // m/s^2
+
+]]></ST>
     </Implementation>
     <LineIds Name="read_accelerometer">
+      <LineId Id="71" Count="0" />
       <LineId Id="37" Count="0" />
+      <LineId Id="69" Count="0" />
+      <LineId Id="68" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

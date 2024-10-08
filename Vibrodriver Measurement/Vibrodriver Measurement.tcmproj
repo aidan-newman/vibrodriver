@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{c00c71d1-1011-429a-92d3-69b79059fc40}</ProjectGuid>
+    <AssemblyName>Vibrodriver Measurement</AssemblyName>
+    <Name>Vibrodriver Measurement</Name>
+    <RootNamespace>Vibrodriver Measurement</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="YT Scope Project.tcscopex">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+</Project>

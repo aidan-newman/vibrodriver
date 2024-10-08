@@ -11,20 +11,28 @@ VAR_OUTPUT
 	velZ : LREAL; // top -> bottom
 END_VAR
 VAR
-	c1Sample AT %I* : DINT; // channel 1 voltage (mV) -  z axis
-	c2Sample AT %I* : DINT; // channel 2 voltage (mV) -  y axis
-	c3Sample AT %I* : DINT; // channel 3 voltage (mV) -  x axis
+	c1Sample AT %I* : DINT; // channel 1 voltage (mV) -  z axis (rods -> level)
+	c2Sample AT %I* : DINT; // channel 2 voltage (mV) -  y axis (red arrow)
+	c3Sample AT %I* : DINT; // channel 3 voltage (mV) -  x axis (yellow arrow)
 	
+	// all real since need to be converted anyway
+	peakVal : REAL := 10;
+	maxInt : REAL := 7812500;
 	sens : REAL := 78.9; // volts per meter per second
+	unitMult : REAL := 1000; // m/s to mm/s
+	mult : REAL := peakVal / maxInt / sens * unitMult;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[velX := DINT_TO_LREAL(c3Sample) / (sens * 1000);
-velY := DINT_TO_LREAL(c2Sample) / (sens * 1000);
-velZ := DINT_TO_LREAL(c1Sample) / (sens * 1000);
+      <ST><![CDATA[
+// m/s
+velX := DINT_TO_REAL(c3Sample) * mult;
+velY := DINT_TO_REAL(c2Sample) * mult;
+velZ := DINT_TO_REAL(c1Sample) * mult;
 ]]></ST>
     </Implementation>
     <LineIds Name="read_geophone">
+      <LineId Id="48" Count="1" />
       <LineId Id="9" Count="0" />
       <LineId Id="27" Count="1" />
       <LineId Id="26" Count="0" />
