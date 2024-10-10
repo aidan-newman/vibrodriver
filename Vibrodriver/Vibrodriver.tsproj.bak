@@ -3299,7 +3299,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{54D122D8-D4A2-435D-82A0-6E32046A178C}" Name="VibrodriverPLC" PrjFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.plcproj" TmcFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{3DA0D33C-0AED-013F-018C-3160491C64EB}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{E576853D-1BB1-CF4F-741C-36C1DEDBD4AB}">
 					<Name>VibrodriverPLC Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -3322,7 +3322,7 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>MAIN.readAcc.c1Sample</Name>
-							<Comment><![CDATA[ channel 1 voltage (mV)  -  x axis]]></Comment>
+							<Comment><![CDATA[ channel 1 voltage (mV) -  x axis]]></Comment>
 							<Type>DINT</Type>
 						</Var>
 						<Var>
@@ -3331,23 +3331,23 @@ External Setpoint Generation:
 							<Type>DINT</Type>
 						</Var>
 						<Var>
-							<Name>MAIN.readAcc.c3Sample</Name>
+							<Name>MAIN.readAcc.c4Sample</Name>
 							<Comment><![CDATA[ channel 3 voltage (mV) -  z axis]]></Comment>
 							<Type>DINT</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.readGeo.c1Sample</Name>
-							<Comment><![CDATA[ channel 1 voltage (mV) -  z axis]]></Comment>
+							<Comment><![CDATA[ channel 1 voltage (mV) -  z axis (rods -> level)]]></Comment>
 							<Type>DINT</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.readGeo.c2Sample</Name>
-							<Comment><![CDATA[ channel 2 voltage (mV) -  y axis]]></Comment>
+							<Comment><![CDATA[ channel 2 voltage (mV) -  y axis (red arrow)]]></Comment>
 							<Type>DINT</Type>
 						</Var>
 						<Var>
 							<Name>MAIN.readGeo.c3Sample</Name>
-							<Comment><![CDATA[ channel 3 voltage (mV) -  x axis]]></Comment>
+							<Comment><![CDATA[ channel 3 voltage (mV) -  x axis (yellow arrow)]]></Comment>
 							<Type>DINT</Type>
 						</Var>
 					</Vars>
@@ -3394,6 +3394,13 @@ External Setpoint Generation:
 						<OwnerA Name="InputDst" Prefix="TIPC^VibrodriverPLC^VibrodriverPLC Instance" Type="1">
 							<OwnerB Name="TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)">
 								<Link VarA="MAIN.readAcc.sample" TypeA="DINT" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000009}" VarB="PAI Samples 1 Channel 1^Samples[0]" RestoreInfo="ANotFound"/>
+							</OwnerB>
+						</OwnerA>
+					</UnrestoredVarLinks>
+					<UnrestoredVarLinks ImportTime="2024-10-10T12:05:29">
+						<OwnerA Name="InputDst" Prefix="TIPC^VibrodriverPLC^VibrodriverPLC Instance" Type="1">
+							<OwnerB Name="TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)">
+								<Link VarA="MAIN.readAcc.c3Sample" TypeA="DINT" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000009}" VarB="PAI Samples 1 Channel 4^Samples[0]" RestoreInfo="ANotFound"/>
 							</OwnerB>
 						</OwnerA>
 					</UnrestoredVarLinks>
@@ -3777,18 +3784,17 @@ External Setpoint Generation:
 							<MBoxUserCmdData>020003000a00000009000000030000000000000000000000000000000000000020108001020000006100496e7465726661636500</MBoxUserCmdData>
 							<MBoxUserCmdData>020003000a000000100000000300000000000000000000000000000000000000201080030200000003004945504520414320436f75706c696e6700</MBoxUserCmdData>
 							<MBoxUserCmdData>02000300090000001100000003000000000000000000000000000000000000002010800701000000024945504520426961732043757272656e7400</MBoxUserCmdData>
-							<MBoxUserCmdData>020003000a00000009000000030000000000000000000000000000000000000020208001020000006100496e7465726661636500</MBoxUserCmdData>
-							<MBoxUserCmdData>020003000a000000100000000300000000000000000000000000000000000000202080030200000003004945504520414320436f75706c696e6700</MBoxUserCmdData>
-							<MBoxUserCmdData>02000300090000001100000003000000000000000000000000000000000000002020800701000000024945504520426961732043757272656e7400</MBoxUserCmdData>
-							<MBoxUserCmdData>020003000a00000009000000030000000000000000000000000000000000000020308001020000000000496e7465726661636500</MBoxUserCmdData>
-							<MBoxUserCmdData>020003000a000000100000000300000000000000000000000000000000000000203080030200000000004945504520414320436f75706c696e6700</MBoxUserCmdData>
-							<MBoxUserCmdData>02000300090000001100000003000000000000000000000000000000000000002030800701000000004945504520426961732043757272656e7400</MBoxUserCmdData>
-							<MBoxUserCmdData>0200030009000000150000000300000000000000000000000000000000000000203080040100000000537461727420436f6e6e656374696f6e205465737400</MBoxUserCmdData>
+							<MBoxUserCmdData>020003000a00000009000000030000000000000000000000000000000000000020208001020000000000496e7465726661636500</MBoxUserCmdData>
+							<MBoxUserCmdData>020003000a000000100000000300000000000000000000000000000000000000202080030200000000004945504520414320436f75706c696e6700</MBoxUserCmdData>
+							<MBoxUserCmdData>02000300090000001100000003000000000000000000000000000000000000002020800701000000004945504520426961732043757272656e7400</MBoxUserCmdData>
+							<MBoxUserCmdData>020003000a00000009000000030000000000000000000000000000000000000020308001020000006100496e7465726661636500</MBoxUserCmdData>
+							<MBoxUserCmdData>020003000a000000100000000300000000000000000000000000000000000000203080030200000003004945504520414320436f75706c696e6700</MBoxUserCmdData>
+							<MBoxUserCmdData>02000300090000001100000003000000000000000000000000000000000000002030800701000000024945504520426961732043757272656e7400</MBoxUserCmdData>
 							<Pdo Name="PAI Status Channel 1" Index="#x1a00" Flags="#x0010" SyncMan="3">
 								<Entry Name="Status__No of Samples" Index="#x6000" Sub="#x01">
 									<Type>USINT</Type>
 								</Entry>
-								<Entry Name="Status__Error" Index="#x6000" Sub="#x09">
+								<Entry Name="Status__Error" Index="#x6000" Sub="#x09" Flags="#x00008020">
 									<Type>BIT</Type>
 									<Comment><![CDATA[Bit set when Over- or Underrange or other error]]></Comment>
 								</Entry>
@@ -7958,13 +7964,13 @@ External Setpoint Generation:
 								<Entry Name="Status__No of Samples" Index="#x6010" Sub="#x01">
 									<Type>USINT</Type>
 								</Entry>
-								<Entry Name="Status__Error" Index="#x6010" Sub="#x09">
+								<Entry Name="Status__Error" Index="#x6010" Sub="#x09" Flags="#x00008020">
 									<Type>BIT</Type>
 								</Entry>
 								<Entry Name="Status__Underrange" Index="#x6010" Sub="#x0a">
 									<Type>BIT</Type>
 								</Entry>
-								<Entry Name="Status__Overrange" Index="#x6010" Sub="#x0b">
+								<Entry Name="Status__Overrange" Index="#x6010" Sub="#x0b" Flags="#x00008020">
 									<Type>BIT</Type>
 								</Entry>
 								<Entry Name="Status__">
@@ -8028,7 +8034,7 @@ External Setpoint Generation:
 								<ExcludePdo>#x1aad</ExcludePdo>
 								<ExcludePdo>#x1aae</ExcludePdo>
 								<ExcludePdo>#x1aaf</ExcludePdo>
-								<Entry Name="Samples__ARRAY [0]" Index="#x6011" Sub="#x01">
+								<Entry Name="Samples__ARRAY [0]" Index="#x6011" Sub="#x01" Flags="#x00008020">
 									<Type>DINT</Type>
 								</Entry>
 							</Pdo>
@@ -12122,13 +12128,13 @@ External Setpoint Generation:
 								<Entry Name="Status__No of Samples" Index="#x6020" Sub="#x01">
 									<Type>USINT</Type>
 								</Entry>
-								<Entry Name="Status__Error" Index="#x6020" Sub="#x09">
+								<Entry Name="Status__Error" Index="#x6020" Sub="#x09" Flags="#x00008020">
 									<Type>BIT</Type>
 								</Entry>
 								<Entry Name="Status__Underrange" Index="#x6020" Sub="#x0a">
 									<Type>BIT</Type>
 								</Entry>
-								<Entry Name="Status__Overrange" Index="#x6020" Sub="#x0b">
+								<Entry Name="Status__Overrange" Index="#x6020" Sub="#x0b" Flags="#x00008020">
 									<Type>BIT</Type>
 								</Entry>
 								<Entry Name="Status__">
@@ -12192,7 +12198,7 @@ External Setpoint Generation:
 								<ExcludePdo>#x1abd</ExcludePdo>
 								<ExcludePdo>#x1abe</ExcludePdo>
 								<ExcludePdo>#x1abf</ExcludePdo>
-								<Entry Name="Samples__ARRAY [0]" Index="#x6021" Sub="#x01">
+								<Entry Name="Samples__ARRAY [0]" Index="#x6021" Sub="#x01" Flags="#x00008020">
 									<Type>DINT</Type>
 								</Entry>
 							</Pdo>
@@ -16286,13 +16292,13 @@ External Setpoint Generation:
 								<Entry Name="Status__No of Samples" Index="#x6030" Sub="#x01">
 									<Type>USINT</Type>
 								</Entry>
-								<Entry Name="Status__Error" Index="#x6030" Sub="#x09">
+								<Entry Name="Status__Error" Index="#x6030" Sub="#x09" Flags="#x00008020">
 									<Type>BIT</Type>
 								</Entry>
-								<Entry Name="Status__Underrange" Index="#x6030" Sub="#x0a">
+								<Entry Name="Status__Underrange" Index="#x6030" Sub="#x0a" Flags="#x00008020">
 									<Type>BIT</Type>
 								</Entry>
-								<Entry Name="Status__Overrange" Index="#x6030" Sub="#x0b">
+								<Entry Name="Status__Overrange" Index="#x6030" Sub="#x0b" Flags="#x00008020">
 									<Type>BIT</Type>
 								</Entry>
 								<Entry Name="Status__">
@@ -16356,7 +16362,7 @@ External Setpoint Generation:
 								<ExcludePdo>#x1acd</ExcludePdo>
 								<ExcludePdo>#x1ace</ExcludePdo>
 								<ExcludePdo>#x1acf</ExcludePdo>
-								<Entry Name="Samples__ARRAY [0]" Index="#x6031" Sub="#x01">
+								<Entry Name="Samples__ARRAY [0]" Index="#x6031" Sub="#x01" Flags="#x00008020">
 									<Type>DINT</Type>
 								</Entry>
 							</Pdo>
@@ -31398,6 +31404,22 @@ External Setpoint Generation:
 				<EtherCAT DcSyncMode="2"/>
 			</Device>
 		</Io>
+		<SymbolWatch>
+			<Variable>TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)^PAI Status Channel 1^Status^Overrange</Variable>
+			<Variable>TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)^PAI Status Channel 2^Status^Error</Variable>
+			<Variable>TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)^PAI Status Channel 2^Status^Overrange</Variable>
+			<Variable>TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)^PAI Status Channel 1^Status^Error</Variable>
+			<Variable>TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)^PAI Status Channel 3^Status^Error</Variable>
+			<Variable>TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)^PAI Status Channel 3^Status^Overrange</Variable>
+			<Variable>TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)^PAI Status Channel 4^Status^Error</Variable>
+			<Variable>TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)^PAI Status Channel 4^Status^Overrange</Variable>
+			<Variable>TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)^InfoData^State</Variable>
+			<Variable>TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)^InfoData^DcInputShift</Variable>
+			<Variable>TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)^PAI Samples 1 Channel 4^Samples[0]</Variable>
+			<Variable>TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)^PAI Samples 1 Channel 3^Samples[0]</Variable>
+			<Variable>TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)^PAI Samples 1 Channel 2^Samples[0]</Variable>
+			<Variable>TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)^PAI Samples 1 Channel 1^Samples[0]</Variable>
+		</SymbolWatch>
 	</Project>
 	<Mappings>
 		<MappingInfo Identifier="{00000000-2001-0850-0020-500830000403}" Id="#x02030040"/>
@@ -31492,7 +31514,6 @@ External Setpoint Generation:
 			<OwnerB Name="TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)">
 				<Link VarA="PlcTask Inputs^MAIN.readAcc.c1Sample" VarB="PAI Samples 1 Channel 1^Samples[0]"/>
 				<Link VarA="PlcTask Inputs^MAIN.readAcc.c2Sample" VarB="PAI Samples 1 Channel 2^Samples[0]"/>
-				<Link VarA="PlcTask Inputs^MAIN.readAcc.c3Sample" VarB="PAI Samples 1 Channel 3^Samples[0]"/>
 			</OwnerB>
 			<OwnerB Name="TIID^EtherCAT^EtherCAT Coupler (EK1100)^Geophone Terminal (ELM3148-0000)">
 				<Link VarA="PlcTask Inputs^MAIN.readGeo.c1Sample" VarB="PAI Samples 1 Channel 1^Samples[0]"/>
