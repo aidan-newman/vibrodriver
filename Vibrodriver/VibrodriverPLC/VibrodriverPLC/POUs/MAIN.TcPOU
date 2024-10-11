@@ -17,9 +17,6 @@ VAR
 	mcGearOuts      : ARRAY[1..3] OF MC_GearOut;
 	mcPhaseAbss     : ARRAY[1..3] OF MC_PhasingAbsolute;
 	
-	readAcc : read_accelerometer;
-	readGeo : read_geophone;
-	
 	tempCtrl : FB_SimpleTempCtrl;
 
 	i: INT;
@@ -62,8 +59,10 @@ END_VAR]]></Declaration>
 	axes[i].ReadStatus();
 END_FOR
 
-readAcc();
-readGeo();
+
+//======================================================
+//======================================================
+
 
 // on off logic
 // prevent turning off a button, only swapping allowed
@@ -107,6 +106,8 @@ ELSIF togVel AND mode <> 2 THEN
 	togRelPos := FALSE;
 	mode := 2;
 END_IF
+//======================================================
+//======================================================
 
 
 // disallow coupling while in motion
@@ -132,6 +133,8 @@ IF (togCoup AND NOT coupled) AND (mcGearIns[1].InGear AND mcGearIns[2].InGear AN
 	endIdx := 0;
 	coupled := TRUE;
 END_IF
+//======================================================
+//======================================================
 
 
 // startup
@@ -150,6 +153,8 @@ IF NOT started THEN
 		END_IF
 	END_FOR
 END_IF
+//======================================================
+//======================================================
 
 
 // if all motors powered up, enter main loop
@@ -208,25 +213,34 @@ IF started THEN
 		mcMoveRelatives[i](Axis:=axes[i], Execute:=togRelPos AND runState AND NOT relsDone[i], Distance:=txtPos, Velocity:=txtVel, Acceleration:=txtAcc, Deceleration:=txtAcc);
 		mcMoveVelocitys[i](Axis:=axes[i], Execute:=togVel AND runState, Velocity:=txtVel, Acceleration:=txtAcc, Deceleration:=txtAcc);
 		
-		mcHalts[i](Axis:=axes[i],Execute:=NOT runState);
+		mcHalts[i](Axis:=axes[i],Execute:=NOT runState, Deceleration:=400);
 	END_FOR
-	
-	// always perform halt last, nothing should ever override halt command
-//	mcHalts[1](Axis:=axes[1],Execute:=NOT runState);
-//	mcHalts[2](Axis:=axes[2],Execute:=NOT runState);
-//	mcHalts[3](Axis:=axes[3],Execute:=NOT runState);
 END_IF
 ]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
-      <LineId Id="1218" Count="3" />
-      <LineId Id="1442" Count="0" />
-      <LineId Id="1498" Count="0" />
-      <LineId Id="1222" Count="60" />
+      <LineId Id="1218" Count="2" />
+      <LineId Id="1558" Count="0" />
+      <LineId Id="1554" Count="0" />
+      <LineId Id="1222" Count="0" />
+      <LineId Id="1556" Count="0" />
+      <LineId Id="1560" Count="0" />
+      <LineId Id="1559" Count="0" />
+      <LineId Id="1223" Count="42" />
+      <LineId Id="1555" Count="0" />
+      <LineId Id="1557" Count="0" />
+      <LineId Id="1266" Count="16" />
       <LineId Id="1381" Count="0" />
       <LineId Id="1284" Count="3" />
       <LineId Id="1380" Count="0" />
-      <LineId Id="1289" Count="23" />
+      <LineId Id="1289" Count="0" />
+      <LineId Id="1291" Count="0" />
+      <LineId Id="1561" Count="0" />
+      <LineId Id="1563" Count="0" />
+      <LineId Id="1562" Count="0" />
+      <LineId Id="1292" Count="16" />
+      <LineId Id="1564" Count="1" />
+      <LineId Id="1309" Count="3" />
       <LineId Id="1378" Count="0" />
       <LineId Id="1315" Count="0" />
       <LineId Id="1385" Count="0" />
@@ -235,8 +249,8 @@ END_IF
       <LineId Id="1316" Count="2" />
       <LineId Id="1326" Count="41" />
       <LineId Id="1382" Count="1" />
-      <LineId Id="1368" Count="2" />
-      <LineId Id="1372" Count="3" />
+      <LineId Id="1368" Count="0" />
+      <LineId Id="1375" Count="0" />
       <LineId Id="452" Count="0" />
     </LineIds>
   </POU>

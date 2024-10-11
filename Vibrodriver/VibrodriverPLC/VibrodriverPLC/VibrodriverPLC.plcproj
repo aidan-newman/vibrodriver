@@ -33,6 +33,9 @@
     <Compile Include="POUs\read_accelerometer.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\read_sensors.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\simulink_testing.TcPOU">
       <SubType>Code</SubType>
     </Compile>

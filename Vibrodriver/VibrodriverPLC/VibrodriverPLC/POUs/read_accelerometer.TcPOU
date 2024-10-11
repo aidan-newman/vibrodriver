@@ -13,7 +13,7 @@ END_VAR
 VAR
 	c1Sample AT %I* : DINT; // channel 1 voltage (mV) -  x axis
 	c2Sample AT %I* : DINT; // channel 2 voltage (mV) -  y axis (+y = down)
-	c4Sample AT %I* : DINT; // channel 3 voltage (mV) -  z axis
+	c3Sample AT %I* : DINT; // channel 3 voltage (mV) -  z axis
 	
 	// ELM3604 defined resolution:
 	// FSV (10V) / 7812500
