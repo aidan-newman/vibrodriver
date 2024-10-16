@@ -3717,7 +3717,7 @@ External Setpoint Generation:
 				<Box Id="1" BoxType="9099">
 					<Name>EtherCAT Coupler (EK1100)</Name>
 					<ImageId>1002</ImageId>
-					<EtherCAT SlaveType="1" PdiType="#x0d00" CycleMBoxPollingTime="0" VendorId="#x00000002" ProductCode="#x044c2c52" RevisionNo="#x00120000" PortPhys="305" MaxSlotCount="256" MaxSlotGroupCount="1" SlotPdoIncrement="1" SlotIndexIncrement="16" Type="EK1100 EtherCAT Coupler (2A E-Bus)" Desc="EK1100" PortABoxInfo="#x00ffffff"/>
+					<EtherCAT EtherCatAddr="1001" SlaveType="1" AdsServerAddress="000000000000e903" PdiType="#x0d00" EtherCatAddrFixed="true" CycleMBoxPollingTime="0" VendorId="#x00000002" ProductCode="#x044c2c52" RevisionNo="#x00120000" PortPhys="305" MaxSlotCount="256" MaxSlotGroupCount="1" SlotPdoIncrement="1" SlotIndexIncrement="16" Type="EK1100 EtherCAT Coupler (2A E-Bus)" Desc="EK1100" PortABoxInfo="#x00ffffff"/>
 					<Box Id="2" BoxType="9099" BoxFlags="#x00000020">
 						<Name>Accelerometer Input (ELM3604-0000)</Name>
 						<ImageId>1003</ImageId>

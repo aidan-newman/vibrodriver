@@ -1890,7 +1890,7 @@ External Setpoint Generation:
 			</Relations>
 		</DataType>
 		<DataType>
-			<Name GUID="{18071995-0000-0000-0000-002000000001}" IecBaseType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..0] OF BIT</Name>
+			<Name GUID="{18071995-0000-0000-0000-002000000001}" IecBaseType="true" BitType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..0] OF BIT</Name>
 			<BitSize>1</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000010}">BIT</BaseType>
 			<ArrayInfo>
@@ -1908,7 +1908,7 @@ External Setpoint Generation:
 			</ArrayInfo>
 		</DataType>
 		<DataType>
-			<Name GUID="{18071995-0000-0000-0000-00200000000E}" IecBaseType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..13] OF BIT</Name>
+			<Name GUID="{18071995-0000-0000-0000-00200000000E}" IecBaseType="true" BitType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..13] OF BIT</Name>
 			<BitSize>14</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000010}">BIT</BaseType>
 			<ArrayInfo>
@@ -3296,7 +3296,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{54D122D8-D4A2-435D-82A0-6E32046A178C}" Name="VibrodriverPLC" PrjFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.plcproj" TmcFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{95B31131-F524-2228-0830-6FF9ED16DCE2}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{3397A04B-65E5-D1E1-114E-B06255CAA9F7}">
 					<Name>VibrodriverPLC Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
