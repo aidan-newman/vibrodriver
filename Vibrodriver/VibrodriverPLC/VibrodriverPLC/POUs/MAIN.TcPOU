@@ -127,7 +127,8 @@ END_IF
 //======================================================
 
 // disallow coupling while in motion
-IF (axes[0].Status.Moving OR axes[1].Status.Moving OR axes[2].Status.Moving OR axes[3].Status.Moving) AND bCouple AND NOT bCoupled THEN
+IF (axes[0].Status.Moving OR axes[1].Status.Moving OR axes[2].Status.Moving OR axes[3].Status.Moving) AND
+		bCouple AND NOT bCoupled THEN
 	bCouple := FALSE;
 END_IF
 
@@ -135,9 +136,9 @@ END_IF
 arrMCGearOuts[1](Slave:=axes[1], Execute:=NOT bCouple AND bCoupled);
 arrMCGearOuts[2](Slave:=axes[2], Execute:=NOT bCouple AND bCoupled);
 arrMCGearOuts[3](Slave:=axes[3], Execute:=NOT bCouple AND bCoupled);
-arrMCGearIns[1](Master:=axes[0], Slave:=axes[1], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=-1); // reverse gear BR with BL
-arrMCGearIns[2](Master:=axes[0], Slave:=axes[2], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=1); // gear TL with BL
-arrMCGearIns[3](Master:=axes[2], Slave:=axes[3], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=-1); // reverse gear TR with TL
+arrMCGearIns[1](Master:=axes[0], Slave:=axes[1], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=-1);
+arrMCGearIns[2](Master:=axes[0], Slave:=axes[2], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=1);
+arrMCGearIns[3](Master:=axes[2], Slave:=axes[3], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=-1);
 
 // check if uncoupling done
 IF (NOT bCouple AND bCoupled) AND (arrMCGearOuts[1].Done AND arrMCGearOuts[2].Done AND arrMCGearOuts[3].Done) THEN
@@ -186,9 +187,12 @@ IF bStarted THEN
 	END_IF
 	
 	IF bRun AND bCoupled THEN
-		arrMCPhaseAbsolutes[1](Master:=axes[0], Slave:=axes[1], Execute:=TRUE, PhaseShift:=0, Velocity:=iVel+200); // set phase of BR w BL
-		arrMCPhaseAbsolutes[2](Master:=axes[0], Slave:=axes[2], Execute:=TRUE, PhaseShift:=iPhs, Velocity:=iVel+200); // set phase of top w bottom
-		arrMCPhaseAbsolutes[3](Master:=axes[2], Slave:=axes[3], Execute:=TRUE, PhaseShift:=0, Velocity:=iVel+200); // set phase of TR w TL
+		 // set phase of BR w BL
+		arrMCPhaseAbsolutes[1](Master:=axes[0], Slave:=axes[1], Execute:=TRUE, PhaseShift:=0, Velocity:=iVel+200);
+		 // set phase of top w bottom
+		arrMCPhaseAbsolutes[2](Master:=axes[0], Slave:=axes[2], Execute:=TRUE, PhaseShift:=iPhs, Velocity:=iVel+200);
+		 // set phase of TR w TL
+		arrMCPhaseAbsolutes[3](Master:=axes[2], Slave:=axes[3], Execute:=TRUE, PhaseShift:=0, Velocity:=iVel+200);
 	END_IF
 	
 	FOR i := 0 TO iEndIdx DO
@@ -260,10 +264,18 @@ IF bStarted THEN
 		
 		// run main operations, execute values based on various bools
 		arrMCSetPositions[i](Axis:=axes[i], Execute:=TRUE, Position:=0); // very important for some reason
-		arrMCMoveAbsolutes[i](Axis:=axes[i], Execute:= iMode=0 AND bRun, Position:=iPos, Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
-		arrMCMoveRelatives[i](Axis:=axes[i], Execute:= iMode=1 AND bRun AND NOT arrRelsDone[i], Distance:=iPos, Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
-		arrMCMoveVelocitys[i](Axis:=axes[i], Execute:= iMode=2 AND bRun, Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
-		arrMCMoveRelativesZero[i](Axis:=axes[i], Execute:= iMode=3 AND bRun AND NOT arrRelsDoneZero[i], Distance:=iZeroPos, Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
+		
+		arrMCMoveAbsolutes[i](Axis:=axes[i], Execute:= iMode=0 AND bRun,
+								Position:=iPos, Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
+								
+		arrMCMoveRelatives[i](Axis:=axes[i], Execute:= iMode=1 AND bRun AND NOT arrRelsDone[i],
+								Distance:=iPos, Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
+								
+		arrMCMoveVelocitys[i](Axis:=axes[i], Execute:= iMode=2 AND bRun,
+								Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
+								
+		arrMCMoveRelativesZero[i](Axis:=axes[i], Execute:= iMode=3 AND bRun AND NOT arrRelsDoneZero[i],
+								Distance:=iZeroPos, Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
 		
 		// NEVER MOVE FROM LAST CALL
 		arrMCHalts[i](Axis:=axes[i],Execute:=NOT bRun, Deceleration:=400);
@@ -276,12 +288,31 @@ END_IF
       <LineId Id="13232" Count="2" />
       <LineId Id="13049" Count="8" />
       <LineId Id="13235" Count="2" />
-      <LineId Id="13061" Count="137" />
+      <LineId Id="13061" Count="16" />
+      <LineId Id="13296" Count="0" />
+      <LineId Id="13078" Count="57" />
+      <LineId Id="13299" Count="0" />
+      <LineId Id="13136" Count="0" />
+      <LineId Id="13298" Count="0" />
+      <LineId Id="13137" Count="1" />
+      <LineId Id="13297" Count="0" />
+      <LineId Id="13139" Count="59" />
       <LineId Id="13223" Count="6" />
       <LineId Id="13199" Count="0" />
       <LineId Id="13230" Count="0" />
-      <LineId Id="13200" Count="4" />
+      <LineId Id="13200" Count="1" />
+      <LineId Id="13300" Count="0" />
+      <LineId Id="13202" Count="0" />
+      <LineId Id="13302" Count="0" />
+      <LineId Id="13306" Count="0" />
+      <LineId Id="13203" Count="0" />
+      <LineId Id="13303" Count="0" />
+      <LineId Id="13307" Count="0" />
+      <LineId Id="13204" Count="0" />
+      <LineId Id="13304" Count="0" />
+      <LineId Id="13308" Count="0" />
       <LineId Id="13210" Count="0" />
+      <LineId Id="13305" Count="0" />
       <LineId Id="13212" Count="0" />
       <LineId Id="13231" Count="0" />
       <LineId Id="13213" Count="2" />
