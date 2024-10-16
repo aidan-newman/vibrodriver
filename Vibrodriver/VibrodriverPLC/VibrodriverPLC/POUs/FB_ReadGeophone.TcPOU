@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
-  <POU Name="read_geophone" Id="{56b7d18b-71f0-4c3f-9840-fefa8f0a6997}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK read_geophone
+  <POU Name="FB_ReadGeophone" Id="{56b7d18b-71f0-4c3f-9840-fefa8f0a6997}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ReadGeophone
 VAR_INPUT
 	// none
 END_VAR
@@ -11,9 +11,9 @@ VAR_OUTPUT
 	velZ : LREAL; // top -> bottom
 END_VAR
 VAR
-	c1Sample AT %I* : DINT; // channel 1 voltage (mV) -  z axis (rods -> level)
+	c1Sample AT %I* : DINT; // channel 1 voltage (mV) -  x axis (yellow arrow)
 	c2Sample AT %I* : DINT; // channel 2 voltage (mV) -  y axis (red arrow)
-	c3Sample AT %I* : DINT; // channel 3 voltage (mV) -  x axis (yellow arrow)
+	c3Sample AT %I* : DINT; // channel 3 voltage (mV) -  z axis (rods -> level)
 	
 	// all real since need to be converted anyway
 	peakVal : REAL := 10;
@@ -26,12 +26,12 @@ END_VAR
     <Implementation>
       <ST><![CDATA[
 // m/s
-velX := DINT_TO_REAL(c3Sample) * mult;
+velX := DINT_TO_REAL(c1Sample) * mult;
 velY := DINT_TO_REAL(c2Sample) * mult;
-velZ := DINT_TO_REAL(c1Sample) * mult;
+velZ := DINT_TO_REAL(c3Sample) * mult;
 ]]></ST>
     </Implementation>
-    <LineIds Name="read_geophone">
+    <LineIds Name="FB_ReadGeophone">
       <LineId Id="48" Count="1" />
       <LineId Id="9" Count="0" />
       <LineId Id="27" Count="1" />

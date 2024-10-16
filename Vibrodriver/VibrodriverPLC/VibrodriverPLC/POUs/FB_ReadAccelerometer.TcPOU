@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
-  <POU Name="read_accelerometer" Id="{b269e3fb-3af3-4ef8-9302-3d60b57b492d}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK read_accelerometer
+  <POU Name="FB_ReadAccelerometer" Id="{b269e3fb-3af3-4ef8-9302-3d60b57b492d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ReadAccelerometer
 VAR_INPUT // input inputs to function
 	// none
 END_VAR
@@ -38,7 +38,7 @@ END_VAR
       <ST><![CDATA[accX := DINT_TO_REAL(c1Sample) * mult; // m/s^2
 accY := DINT_TO_REAL(c2Sample) * mult; // m/s^2]]></ST>
     </Implementation>
-    <LineIds Name="read_accelerometer">
+    <LineIds Name="FB_ReadAccelerometer">
       <LineId Id="71" Count="0" />
       <LineId Id="37" Count="0" />
     </LineIds>

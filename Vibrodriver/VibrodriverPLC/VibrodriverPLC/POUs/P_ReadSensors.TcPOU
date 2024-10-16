@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
-  <POU Name="read_sensors" Id="{5db38278-0676-4eeb-ab89-3aec0fb96e5a}" SpecialFunc="None">
-    <Declaration><![CDATA[PROGRAM read_sensors
+  <POU Name="P_ReadSensors" Id="{5db38278-0676-4eeb-ab89-3aec0fb96e5a}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM P_ReadSensors
 VAR
 	
-	readAcc : read_accelerometer;
-	readGeo : read_geophone;
+	readAcc : FB_ReadAccelerometer;
+	readGeo : FB_ReadGeophone;
 	
 	accX : LREAL;
 	accY : LREAL;
@@ -20,7 +20,7 @@ END_VAR
       <ST><![CDATA[readAcc(accX => accX, accY => accY, accZ => accZ);
 readGeo(velX => velX, velY => velY, velZ => velZ);]]></ST>
     </Implementation>
-    <LineIds Name="read_sensors">
+    <LineIds Name="P_ReadSensors">
       <LineId Id="7" Count="1" />
     </LineIds>
   </POU>

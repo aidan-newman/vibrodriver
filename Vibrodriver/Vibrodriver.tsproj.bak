@@ -3299,7 +3299,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{54D122D8-D4A2-435D-82A0-6E32046A178C}" Name="VibrodriverPLC" PrjFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.plcproj" TmcFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{5B78F042-DE0A-725D-CF72-19835FDF6FD4}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{630E3972-68AB-6E97-91C7-DE47D4F4ABC7}">
 					<Name>VibrodriverPLC Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -3321,33 +3321,33 @@ External Setpoint Generation:
 							<Type GUID="{25521FAA-EA5F-4C7F-8864-BBCCDACD2E98}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>read_sensors.readAcc.c1Sample</Name>
+							<Name>P_ReadSensors.readAcc.c1Sample</Name>
 							<Comment><![CDATA[ channel 1 voltage (mV) -  x axis]]></Comment>
 							<Type>DINT</Type>
 						</Var>
 						<Var>
-							<Name>read_sensors.readAcc.c2Sample</Name>
+							<Name>P_ReadSensors.readAcc.c2Sample</Name>
 							<Comment><![CDATA[ channel 2 voltage (mV) -  y axis (+y = down)]]></Comment>
 							<Type>DINT</Type>
 						</Var>
 						<Var>
-							<Name>read_sensors.readAcc.c3Sample</Name>
+							<Name>P_ReadSensors.readAcc.c3Sample</Name>
 							<Comment><![CDATA[ channel 3 voltage (mV) -  z axis]]></Comment>
 							<Type>DINT</Type>
 						</Var>
 						<Var>
-							<Name>read_sensors.readGeo.c1Sample</Name>
-							<Comment><![CDATA[ channel 1 voltage (mV) -  z axis (rods -> level)]]></Comment>
+							<Name>P_ReadSensors.readGeo.c1Sample</Name>
+							<Comment><![CDATA[ channel 1 voltage (mV) -  x axis (yellow arrow)]]></Comment>
 							<Type>DINT</Type>
 						</Var>
 						<Var>
-							<Name>read_sensors.readGeo.c2Sample</Name>
+							<Name>P_ReadSensors.readGeo.c2Sample</Name>
 							<Comment><![CDATA[ channel 2 voltage (mV) -  y axis (red arrow)]]></Comment>
 							<Type>DINT</Type>
 						</Var>
 						<Var>
-							<Name>read_sensors.readGeo.c3Sample</Name>
-							<Comment><![CDATA[ channel 3 voltage (mV) -  x axis (yellow arrow)]]></Comment>
+							<Name>P_ReadSensors.readGeo.c3Sample</Name>
+							<Comment><![CDATA[ channel 3 voltage (mV) -  z axis (rods -> level)]]></Comment>
 							<Type>DINT</Type>
 						</Var>
 					</Vars>
@@ -3428,14 +3428,6 @@ External Setpoint Generation:
 							<CycleTime>10000000</CycleTime>
 						</Context>
 					</Contexts>
-					<InitSymbols>
-						<InitSymbol>
-							<Name>MAIN.tempCtrl.eTraceLevelMax</Name>
-							<Type GUID="{8007AE3B-86BB-40F2-B385-EF87FCC239A4}">TcTraceLevel</Type>
-							<AreaNo>#x00000003</AreaNo>
-							<Data>00000000</Data>
-						</InitSymbol>
-					</InitSymbols>
 					<TaskPouOids>
 						<TaskPouOid Prio="20" OTCID="#x08502001"/>
 					</TaskPouOids>
@@ -31417,6 +31409,10 @@ External Setpoint Generation:
 				<EtherCAT DcSyncMode="2"/>
 			</Device>
 		</Io>
+		<SymbolWatch>
+			<Variable>TINC^NC-Task 1 SAF^Axes^AxisBL^Enc^Inputs^In^nDataIn1</Variable>
+			<Variable>TIID^Motors^BL^Module 1 (CSP Mode)^CSP Outputs^Target position</Variable>
+		</SymbolWatch>
 	</Project>
 	<Mappings>
 		<MappingInfo Identifier="{00000000-2001-0850-0020-500830000403}" Id="#x02030040"/>
@@ -31509,14 +31505,14 @@ External Setpoint Generation:
 		</OwnerA>
 		<OwnerA Name="TIPC^VibrodriverPLC^VibrodriverPLC Instance">
 			<OwnerB Name="TIID^EtherCAT^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)">
-				<Link VarA="PlcTask Inputs^read_sensors.readAcc.c1Sample" VarB="PAI Samples 1 Channel 1^Samples[0]"/>
-				<Link VarA="PlcTask Inputs^read_sensors.readAcc.c2Sample" VarB="PAI Samples 1 Channel 2^Samples[0]"/>
-				<Link VarA="PlcTask Inputs^read_sensors.readAcc.c3Sample" VarB="PAI Samples 1 Channel 3^Samples[0]"/>
+				<Link VarA="PlcTask Inputs^P_ReadSensors.readAcc.c1Sample" VarB="PAI Samples 1 Channel 1^Samples[0]"/>
+				<Link VarA="PlcTask Inputs^P_ReadSensors.readAcc.c2Sample" VarB="PAI Samples 1 Channel 2^Samples[0]"/>
+				<Link VarA="PlcTask Inputs^P_ReadSensors.readAcc.c3Sample" VarB="PAI Samples 1 Channel 3^Samples[0]"/>
 			</OwnerB>
 			<OwnerB Name="TIID^EtherCAT^EtherCAT Coupler (EK1100)^Geophone Terminal (ELM3148-0000)">
-				<Link VarA="PlcTask Inputs^read_sensors.readGeo.c1Sample" VarB="PAI Samples 1 Channel 1^Samples[0]"/>
-				<Link VarA="PlcTask Inputs^read_sensors.readGeo.c2Sample" VarB="PAI Samples 1 Channel 2^Samples[0]"/>
-				<Link VarA="PlcTask Inputs^read_sensors.readGeo.c3Sample" VarB="PAI Samples 1 Channel 3^Samples[0]"/>
+				<Link VarA="PlcTask Inputs^P_ReadSensors.readGeo.c1Sample" VarB="PAI Samples 1 Channel 1^Samples[0]"/>
+				<Link VarA="PlcTask Inputs^P_ReadSensors.readGeo.c2Sample" VarB="PAI Samples 1 Channel 2^Samples[0]"/>
+				<Link VarA="PlcTask Inputs^P_ReadSensors.readGeo.c3Sample" VarB="PAI Samples 1 Channel 3^Samples[0]"/>
 			</OwnerB>
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^AxisBL">
 				<Link VarA="PlcTask Inputs^MAIN.axes[0].NcToPlc" VarB="Outputs^ToPlc"/>

@@ -27,16 +27,16 @@
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\read_geophone.TcPOU">
+    <Compile Include="POUs\FB_ReadGeophone.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\read_accelerometer.TcPOU">
+    <Compile Include="POUs\FB_ReadAccelerometer.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\read_sensors.TcPOU">
+    <Compile Include="POUs\P_ReadSensors.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\simulink_testing.TcPOU">
+    <Compile Include="POUs\P_SimulinkTesting.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Visualization Manager.TcVMO">
