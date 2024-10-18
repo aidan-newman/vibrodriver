@@ -19,7 +19,6 @@ VAR
 	arrMCGearIns			: ARRAY[1..3] OF MC_GearIn;
 	arrMCGearOuts			: ARRAY[1..3] OF MC_GearOut;
 	arrMCPhaseAbsolutes     : ARRAY[1..3] OF MC_PhasingAbsolute;
-	fbMCReadActPos : MC_ReadActualPosition;
 	
 	arrRelsDone : ARRAY[0..3] OF BOOL; // keep track of if each motor is done its relative movement
 	arrRelsDoneZero : ARRAY[0..3] OF BOOL; // keep track of if each motor is done its relative movement
@@ -56,53 +55,40 @@ VAR
 	iPrevVel : INT := iVel;
 	iPrevAcc : INT := iAcc;
 	iPrevPhs : INT := iPhs;
+	
+	iMaxVel : INT := 1400; // max 12 hz
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[FOR i := 0 TO 3 DO
+      <ST><![CDATA[// UPDATE AXES STATUS
+FOR i := 0 TO 3 DO
 	axes[i].ReadStatus();
 END_FOR
 
-// startup
+// RESTRICT VELOCITY
+IF axes[i].NcToPlc.ActVelo > iMaxVel THEN
+	M_SetState(0);
+END_IF
+
+
+// STARTUP
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 IF NOT bStarted THEN
 	FOR i := 0 TO 3 DO
 		// default to OFF despite variable values
-		bStart := FALSE;
-		bStop := TRUE;
-		bRun := FALSE;
+		M_SetState(0);
 		arrMCResets[i](Axis:=axes[i]);
 		arrMCPowers[i](Axis:=axes[i], Enable:= TRUE, Enable_Positive:=TRUE, Enable_Negative:=TRUE);
-			
 		// if all motors powered, set to started
 		IF arrMCPowers[0].Status AND arrMCPowers[1].Status AND arrMCPowers[2].Status AND arrMCPowers[3].Status THEN
 			bStarted := TRUE;
 		END_IF
 	END_FOR
 END_IF
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
-//======================================================
-//======================================================
-
-// prevent turning off a button, only swapping allowed
-IF bRun AND NOT bStop THEN
-	bStart := TRUE;
-ELSIF NOT bRun AND NOT bStart THEN
-	bStop := TRUE;
-ELSE // invalid state
-	bStop := TRUE;
-END_IF
-
-// on off logic
-IF NOT bRun AND bStart THEN 
-	bStop := FALSE;
-	bRun := TRUE;
-END_IF
-// always have stop check last
-IF bStop THEN
-	bStart := FALSE;
-	bRun := FALSE;
-END_IF
-
+// MODE SELECTION
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 // prevent no mode selection
 IF NOT bAbsPos AND iMode = 0 THEN
 	bAbsPos := TRUE;
@@ -114,35 +100,47 @@ END_IF
 
 // switch modes
 IF iMode = 3 THEN
-	bAbsPos := FALSE;
-	bRelPos := FALSE;
-	bVel := FALSE;
-ELSIF bRelPos AND iMode <> 1 THEN
-	bAbsPos := FALSE;
-	bVel := FALSE;
-	iMode := 1;
-ELSIF bVel AND iMode <> 2 THEN
-	bAbsPos := FALSE;
-	bRelPos := FALSE;
-	iMode := 2;
+	M_SetMode(3);
 ELSIF bAbsPos AND iMode <> 0 THEN
-	bRelPos := FALSE;
-	bVel := FALSE;
-	iMode := 0;
+	M_SetMode(0);
+ELSIF bRelPos AND iMode <> 1 THEN
+	M_SetMode(1);
+ELSIF bVel AND iMode <> 2 THEN
+	M_SetMode(2);
 END_IF
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-IF bZeroNear AND NOT bRun THEN
-	iMode := 3;
+
+// RUN STATE SELECTION
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// prevent turning off a button, only swapping allowed
+IF bRun AND NOT bStop THEN
 	bStart := TRUE;
-	bStop := FALSE;
-	bRun:= TRUE;
-	bAbsPos := FALSE;
-	bRelPos := FALSE;
-	bVel := FALSE;
+ELSIF NOT bRun AND NOT bStart THEN
+	bStop := TRUE;
+ELSE // invalid state
+	bStop := TRUE;
 END_IF
-//======================================================
-//======================================================
 
+// on off logic
+IF NOT bRun AND bStart THEN
+	M_SetState(1);
+END_IF
+// always have stop check last
+IF bStop THEN
+	M_SetState(0);
+END_IF
+
+// handle zeroing button
+IF bZeroNear AND NOT bRun THEN
+	M_SetState(1);
+	M_SetMode(3);
+END_IF
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+// COUPLING
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 // disallow coupling while in motion
 IF (axes[0].Status.Moving OR axes[1].Status.Moving OR axes[2].Status.Moving OR axes[3].Status.Moving) AND
 		bCouple AND NOT bCoupled THEN
@@ -167,8 +165,9 @@ IF (bCouple AND NOT bCoupled) AND (arrMCGearIns[1].InGear AND arrMCGearIns[2].In
 	iEndIdx := 0;
 	bCoupled := TRUE;
 END_IF
-//======================================================
-//======================================================
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
 
 
 
@@ -194,6 +193,8 @@ IF bStarted THEN
 		arrMCPhaseAbsolutes[3](Master:=axes[2], Slave:=axes[3], Execute:=TRUE, PhaseShift:=0, Velocity:=iVel+200);
 	END_IF
 	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	
+	
 	
 	// main motor looop
 	FOR i := 0 TO iEndIdx DO
@@ -221,9 +222,7 @@ IF bStarted THEN
 			FOR j := 0 TO iEndIdx DO
 				IF arrRelsDone[j] = FALSE THEN EXIT; END_IF
 				IF j = iEndIdx THEN
-					bStop := TRUE;
-					bStart := FALSE;
-					bRun := FALSE;
+					M_SetState(0);
 					arrRelsDone[0] := FALSE;
 					arrRelsDone[1] := FALSE;
 					arrRelsDone[2] := FALSE;
@@ -237,9 +236,7 @@ IF bStarted THEN
 			FOR j := 0 TO iEndIdx DO
 				IF arrRelsDoneZero[j] = FALSE THEN EXIT; END_IF
 				IF j = iEndIdx THEN
-					bStop := TRUE;
-					bStart := FALSE;
-					bRun := FALSE;
+					M_SetState(0);
 					arrRelsDoneZero[0] := FALSE;
 					arrRelsDoneZero[1] := FALSE;
 					arrRelsDoneZero[2] := FALSE;
@@ -249,7 +246,7 @@ IF bStarted THEN
 						arrZeroPoss[1] := 0;
 						arrZeroPoss[2] := 0;
 						arrZeroPoss[3] := 0;
-						iMode := 2;
+						M_SetMode(2);
 					END_IF
 				END_IF
 			END_FOR
@@ -264,7 +261,6 @@ IF bStarted THEN
 				arrZeroPoss[i] := -axes[i].NcToPlc.ModuloActPos;
 			END_IF
 		END_IF
-		fbMCReadActPos(Axis:=axes[i], Enable:=TRUE);
 		
 		
 		// run main operations, execute values based on various bools
@@ -288,21 +284,117 @@ IF bStarted THEN
 END_IF
 ]]></ST>
     </Implementation>
+    <Method Name="M_SetMode" Id="{35424578-132b-4116-862c-bee1bc6aa9d2}">
+      <Declaration><![CDATA[METHOD PRIVATE M_SetMode
+VAR_INPUT
+	iModeSet : INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE iModeSet OF
+	0 : // move absolute
+		bAbsPos := TRUE;
+		bRelPos := FALSE;
+		bVel := FALSE;
+		iMode := 0;
+	1 : // move relative
+		bAbsPos := FALSE;
+		bRelPos := TRUE;
+		bVel := FALSE;
+		iMode := 1;
+	2 : // move velocity
+		bAbsPos := FALSE;
+		bRelPos := FALSE;
+		bVel := TRUE;
+		iMode := 2;
+	3 : // move to nearest zero
+		bAbsPos := FALSE;
+		bRelPos := FALSE;
+		bVel := FALSE;
+		iMode := 3;
+	ELSE
+		ADSLOGSTR(
+			msgCtrlMask := ADSLOG_MSGTYPE_ERROR, 
+			msgFmtStr   := 'Invalid Mode%s', 
+			strArg      := ''
+		); 
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="M_SetState" Id="{3016c449-8a40-44e1-81c5-5a3b4d25c33b}">
+      <Declaration><![CDATA[METHOD PRIVATE M_SetState
+VAR_INPUT
+	iState: INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE iState OF
+	0 :
+		bRun := FALSE;
+		bStart := FALSE;
+		bStop := TRUE;
+	1 :
+		bRun := TRUE;
+		bStart := TRUE;
+		bStop := FALSE;
+	ELSE
+		ADSLOGSTR(
+			msgCtrlMask := ADSLOG_MSGTYPE_ERROR, 
+			msgFmtStr   := 'Invalid State%s', 
+			strArg      := ''
+		); 
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="MAIN">
+      <LineId Id="13417" Count="0" />
       <LineId Id="13008" Count="1" />
       <LineId Id="13326" Count="0" />
-      <LineId Id="13342" Count="0" />
+      <LineId Id="13416" Count="0" />
+      <LineId Id="13352" Count="1" />
+      <LineId Id="13363" Count="0" />
+      <LineId Id="13357" Count="0" />
+      <LineId Id="13593" Count="0" />
+      <LineId Id="13412" Count="1" />
       <LineId Id="13341" Count="0" />
-      <LineId Id="13327" Count="13" />
-      <LineId Id="13010" Count="35" />
-      <LineId Id="13232" Count="2" />
-      <LineId Id="13049" Count="8" />
-      <LineId Id="13235" Count="2" />
-      <LineId Id="13061" Count="16" />
+      <LineId Id="13327" Count="2" />
+      <LineId Id="13332" Count="2" />
+      <LineId Id="13336" Count="4" />
+      <LineId Id="13010" Count="0" />
+      <LineId Id="13414" Count="0" />
+      <LineId Id="13411" Count="0" />
+      <LineId Id="13408" Count="1" />
+      <LineId Id="13035" Count="10" />
+      <LineId Id="13232" Count="0" />
+      <LineId Id="13049" Count="0" />
+      <LineId Id="13374" Count="0" />
+      <LineId Id="13462" Count="0" />
+      <LineId Id="13376" Count="0" />
+      <LineId Id="13463" Count="0" />
+      <LineId Id="13378" Count="0" />
+      <LineId Id="13465" Count="0" />
+      <LineId Id="13062" Count="0" />
+      <LineId Id="13400" Count="0" />
+      <LineId Id="13410" Count="0" />
+      <LineId Id="13399" Count="0" />
+      <LineId Id="13383" Count="0" />
+      <LineId Id="13406" Count="1" />
+      <LineId Id="13384" Count="14" />
+      <LineId Id="13382" Count="0" />
+      <LineId Id="13599" Count="0" />
+      <LineId Id="13063" Count="2" />
+      <LineId Id="13071" Count="1" />
+      <LineId Id="13404" Count="1" />
+      <LineId Id="13402" Count="0" />
+      <LineId Id="13401" Count="0" />
+      <LineId Id="13075" Count="2" />
       <LineId Id="13296" Count="0" />
-      <LineId Id="13078" Count="22" />
+      <LineId Id="13078" Count="20" />
+      <LineId Id="13100" Count="0" />
       <LineId Id="13325" Count="0" />
-      <LineId Id="13121" Count="3" />
+      <LineId Id="13121" Count="0" />
+      <LineId Id="13418" Count="0" />
+      <LineId Id="13443" Count="0" />
+      <LineId Id="13122" Count="2" />
       <LineId Id="13320" Count="0" />
       <LineId Id="13318" Count="1" />
       <LineId Id="13127" Count="8" />
@@ -314,20 +406,34 @@ END_IF
       <LineId Id="13139" Count="0" />
       <LineId Id="13316" Count="0" />
       <LineId Id="13140" Count="0" />
+      <LineId Id="13449" Count="0" />
+      <LineId Id="13451" Count="0" />
       <LineId Id="13321" Count="0" />
       <LineId Id="13141" Count="17" />
       <LineId Id="13323" Count="0" />
-      <LineId Id="13159" Count="11" />
-      <LineId Id="13175" Count="18" />
-      <LineId Id="13344" Count="2" />
-      <LineId Id="13194" Count="4" />
+      <LineId Id="13159" Count="5" />
+      <LineId Id="13167" Count="1" />
+      <LineId Id="13429" Count="0" />
+      <LineId Id="13428" Count="0" />
+      <LineId Id="13427" Count="0" />
+      <LineId Id="13176" Count="7" />
+      <LineId Id="13187" Count="0" />
+      <LineId Id="13600" Count="0" />
+      <LineId Id="13188" Count="0" />
+      <LineId Id="13436" Count="0" />
+      <LineId Id="13435" Count="0" />
+      <LineId Id="13434" Count="0" />
+      <LineId Id="13192" Count="1" />
+      <LineId Id="13432" Count="0" />
+      <LineId Id="13431" Count="0" />
+      <LineId Id="13430" Count="0" />
+      <LineId Id="13601" Count="0" />
+      <LineId Id="13195" Count="3" />
       <LineId Id="13324" Count="0" />
       <LineId Id="13310" Count="0" />
       <LineId Id="13313" Count="0" />
-      <LineId Id="13224" Count="5" />
-      <LineId Id="13199" Count="0" />
-      <LineId Id="13348" Count="0" />
-      <LineId Id="13230" Count="0" />
+      <LineId Id="13224" Count="6" />
+      <LineId Id="13351" Count="0" />
       <LineId Id="13314" Count="0" />
       <LineId Id="13200" Count="1" />
       <LineId Id="13300" Count="0" />
@@ -346,6 +452,14 @@ END_IF
       <LineId Id="13231" Count="0" />
       <LineId Id="13213" Count="2" />
       <LineId Id="452" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.M_SetMode">
+      <LineId Id="14" Count="26" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.M_SetState">
+      <LineId Id="6" Count="15" />
+      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

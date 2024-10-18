@@ -16,6 +16,7 @@
     <Implicit_KindOfTask>{e2ed547a-cc69-4a89-936a-065453404f9b}</Implicit_KindOfTask>
     <Implicit_Jitter_Distribution>{7a61f19a-0291-4620-8d22-aebe3ecaa49b}</Implicit_Jitter_Distribution>
     <LibraryReferences>{fe39485d-146e-45ee-bfa3-9bf2bb9429c5}</LibraryReferences>
+    <Released>false</Released>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="GlobalTextList.TcGTLO">
@@ -54,10 +55,6 @@
     <Folder Include="POUs" />
   </ItemGroup>
   <ItemGroup>
-    <PlaceholderReference Include="SimpleTempCtrl">
-      <DefaultResolution>SimpleTempCtrl, * (TE140x Module Vendor)</DefaultResolution>
-      <Namespace>SimpleTempCtrl</Namespace>
-    </PlaceholderReference>
     <PlaceholderReference Include="System_VisuElemMeter">
       <DefaultResolution>VisuElemMeter, 3.5.13.0 (System)</DefaultResolution>
       <Namespace>VisuElemMeter</Namespace>
