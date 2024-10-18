@@ -10,6 +10,9 @@
     <PouCall>
       <Name>P_ReadSensors</Name>
     </PouCall>
+    <PouCall>
+      <Name>P_SimulinkTesting</Name>
+    </PouCall>
     <TaskFBGuid>{8d034b40-f01d-4c88-b8a2-221550d7688a}</TaskFBGuid>
     <Fb_init>{4f9d98d0-71aa-4e7a-9a11-7000217a874a}</Fb_init>
     <Fb_exit>{0dfd7f65-52f7-4705-a500-d5923b56a19a}</Fb_exit>

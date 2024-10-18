@@ -56,18 +56,18 @@ VAR
 	iPrevAcc : INT := iAcc;
 	iPrevPhs : INT := iPhs;
 	
-	iMaxVel : INT := 1400; // max 12 hz
+	iMaxVel : INT := 3600; // max 10 hz
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// UPDATE AXES STATUS
+      <ST><![CDATA[
 FOR i := 0 TO 3 DO
+	// UPDATE AXES STATUS
 	axes[i].ReadStatus();
+	// RESTRICT VELOCITY
+	IF ABS(axes[i].NcToPlc.ActVelo) > iMaxVel THEN
+		M_SetState(0);
+	END_IF
 END_FOR
-
-// RESTRICT VELOCITY
-IF axes[i].NcToPlc.ActVelo > iMaxVel THEN
-	M_SetState(0);
-END_IF
 
 
 // STARTUP
@@ -347,14 +347,15 @@ END_CASE
     </Method>
     <LineIds Name="MAIN">
       <LineId Id="13417" Count="0" />
-      <LineId Id="13008" Count="1" />
+      <LineId Id="13008" Count="0" />
+      <LineId Id="13779" Count="1" />
+      <LineId Id="13783" Count="0" />
+      <LineId Id="13781" Count="1" />
+      <LineId Id="13009" Count="0" />
       <LineId Id="13326" Count="0" />
-      <LineId Id="13416" Count="0" />
-      <LineId Id="13352" Count="1" />
-      <LineId Id="13363" Count="0" />
-      <LineId Id="13357" Count="0" />
-      <LineId Id="13593" Count="0" />
-      <LineId Id="13412" Count="1" />
+      <LineId Id="13660" Count="0" />
+      <LineId Id="13659" Count="0" />
+      <LineId Id="13413" Count="0" />
       <LineId Id="13341" Count="0" />
       <LineId Id="13327" Count="2" />
       <LineId Id="13332" Count="2" />

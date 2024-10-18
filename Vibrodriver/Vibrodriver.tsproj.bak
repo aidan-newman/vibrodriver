@@ -1950,8 +1950,8 @@ External Setpoint Generation:
 				</Task>
 			</Tasks>
 			<Modules>
-				<Module Id="#x01010010" KeepUnrestoredLinks="2" ClassFactoryId="TE140x Module Vendor|SimpleTempCtrl|0.0.0.2">
-					<Name>Object1 (SimpleTempCtrl)</Name>
+				<Module Id="#x01010010" KeepUnrestoredLinks="2" ClassFactoryId="TE140x Module Vendor|SimpleTempCtrl|0.0.0.3">
+					<Name>SimpleTempCtrl</Name>
 					<ImageId>1000</ImageId>
 					<TmcDesc GUID="{61B84FF0-E3A1-F153-0BF4-EBB8D3C140FD}">
 						<Name>SimpleTempCtrl</Name>
@@ -3299,7 +3299,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{54D122D8-D4A2-435D-82A0-6E32046A178C}" Name="VibrodriverPLC" PrjFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.plcproj" TmcFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{6CD886E9-FFF7-9A38-CE89-F1CF2ED9B11F}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{3A7CA301-0CD9-FCA8-A814-A7B5C13C565A}">
 					<Name>VibrodriverPLC Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -3350,6 +3350,10 @@ External Setpoint Generation:
 							<Comment><![CDATA[ channel 3 voltage (mV) -  z axis (rods -> level)]]></Comment>
 							<Type>DINT</Type>
 						</Var>
+						<Var>
+							<Name>P_SimulinkTesting.power</Name>
+							<Type>LREAL</Type>
+						</Var>
 					</Vars>
 					<Vars VarGrpType="2" AreaNo="1">
 						<Name>PlcTask Outputs</Name>
@@ -3368,6 +3372,15 @@ External Setpoint Generation:
 						<Var>
 							<Name>MAIN.axes[3].PlcToNc</Name>
 							<Type GUID="{96B75FEB-2D84-43BE-A3EC-D9A681F27D52}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>P_SimulinkTesting.setTemp</Name>
+							<Comment><![CDATA[ linked variables to TcCOM object]]></Comment>
+							<Type>LREAL</Type>
+						</Var>
+						<Var>
+							<Name>P_SimulinkTesting.fdbkTemp</Name>
+							<Type>LREAL</Type>
 						</Var>
 					</Vars>
 					<UnrestoredVarLinks ImportTime="2024-09-25T11:35:53">
@@ -3428,6 +3441,14 @@ External Setpoint Generation:
 							<CycleTime>10000000</CycleTime>
 						</Context>
 					</Contexts>
+					<InitSymbols>
+						<InitSymbol>
+							<Name>P_SimulinkTesting.tempCtrl.eTraceLevelMax</Name>
+							<Type GUID="{8007AE3B-86BB-40F2-B385-EF87FCC239A4}">TcTraceLevel</Type>
+							<AreaNo>#x00000003</AreaNo>
+							<Data>00000000</Data>
+						</InitSymbol>
+					</InitSymbols>
 					<TaskPouOids>
 						<TaskPouOid Prio="20" OTCID="#x08502001"/>
 					</TaskPouOids>
@@ -3513,7 +3534,7 @@ External Setpoint Generation:
 							<ModuleIdent>1778384906</ModuleIdent>
 							<Module Id="#x03090001" Type="CSP Mode" Class="">
 								<Name>Module 1 (CSP Mode)</Name>
-								<ImageId>405</ImageId>
+								<ImageId>406</ImageId>
 								<ModuleData>fb0000000a000068000004000000000000000000000000000000000000000000</ModuleData>
 								<PdoIndex>6656</PdoIndex>
 								<PdoIndex>5632</PdoIndex>
@@ -3588,7 +3609,7 @@ External Setpoint Generation:
 							<ModuleIdent>1778384906</ModuleIdent>
 							<Module Id="#x03090002" Type="CSP Mode" Class="">
 								<Name>Module 1 (CSP Mode)</Name>
-								<ImageId>405</ImageId>
+								<ImageId>406</ImageId>
 								<ModuleData>fb0000000a000068000004000000000000000000000000000000000000000000</ModuleData>
 								<PdoIndex>6656</PdoIndex>
 								<PdoIndex>5632</PdoIndex>
@@ -3663,7 +3684,7 @@ External Setpoint Generation:
 							<ModuleIdent>1778384906</ModuleIdent>
 							<Module Id="#x03090003" Type="CSP Mode" Class="">
 								<Name>Module 1 (CSP Mode)</Name>
-								<ImageId>405</ImageId>
+								<ImageId>406</ImageId>
 								<ModuleData>fb0000000a000068000004000000000000000000000000000000000000000000</ModuleData>
 								<PdoIndex>6656</PdoIndex>
 								<PdoIndex>5632</PdoIndex>
@@ -3738,7 +3759,7 @@ External Setpoint Generation:
 							<ModuleIdent>1778384906</ModuleIdent>
 							<Module Id="#x03090004" Type="CSP Mode" Class="">
 								<Name>Module 1 (CSP Mode)</Name>
-								<ImageId>405</ImageId>
+								<ImageId>406</ImageId>
 								<ModuleData>fb0000000a000068000004000000000000000000000000000000000000000000</ModuleData>
 								<PdoIndex>6656</PdoIndex>
 								<PdoIndex>5632</PdoIndex>
@@ -31419,6 +31440,7 @@ External Setpoint Generation:
 		<MappingInfo Identifier="{00000000-0040-0304-1000-040340000403}" Id="#x02030010"/>
 		<MappingInfo Identifier="{00000000-0050-0304-1000-040351000403}" Id="#x02030020"/>
 		<MappingInfo Identifier="{05000010-2001-0850-1000-040300205008}" Id="#x02030030" Watchdog="14000000040000000400000004000000"/>
+		<MappingInfo Identifier="{02010090-2001-0850-1000-010100205008}" Id="#x02030050" Watchdog="08000000040000000400000004000000"/>
 		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^AxisBL">
 			<OwnerB Name="TIID^Motors^BL">
 				<Link VarA="Drive^Inputs^In^nDataIn3[0]" VarB="Module 1 (CSP Mode)^CSP Inputs^Torque actual value"/>
@@ -31529,6 +31551,11 @@ External Setpoint Generation:
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^AxísBR">
 				<Link VarA="PlcTask Inputs^MAIN.axes[1].NcToPlc" VarB="Outputs^ToPlc"/>
 				<Link VarA="PlcTask Outputs^MAIN.axes[1].PlcToNc" VarB="Inputs^FromPlc"/>
+			</OwnerB>
+			<OwnerB Name="TIRC^TcCOM Objects^SimpleTempCtrl">
+				<Link VarA="PlcTask Inputs^P_SimulinkTesting.power" VarB="SimpleTempCtrl_Y^HeaterPower"/>
+				<Link VarA="PlcTask Outputs^P_SimulinkTesting.fdbkTemp" VarB="SimpleTempCtrl_U^FeedbackTemp"/>
+				<Link VarA="PlcTask Outputs^P_SimulinkTesting.setTemp" VarB="SimpleTempCtrl_U^SetpointTemp"/>
 			</OwnerB>
 		</OwnerA>
 	</Mappings>
