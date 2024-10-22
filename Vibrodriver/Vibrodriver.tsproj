@@ -1937,6 +1937,7 @@ External Setpoint Generation:
 		<System>
 			<Settings MaxCpus="6" NonWinCpus="1">
 				<Cpu CpuId="5"/>
+				<IoIdleTask CycleTime="20000"/>
 			</Settings>
 			<Tasks>
 				<Task Id="5" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
@@ -3299,7 +3300,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{54D122D8-D4A2-435D-82A0-6E32046A178C}" Name="VibrodriverPLC" PrjFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.plcproj" TmcFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{3A7CA301-0CD9-FCA8-A814-A7B5C13C565A}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{B17AA4B1-F62C-A584-8830-4EA38C117C4F}">
 					<Name>VibrodriverPLC Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -3471,7 +3472,7 @@ External Setpoint Generation:
 				<Box Id="4" BoxType="9099" BoxFlags="#x00000020">
 					<Name>BL</Name>
 					<ImageId>1001</ImageId>
-					<EtherCAT SlaveType="2" PdiType="#x0680" MboxDataLinkLayer="true" StateMBoxPolling="true" CycleMBoxPollingTime="0" CoeType="45" FoeType="1" VendorId="#x000000fb" ProductCode="#x61500000" RevisionNo="#x01700000" InfoDataAddr="true" InfoDataSoeDS401="true" InfoDataDcTimes="true" DownloadSlotCfg="true" PortPhys="17" MaxSlotCount="1" SlotPdoIncrement="1" Type="EPOS4 Module 50/5 EtherCAT" Desc="EPOS4" PortABoxInfo="#x00ffffff">
+					<EtherCAT SlaveType="2" PdiType="#x0680" MboxDataLinkLayer="true" StateMBoxPolling="true" CycleMBoxPollingTime="0" CoeType="45" FoeType="1" VendorId="#x000000fb" ProductCode="#x61500000" RevisionNo="#x01700000" InfoDataAddr="true" InfoDataSoeDS401="true" InfoDataDcTimes="true" DownloadSlotCfg="true" PortPhys="17" DownloadSlotCfgIP="true" MaxSlotCount="1" SlotPdoIncrement="1" Type="EPOS4 Module 50/5 EtherCAT" Desc="EPOS4" PortABoxInfo="#x00ffffff">
 						<SyncMan>001030002600010001000000300030003000001026010000</SyncMan>
 						<SyncMan>301030002200010002000000300030003000301022010000</SyncMan>
 						<SyncMan>601011006400010003000000000000000000601064010000</SyncMan>
@@ -31430,10 +31431,6 @@ External Setpoint Generation:
 				<EtherCAT DcSyncMode="2"/>
 			</Device>
 		</Io>
-		<SymbolWatch>
-			<Variable>TINC^NC-Task 1 SAF^Axes^AxisBL^Enc^Inputs^In^nDataIn1</Variable>
-			<Variable>TIID^Motors^BL^Module 1 (CSP Mode)^CSP Outputs^Target position</Variable>
-		</SymbolWatch>
 	</Project>
 	<Mappings>
 		<MappingInfo Identifier="{00000000-2001-0850-0020-500830000403}" Id="#x02030040"/>

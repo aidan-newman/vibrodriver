@@ -126,7 +126,6 @@ END_IF
 IF NOT bRun AND bStart THEN
 	M_SetState(1);
 END_IF
-// always have stop check last
 IF bStop THEN
 	M_SetState(0);
 END_IF
@@ -379,7 +378,10 @@ END_CASE
       <LineId Id="13399" Count="0" />
       <LineId Id="13383" Count="0" />
       <LineId Id="13406" Count="1" />
-      <LineId Id="13384" Count="14" />
+      <LineId Id="13384" Count="10" />
+      <LineId Id="13397" Count="0" />
+      <LineId Id="13840" Count="0" />
+      <LineId Id="13398" Count="0" />
       <LineId Id="13382" Count="0" />
       <LineId Id="13599" Count="0" />
       <LineId Id="13063" Count="2" />
