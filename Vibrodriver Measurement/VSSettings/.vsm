@@ -32,24 +32,6 @@
               <Children />
             </Node>
             <Node>
-              <Title>Done</Title>
-              <Expanded>False</Expanded>
-              <FileName></FileName>
-              <Children />
-            </Node>
-            <Node>
-              <Title>Execute</Title>
-              <Expanded>False</Expanded>
-              <FileName></FileName>
-              <Children />
-            </Node>
-            <Node>
-              <Title>relsDone[0]</Title>
-              <Expanded>False</Expanded>
-              <FileName></FileName>
-              <Children />
-            </Node>
-            <Node>
               <Title>velX</Title>
               <Expanded>False</Expanded>
               <FileName></FileName>

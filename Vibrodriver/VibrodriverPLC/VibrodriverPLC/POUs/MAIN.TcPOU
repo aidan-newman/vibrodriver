@@ -151,7 +151,7 @@ arrMCGearOuts[1](Slave:=axes[1], Execute:=NOT bCouple AND bCoupled);
 arrMCGearOuts[2](Slave:=axes[2], Execute:=NOT bCouple AND bCoupled);
 arrMCGearOuts[3](Slave:=axes[3], Execute:=NOT bCouple AND bCoupled);
 arrMCGearIns[1](Master:=axes[0], Slave:=axes[1], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=-1);
-arrMCGearIns[2](Master:=axes[0], Slave:=axes[2], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=1);
+arrMCGearIns[2](Master:=axes[0], Slave:=axes[2], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=-1);
 arrMCGearIns[3](Master:=axes[2], Slave:=axes[3], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=-1);
 
 // check if uncoupling done
