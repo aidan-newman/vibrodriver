@@ -16,6 +16,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"543"</v>
+              <v n="TextDefault">"%s"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"196"</v>
               <v n="TextDefault">"0"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -41,6 +46,16 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"909"</v>
+              <v n="TextDefault">"BL"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"207"</v>
+              <v n="TextDefault">"BR"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"18"</v>
               <v n="TextDefault">"Couple"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -48,6 +63,11 @@
             <o>
               <v n="TextID">"782"</v>
               <v n="TextDefault">"COUPLE"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"471"</v>
+              <v n="TextDefault">"Error #"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -101,6 +121,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"359"</v>
+              <v n="TextDefault">"Reset Faults"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"245"</v>
               <v n="TextDefault">"Run Mode"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -126,6 +151,16 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"592"</v>
+              <v n="TextDefault">"TL"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"531"</v>
+              <v n="TextDefault">"TR"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"226"</v>
               <v n="TextDefault">"U/L Phase:"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -138,6 +173,16 @@
             <o>
               <v n="TextID">"275"</v>
               <v n="TextDefault">"Velocity:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"935"</v>
+              <v n="TextDefault">"Vibrodriver HMI"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"875"</v>
+              <v n="TextDefault">"Zero to Nearest"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
           </l>
