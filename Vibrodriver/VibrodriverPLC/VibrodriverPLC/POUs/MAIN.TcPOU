@@ -19,6 +19,7 @@ VAR
 	arrMCGearIns			: ARRAY[1..3] OF MC_GearIn;
 	arrMCGearOuts			: ARRAY[1..3] OF MC_GearOut;
 	arrMCPhaseAbsolutes     : ARRAY[1..3] OF MC_PhasingAbsolute;
+	arrMCTorqueControls		: ARRAY[0..3] OF MC_TorqueControl;
 	
 	arrRelsDone : ARRAY[0..3] OF BOOL; // keep track of if each motor is done its relative movement
 	arrRelsDoneZero : ARRAY[0..3] OF BOOL; // keep track of if each motor is done its relative movement
@@ -275,21 +276,23 @@ IF bStarted THEN
 		END_IF
 		
 		
-		// run main operations, execute values based on various bools
-		arrMCSetPositions[i](Axis:=axes[i], Execute:=TRUE, Position:=0); // very important for some reason
+//		// run main operations, execute values based on various bools
+//		arrMCSetPositions[i](Axis:=axes[i], Execute:=TRUE, Position:=0); // very important for some reason
 		
-		arrMCMoveAbsolutes[i](Axis:=axes[i], Execute:= iMode=0 AND bRun,
-								Position:=iPos*iDirMult, Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
+//		arrMCMoveAbsolutes[i](Axis:=axes[i], Execute:= iMode=0 AND bRun,
+//								Position:=iPos*iDirMult, Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
 								
-		arrMCMoveRelatives[i](Axis:=axes[i], Execute:= iMode=1 AND bRun AND NOT arrRelsDone[i],
-								Distance:=iPos*iDirMult, Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
+//		arrMCMoveRelatives[i](Axis:=axes[i], Execute:= iMode=1 AND bRun AND NOT arrRelsDone[i],
+//								Distance:=iPos*iDirMult, Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
 								
-		arrMCMoveVelocitys[i](Axis:=axes[i], Execute:= iMode=2 AND bRun, Direction:=eDirec,
-								Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
+//		arrMCMoveVelocitys[i](Axis:=axes[i], Execute:= iMode=2 AND bRun, Direction:=eDirec,
+//								Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
 								
-		arrMCMoveRelativesZero[i](Axis:=axes[i], Execute:= iMode=3 AND bRun AND NOT arrRelsDoneZero[i],
-								Distance:=arrZeroPoss[i], Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
+//		arrMCMoveRelativesZero[i](Axis:=axes[i], Execute:= iMode=3 AND bRun AND NOT arrRelsDoneZero[i],
+//								Distance:=arrZeroPoss[i], Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
 		
+		arrMCTorqueControls[i](Axis:=axes[i],Execute:=bRun, ContinuousUpdate:=TRUE, Torque:=iPos, TorqueRamp:=50,VelocityLimitLow:=-2000, VelocityLimitHigh:=2000);
+
 		// NEVER MOVE FROM LAST CALL
 		arrMCHalts[i](Axis:=axes[i],Execute:=NOT bRun, Deceleration:=400);
 	END_FOR
@@ -480,6 +483,8 @@ END_CASE
       <LineId Id="13210" Count="0" />
       <LineId Id="13305" Count="0" />
       <LineId Id="13212" Count="0" />
+      <LineId Id="13975" Count="0" />
+      <LineId Id="13974" Count="0" />
       <LineId Id="13231" Count="0" />
       <LineId Id="13213" Count="2" />
       <LineId Id="452" Count="0" />
