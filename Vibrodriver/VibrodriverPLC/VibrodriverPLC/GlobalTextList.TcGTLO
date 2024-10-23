@@ -71,6 +71,11 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"37"</v>
+              <v n="TextDefault">"Labelhttps://infosys.beckhoff.com/english.php?https://infosys.beckhoff.com/english.php?content=../content/1033/tcncerrcode2/513133323.html&amp;id="</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"295"</v>
               <v n="TextDefault">"Mode"</v>
               <l n="LanguageTexts" t="ArrayList" />
