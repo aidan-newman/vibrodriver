@@ -37,9 +37,6 @@
     <Compile Include="POUs\P_ReadSensors.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\P_SimulinkTesting.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Visualization Manager.TcVMO">
       <SubType>Code</SubType>
     </Compile>

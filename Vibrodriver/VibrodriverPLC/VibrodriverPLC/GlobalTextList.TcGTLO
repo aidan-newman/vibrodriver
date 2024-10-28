@@ -51,8 +51,18 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"278"</v>
+              <v n="TextDefault">"BL Torque:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"207"</v>
               <v n="TextDefault">"BR"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"495"</v>
+              <v n="TextDefault">"BR Torque:"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -161,8 +171,18 @@
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"858"</v>
+              <v n="TextDefault">"TL Torque:"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"531"</v>
               <v n="TextDefault">"TR"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"672"</v>
+              <v n="TextDefault">"TR Torque:"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -183,6 +203,16 @@
             <o>
               <v n="TextID">"935"</v>
               <v n="TextDefault">"Vibrodriver HMI"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"169"</v>
+              <v n="TextDefault">"x%s"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"868"</v>
+              <v n="TextDefault">"xs"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
