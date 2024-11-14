@@ -1433,6 +1433,15 @@ External Setpoint Generation:
 			</ArrayInfo>
 		</DataType>
 		<DataType>
+			<Name GUID="{9BE1C298-465A-5B1C-50FF-C924F60C4E32}" IecBaseType="true" AutoDeleteType="true">ARRAY [0..3] OF DINT</Name>
+			<BitSize>128</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000009}">DINT</BaseType>
+			<ArrayInfo>
+				<LBound>0</LBound>
+				<Elements>4</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
 			<Name GUID="{18071995-0000-0000-0000-002000000001}" IecBaseType="true" BitType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..0] OF BIT</Name>
 			<BitSize>1</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000010}">BIT</BaseType>
@@ -1492,6 +1501,10 @@ External Setpoint Generation:
 					<Name>TcCOM Task</Name>
 				</Task>
 			</Tasks>
+			<Modules>
+				<Module File="TorquePID.xti"/>
+				<Module File="TorquePID2.xti"/>
+			</Modules>
 		</System>
 		<Motion>
 			<NC>
@@ -2082,7 +2095,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{54D122D8-D4A2-435D-82A0-6E32046A178C}" Name="VibrodriverPLC" PrjFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.plcproj" TmcFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{469DD798-E6B9-A36B-63B3-896A096C7D50}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{5DBA25C0-10D9-34F6-A346-F99AD8CC8627}">
 					<Name>VibrodriverPLC Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -2137,6 +2150,11 @@ External Setpoint Generation:
 					<Vars VarGrpType="2" AreaNo="1">
 						<Name>PlcTask Outputs</Name>
 						<Var>
+							<Name>MAIN.bRun</Name>
+							<Comment><![CDATA[ main control	]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>MAIN.axes[0].PlcToNc</Name>
 							<Type GUID="{96B75FEB-2D84-43BE-A3EC-D9A681F27D52}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
@@ -2155,6 +2173,14 @@ External Setpoint Generation:
 						<Var>
 							<Name>MAIN.arrTorques</Name>
 							<Type GUID="{E1E90A9D-2E34-1B23-BC03-A5D169C28CE9}">ARRAY [0..3] OF INT</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.targetVel</Name>
+							<Type>LREAL</Type>
+						</Var>
+						<Var>
+							<Name>MAIN.arrVels</Name>
+							<Type GUID="{9BE1C298-465A-5B1C-50FF-C924F60C4E32}">ARRAY [0..3] OF DINT</Type>
 						</Var>
 					</Vars>
 					<UnrestoredVarLinks ImportTime="2024-09-25T11:35:53">
@@ -29893,6 +29919,9 @@ External Setpoint Generation:
 				<Image Id="4" AddrType="9" ImageType="3">
 					<Name>Image</Name>
 				</Image>
+				<Image Id="2" AddrType="10" ImageType="3">
+					<Name>Image-2</Name>
+				</Image>
 				<Box Id="4" BoxType="9099" BoxFlags="#x00000020">
 					<Name>BL</Name>
 					<ImageId>1003</ImageId>
@@ -30142,16 +30171,21 @@ External Setpoint Generation:
 				<EtherCAT DcSyncMode="2"/>
 			</Device>
 		</Io>
-		<SymbolWatch>
-			<Variable>TIID^Motors^TL^Module 1 (CST Mode)^CST Inputs^Statusword</Variable>
-		</SymbolWatch>
 	</Project>
 	<Mappings>
 		<MappingInfo Identifier="{00000000-2001-0850-0020-500830000403}" Id="#x02030040"/>
-		<MappingInfo Identifier="{00000000-0040-0304-1000-040340000403}" Id="#x02030010"/>
-		<MappingInfo Identifier="{00000000-0050-0304-1000-040351000403}" Id="#x02030020"/>
-		<MappingInfo Identifier="{08502001-0040-0304-0020-500840000403}" Id="#x02030050" Watchdog="00000000000000000000000000000000"/>
+		<MappingInfo Identifier="{00000000-0020-0304-1000-040321000403}" Id="#x02030050"/>
+		<MappingInfo Identifier="{00000000-0040-0304-2000-010140000403}" Id="#x02030010"/>
+		<MappingInfo Identifier="{00000000-0050-0304-1000-040352000403}" Id="#x02030070"/>
+		<MappingInfo Identifier="{08502001-0020-0304-0020-500820000403}" Id="#x02030060" Watchdog="00000000000000000000000000000000"/>
 		<MappingInfo Identifier="{05000010-2001-0850-1000-040300205008}" Id="#x02030030" Watchdog="0a000000040000000400000004000000"/>
+		<MappingInfo Identifier="{05000010-0040-0304-1000-040340000403}" Id="#x02030020" Watchdog="00000000000000000000000000000000"/>
+		<MappingInfo Identifier="{02010090-2001-0850-2000-010100205008}" Id="#x02030080" Watchdog="04000000040000000400000004000000"/>
+		<OwnerA Name="TIID^Motors">
+			<OwnerB Name="TIRC^TcCOM Objects^TorquePID2">
+				<Link VarA="TR^Module 1 (CST Mode)^CST Outputs^Target torque" VarB="simplePID2_Y^torque"/>
+			</OwnerB>
+		</OwnerA>
 		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^BL">
 			<OwnerB Name="TIID^Motors^BL">
 				<Link VarA="Drive^Inputs^In^nDataIn3[0]" VarB="Module 1 (CST Mode)^CST Inputs^Torque actual value"/>
@@ -30244,8 +30278,9 @@ External Setpoint Generation:
 			<OwnerB Name="TIID^Motors^TL">
 				<Link VarA="PlcTask Outputs^MAIN.arrTorques[2]" VarB="Module 1 (CST Mode)^CST Outputs^Target torque"/>
 			</OwnerB>
-			<OwnerB Name="TIID^Motors^TR">
-				<Link VarA="PlcTask Outputs^MAIN.arrTorques[3]" VarB="Module 1 (CST Mode)^CST Outputs^Target torque"/>
+			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^BL">
+				<Link VarA="PlcTask Inputs^MAIN.axes[0].NcToPlc" VarB="Outputs^ToPlc"/>
+				<Link VarA="PlcTask Outputs^MAIN.axes[0].PlcToNc" VarB="Inputs^FromPlc"/>
 			</OwnerB>
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^BR">
 				<Link VarA="PlcTask Inputs^MAIN.axes[1].NcToPlc" VarB="Outputs^ToPlc"/>
@@ -30258,6 +30293,11 @@ External Setpoint Generation:
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^TR">
 				<Link VarA="PlcTask Inputs^MAIN.axes[3].NcToPlc" VarB="Outputs^ToPlc"/>
 				<Link VarA="PlcTask Outputs^MAIN.axes[3].PlcToNc" VarB="Inputs^FromPlc"/>
+			</OwnerB>
+			<OwnerB Name="TIRC^TcCOM Objects^TorquePID2">
+				<Link VarA="PlcTask Outputs^MAIN.arrVels[3]" VarB="simplePID2_U^feedback"/>
+				<Link VarA="PlcTask Outputs^MAIN.bRun" VarB="simplePID2_U^execute"/>
+				<Link VarA="PlcTask Outputs^MAIN.targetVel" VarB="simplePID2_U^setpoint"/>
 			</OwnerB>
 		</OwnerA>
 	</Mappings>

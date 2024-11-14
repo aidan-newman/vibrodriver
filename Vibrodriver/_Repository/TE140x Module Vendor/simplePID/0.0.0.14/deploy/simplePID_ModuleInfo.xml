@@ -1,0 +1,938 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TctGeneratedModules>
+   <ModuleInfo CLSID="{91BF6D1B-751B-ADD7-501D-93BAD2766FCC}" GUID="{91BF6D1B-751B-ADD7-501D-93BAD2766FCC}" LibraryId="TE140x Module Vendor|simplePID|0.0.0.14">
+      <BlockDiagram>
+         <Name>simplePID</Name>
+         <Identifier>&lt;Root&gt;</Identifier>
+         <Type>root</Type>
+         <Position h="0" w="0" x="0" y="0"/>
+         <BlockDesign/>
+         <Block>
+            <Name>execute</Name>
+            <Identifier>&lt;Root&gt;/execute</Identifier>
+            <Type>Inport</Type>
+            <Position h="14" w="30" x="660" y="353"/>
+            <BlockDesign>
+               <Border>
+                  <svg height="1" width="1"/>
+               </Border>
+               <Image>
+                  <Placeholder Name="Port" Value="1"/>
+               </Image>
+            </BlockDesign>
+            <Port>
+               <Type No="1">Outport</Type>
+               <Position x="695" y="360"/>
+               <Name>execute</Name>
+               <IsConnected>1</IsConnected>
+               <Line>
+                  <Point x="695" y="360"/>
+                  <Point x="730" y="360"/>
+               </Line>
+               <Signal Category="Input" Name="execute" ReadOnly="true">
+                  <GlobalName>simplePID_U.execute</GlobalName>
+                  <AdsIdxOffs>#x80000000</AdsIdxOffs>
+               </Signal>
+            </Port>
+         </Block>
+         <Block>
+            <Name>setpoint</Name>
+            <Identifier>&lt;Root&gt;/setpoint</Identifier>
+            <Type>Inport</Type>
+            <Position h="14" w="30" x="270" y="308"/>
+            <BlockDesign>
+               <Border>
+                  <svg height="1" width="1"/>
+               </Border>
+               <Image>
+                  <Placeholder Name="Port" Value="2"/>
+               </Image>
+            </BlockDesign>
+            <Port>
+               <Type No="1">Outport</Type>
+               <Position x="305" y="315"/>
+               <Name>setpoint</Name>
+               <IsConnected>1</IsConnected>
+               <Line>
+                  <Point x="305" y="315"/>
+                  <Point x="330" y="315"/>
+               </Line>
+               <Signal Category="Input" Name="setpoint" ReadOnly="true">
+                  <GlobalName>simplePID_U.setpoint</GlobalName>
+                  <AdsIdxOffs>#x80000008</AdsIdxOffs>
+               </Signal>
+            </Port>
+         </Block>
+         <Block>
+            <Name>feedback</Name>
+            <Identifier>&lt;Root&gt;/feedback</Identifier>
+            <Type>Inport</Type>
+            <Position h="14" w="30" x="270" y="383"/>
+            <BlockDesign>
+               <Border>
+                  <svg height="1" width="1"/>
+               </Border>
+               <Image>
+                  <Placeholder Name="Port" Value="3"/>
+               </Image>
+            </BlockDesign>
+            <Port>
+               <Type No="1">Outport</Type>
+               <Position x="305" y="390"/>
+               <Name>feedback</Name>
+               <IsConnected>1</IsConnected>
+               <Line>
+                  <Point x="305" y="390"/>
+                  <Point x="330" y="390"/>
+               </Line>
+               <Signal Category="Input" Name="feedback" ReadOnly="true">
+                  <GlobalName>simplePID_U.feedback</GlobalName>
+                  <AdsIdxOffs>#x80000010</AdsIdxOffs>
+               </Signal>
+            </Port>
+         </Block>
+         <Block>
+            <Name>Constant</Name>
+            <Identifier>&lt;Root&gt;/Constant</Identifier>
+            <Type>Constant</Type>
+            <Position h="30" w="30" x="660" y="395"/>
+            <BlockDesign>
+               <Border>
+                  <svg height="1" width="1"/>
+               </Border>
+               <Image>
+                  <Placeholder Name="Value" Value="0"/>
+               </Image>
+            </BlockDesign>
+            <Port>
+               <Type No="1">Outport</Type>
+               <Position x="695" y="410"/>
+               <IsConnected>1</IsConnected>
+               <Line>
+                  <Point x="695" y="410"/>
+                  <Point x="713" y="410"/>
+                  <Point x="713" y="375"/>
+                  <Point x="730" y="375"/>
+               </Line>
+            </Port>
+            <Parameter Category="Parameters" Name="Value">
+               <GlobalName>simplePID_P.Constant_Value</GlobalName>
+               <AdsIdxOffs>#x53</AdsIdxOffs>
+            </Parameter>
+         </Block>
+         <Block>
+            <Name>Data Type Conversion</Name>
+            <Identifier>&lt;Root&gt;/Data Type Conversion</Identifier>
+            <Type>DataTypeConversion</Type>
+            <Position h="20" w="40" x="335" y="305"/>
+            <BlockDesign>
+               <Border>
+                  <svg height="1" width="1"/>
+               </Border>
+            </BlockDesign>
+            <Port>
+               <Type No="1">Inport</Type>
+               <Position x="320" y="315"/>
+               <IsConnected>1</IsConnected>
+               <Source>
+                  <BlockIdentifier>&lt;Root&gt;/setpoint</BlockIdentifier>
+                  <PortType>Outport</PortType>
+                  <PortNo>1</PortNo>
+               </Source>
+               <Signal Category="Input" Name="setpoint" ReadOnly="true">
+                  <GlobalName>simplePID_U.setpoint</GlobalName>
+                  <AdsIdxOffs>#x80000008</AdsIdxOffs>
+               </Signal>
+            </Port>
+            <Port>
+               <Type No="1">Outport</Type>
+               <Position x="380" y="315"/>
+               <IsConnected>1</IsConnected>
+               <Line>
+                  <Point x="380" y="315"/>
+                  <Point x="400" y="315"/>
+               </Line>
+            </Port>
+         </Block>
+         <Block>
+            <Name>Data Type Conversion1</Name>
+            <Identifier>&lt;Root&gt;/Data Type Conversion1</Identifier>
+            <Type>DataTypeConversion</Type>
+            <Position h="20" w="40" x="335" y="380"/>
+            <BlockDesign>
+               <Border>
+                  <svg height="1" width="1"/>
+               </Border>
+            </BlockDesign>
+            <Port>
+               <Type No="1">Inport</Type>
+               <Position x="320" y="390"/>
+               <IsConnected>1</IsConnected>
+               <Source>
+                  <BlockIdentifier>&lt;Root&gt;/feedback</BlockIdentifier>
+                  <PortType>Outport</PortType>
+                  <PortNo>1</PortNo>
+               </Source>
+               <Signal Category="Input" Name="feedback" ReadOnly="true">
+                  <GlobalName>simplePID_U.feedback</GlobalName>
+                  <AdsIdxOffs>#x80000010</AdsIdxOffs>
+               </Signal>
+            </Port>
+            <Port>
+               <Type No="1">Outport</Type>
+               <Position x="380" y="390"/>
+               <IsConnected>1</IsConnected>
+               <Line>
+                  <Point x="380" y="390"/>
+                  <Point x="415" y="390"/>
+                  <Point x="415" y="330"/>
+               </Line>
+            </Port>
+         </Block>
+         <Block>
+            <Name>Data Type Conversion2</Name>
+            <Identifier>&lt;Root&gt;/Data Type Conversion2</Identifier>
+            <Type>DataTypeConversion</Type>
+            <Position h="20" w="40" x="650" y="305"/>
+            <BlockDesign>
+               <Border>
+                  <svg height="1" width="1"/>
+               </Border>
+            </BlockDesign>
+            <Port>
+               <Type No="1">Inport</Type>
+               <Position x="635" y="315"/>
+               <IsConnected>1</IsConnected>
+               <Source>
+                  <BlockIdentifier>&lt;S1&gt;</BlockIdentifier>
+                  <PortType>Outport</PortType>
+                  <PortNo>1</PortNo>
+               </Source>
+            </Port>
+            <Port>
+               <Type No="1">Outport</Type>
+               <Position x="695" y="315"/>
+               <IsConnected>1</IsConnected>
+               <Line>
+                  <Point x="695" y="315"/>
+                  <Point x="713" y="315"/>
+                  <Point x="713" y="345"/>
+                  <Point x="730" y="345"/>
+               </Line>
+               <Signal Category="Output" Name="DataTypeConversion2" ReadOnly="true">
+                  <GlobalName>simplePID_B.DataTypeConversion2</GlobalName>
+                  <AdsIdxOffs>#x82000040</AdsIdxOffs>
+               </Signal>
+            </Port>
+         </Block>
+         <Block>
+            <Name>Gain</Name>
+            <Identifier>&lt;Root&gt;/Gain</Identifier>
+            <Type>Gain</Type>
+            <Position h="30" w="30" x="490" y="300"/>
+            <BlockDesign>
+               <Border>
+                  <svg height="1" width="1"/>
+               </Border>
+               <Image>
+                  <Placeholder Name="Gain" Value="0.01"/>
+               </Image>
+            </BlockDesign>
+            <Port>
+               <Type No="1">Inport</Type>
+               <Position x="475" y="315"/>
+               <IsConnected>1</IsConnected>
+               <Source>
+                  <BlockIdentifier>&lt;Root&gt;/Sum</BlockIdentifier>
+                  <PortType>Outport</PortType>
+                  <PortNo>1</PortNo>
+               </Source>
+            </Port>
+            <Port>
+               <Type No="1">Outport</Type>
+               <Position x="525" y="315"/>
+               <IsConnected>1</IsConnected>
+               <Line>
+                  <Point x="525" y="315"/>
+                  <Point x="560" y="315"/>
+               </Line>
+               <Signal Category="Output" Name="Gain" ReadOnly="true">
+                  <GlobalName>simplePID_B.Gain</GlobalName>
+                  <AdsIdxOffs>#x82000038</AdsIdxOffs>
+               </Signal>
+            </Port>
+            <Parameter Category="Parameters" Name="Gain">
+               <GlobalName>simplePID_P.Gain_Gain</GlobalName>
+               <AdsIdxOffs>#x5B</AdsIdxOffs>
+            </Parameter>
+         </Block>
+         <Block>
+            <Name>PID Controller</Name>
+            <Identifier>&lt;S1&gt;</Identifier>
+            <Type>SubSystem</Type>
+            <Position h="36" w="40" x="565" y="297"/>
+            <BlockDesign>
+               <Border>
+                  <svg height="1" width="1"/>
+               </Border>
+            </BlockDesign>
+            <Port>
+               <Type No="1">Inport</Type>
+               <Position x="550" y="315"/>
+               <IsConnected>1</IsConnected>
+               <Source>
+                  <BlockIdentifier>&lt;Root&gt;/Gain</BlockIdentifier>
+                  <PortType>Outport</PortType>
+                  <PortNo>1</PortNo>
+               </Source>
+               <Signal Category="Output" Name="Gain" ReadOnly="true">
+                  <GlobalName>simplePID_B.Gain</GlobalName>
+                  <AdsIdxOffs>#x82000038</AdsIdxOffs>
+               </Signal>
+            </Port>
+            <Port>
+               <Type No="1">Outport</Type>
+               <Position x="610" y="315"/>
+               <IsConnected>1</IsConnected>
+               <Line>
+                  <Point x="610" y="315"/>
+                  <Point x="645" y="315"/>
+               </Line>
+            </Port>
+            <State Category="Internal signals" Name="Filter/Disc. Forward Euler Filter/Filter" ReadOnly="true">
+               <GlobalName>simplePID_B.Filter</GlobalName>
+               <AdsIdxOffs>#x82000020</AdsIdxOffs>
+            </State>
+            <State Category="Internal signals" Name="N Gain/Internal Parameters/Filter Coefficient" ReadOnly="true">
+               <GlobalName>simplePID_B.FilterCoefficient</GlobalName>
+               <AdsIdxOffs>#x82000000</AdsIdxOffs>
+            </State>
+            <State Category="Internal signals" Name="I Gain/Internal Parameters/Integral Gain" ReadOnly="true">
+               <GlobalName>simplePID_B.IntegralGain</GlobalName>
+               <AdsIdxOffs>#x82000010</AdsIdxOffs>
+            </State>
+            <State Category="Internal signals" Name="Integrator/Discrete/Integrator" ReadOnly="true">
+               <GlobalName>simplePID_B.Integrator</GlobalName>
+               <AdsIdxOffs>#x82000018</AdsIdxOffs>
+            </State>
+            <State Category="Internal signals" Name="Saturation/Enabled/Saturation" ReadOnly="true">
+               <GlobalName>simplePID_B.Saturation</GlobalName>
+               <AdsIdxOffs>#x82000008</AdsIdxOffs>
+            </State>
+            <State Category="Internal signals" Name="Sum/Sum_PID/Sum" ReadOnly="true">
+               <GlobalName>simplePID_B.Sum</GlobalName>
+               <AdsIdxOffs>#x82000028</AdsIdxOffs>
+            </State>
+            <State Category="Internal signals" Name="Filter/Disc. Forward Euler Filter/SumD" ReadOnly="true">
+               <GlobalName>simplePID_B.SumD</GlobalName>
+               <AdsIdxOffs>#x82000030</AdsIdxOffs>
+            </State>
+            <State Category="DWork" Name="Filter/Disc. Forward Euler Filter/Filter" ReadOnly="true">
+               <GlobalName>simplePID_DW.Filter_DSTATE</GlobalName>
+               <AdsIdxOffs>#x83000008</AdsIdxOffs>
+            </State>
+            <State Category="DWork" Name="Integrator/Discrete/Integrator" ReadOnly="true">
+               <GlobalName>simplePID_DW.Integrator_DSTATE</GlobalName>
+               <AdsIdxOffs>#x83000000</AdsIdxOffs>
+            </State>
+            <Parameter Category="Parameters" Name="Filter/Disc. Forward Euler Filter/Filter:gainval">
+               <GlobalName>simplePID_P.Filter_gainval</GlobalName>
+               <AdsIdxOffs>#x6B</AdsIdxOffs>
+            </Parameter>
+            <Parameter Category="Parameters" Name="Integrator/Discrete/Integrator:gainval">
+               <GlobalName>simplePID_P.Integrator_gainval</GlobalName>
+               <AdsIdxOffs>#x63</AdsIdxOffs>
+            </Parameter>
+            <Parameter Category="Parameters" Name="D Gain/Internal Parameters/Derivative Gain:Gain">
+               <GlobalName>simplePID_P.PIDController_D</GlobalName>
+               <AdsIdxOffs>#x13</AdsIdxOffs>
+            </Parameter>
+            <Parameter Category="Parameters" Name="I Gain/Internal Parameters/Integral Gain:Gain">
+               <GlobalName>simplePID_P.PIDController_I</GlobalName>
+               <AdsIdxOffs>#x1B</AdsIdxOffs>
+            </Parameter>
+            <Parameter Category="Parameters" Name="Integrator/Discrete/Integrator:InitialCondition">
+               <GlobalName>simplePID_P.PIDController_InitialConditio_d</GlobalName>
+               <AdsIdxOffs>#x2B</AdsIdxOffs>
+            </Parameter>
+            <Parameter Category="Parameters" Name="Filter/Disc. Forward Euler Filter/Filter:InitialCondition">
+               <GlobalName>simplePID_P.PIDController_InitialConditionF</GlobalName>
+               <AdsIdxOffs>#x23</AdsIdxOffs>
+            </Parameter>
+            <Parameter Category="Parameters" Name="Saturation/Enabled/Saturation:LowerLimit">
+               <GlobalName>simplePID_P.PIDController_LowerSaturationLi</GlobalName>
+               <AdsIdxOffs>#x33</AdsIdxOffs>
+            </Parameter>
+            <Parameter Category="Parameters" Name="N Gain/Internal Parameters/Filter Coefficient:Gain">
+               <GlobalName>simplePID_P.PIDController_N</GlobalName>
+               <AdsIdxOffs>#x3B</AdsIdxOffs>
+            </Parameter>
+            <Parameter Category="Parameters" Name="Parallel P Gain/Internal Parameters/Proportional Gain:Gain">
+               <GlobalName>simplePID_P.PIDController_P</GlobalName>
+               <AdsIdxOffs>#x43</AdsIdxOffs>
+            </Parameter>
+            <Parameter Category="Parameters" Name="Saturation/Enabled/Saturation:UpperLimit">
+               <GlobalName>simplePID_P.PIDController_UpperSaturationLi</GlobalName>
+               <AdsIdxOffs>#x4B</AdsIdxOffs>
+            </Parameter>
+         </Block>
+         <Block>
+            <Name>Sum</Name>
+            <Identifier>&lt;Root&gt;/Sum</Identifier>
+            <Type>Sum</Type>
+            <Position h="20" w="20" x="405" y="305"/>
+            <BlockDesign>
+               <Border>
+                  <svg height="1" width="1"/>
+               </Border>
+            </BlockDesign>
+            <Port>
+               <Type No="1">Inport</Type>
+               <Position x="390" y="315"/>
+               <IsConnected>1</IsConnected>
+               <Source>
+                  <BlockIdentifier>&lt;Root&gt;/Data Type Conversion</BlockIdentifier>
+                  <PortType>Outport</PortType>
+                  <PortNo>1</PortNo>
+               </Source>
+            </Port>
+            <Port>
+               <Type No="2">Inport</Type>
+               <Position x="415" y="340"/>
+               <Rotation>1.5708</Rotation>
+               <IsConnected>1</IsConnected>
+               <Source>
+                  <BlockIdentifier>&lt;Root&gt;/Data Type Conversion1</BlockIdentifier>
+                  <PortType>Outport</PortType>
+                  <PortNo>1</PortNo>
+               </Source>
+            </Port>
+            <Port>
+               <Type No="1">Outport</Type>
+               <Position x="430" y="315"/>
+               <IsConnected>1</IsConnected>
+               <Line>
+                  <Point x="430" y="315"/>
+                  <Point x="485" y="315"/>
+               </Line>
+            </Port>
+         </Block>
+         <Block>
+            <Name>Switch</Name>
+            <Identifier>&lt;Root&gt;/Switch</Identifier>
+            <Type>Switch</Type>
+            <Position h="40" w="50" x="735" y="340"/>
+            <BlockDesign>
+               <Border>
+                  <svg height="1" width="1"/>
+               </Border>
+            </BlockDesign>
+            <Port>
+               <Type No="1">Inport</Type>
+               <Position x="720" y="345"/>
+               <IsConnected>1</IsConnected>
+               <Source>
+                  <BlockIdentifier>&lt;Root&gt;/Data Type Conversion2</BlockIdentifier>
+                  <PortType>Outport</PortType>
+                  <PortNo>1</PortNo>
+               </Source>
+               <Signal Category="Output" Name="DataTypeConversion2" ReadOnly="true">
+                  <GlobalName>simplePID_B.DataTypeConversion2</GlobalName>
+                  <AdsIdxOffs>#x82000040</AdsIdxOffs>
+               </Signal>
+            </Port>
+            <Port>
+               <Type No="2">Inport</Type>
+               <Position x="720" y="360"/>
+               <IsConnected>1</IsConnected>
+               <Source>
+                  <BlockIdentifier>&lt;Root&gt;/execute</BlockIdentifier>
+                  <PortType>Outport</PortType>
+                  <PortNo>1</PortNo>
+               </Source>
+               <Signal Category="Input" Name="execute" ReadOnly="true">
+                  <GlobalName>simplePID_U.execute</GlobalName>
+                  <AdsIdxOffs>#x80000000</AdsIdxOffs>
+               </Signal>
+            </Port>
+            <Port>
+               <Type No="3">Inport</Type>
+               <Position x="720" y="375"/>
+               <IsConnected>1</IsConnected>
+               <Source>
+                  <BlockIdentifier>&lt;Root&gt;/Constant</BlockIdentifier>
+                  <PortType>Outport</PortType>
+                  <PortNo>1</PortNo>
+               </Source>
+            </Port>
+            <Port>
+               <Type No="1">Outport</Type>
+               <Position x="790" y="360"/>
+               <IsConnected>1</IsConnected>
+               <Line>
+                  <Point x="790" y="360"/>
+                  <Point x="835" y="360"/>
+               </Line>
+               <Signal Category="Output" Name="torque" ReadOnly="true">
+                  <GlobalName>simplePID_Y.torque</GlobalName>
+                  <AdsIdxOffs>#x81000000</AdsIdxOffs>
+               </Signal>
+            </Port>
+         </Block>
+         <Block>
+            <Name>torque</Name>
+            <Identifier>&lt;Root&gt;/torque</Identifier>
+            <Type>Outport</Type>
+            <Position h="14" w="30" x="840" y="353"/>
+            <BlockDesign>
+               <Border>
+                  <svg height="1" width="1"/>
+               </Border>
+               <Image>
+                  <Placeholder Name="Port" Value="1"/>
+               </Image>
+            </BlockDesign>
+            <Port>
+               <Type No="1">Inport</Type>
+               <Position x="825" y="360"/>
+               <Name>torque</Name>
+               <IsConnected>1</IsConnected>
+               <Source>
+                  <BlockIdentifier>&lt;Root&gt;/Switch</BlockIdentifier>
+                  <PortType>Outport</PortType>
+                  <PortNo>1</PortNo>
+               </Source>
+               <Signal Category="Output" Name="torque" ReadOnly="true">
+                  <GlobalName>simplePID_Y.torque</GlobalName>
+                  <AdsIdxOffs>#x81000000</AdsIdxOffs>
+               </Signal>
+            </Port>
+         </Block>
+         <SubsystemHierarchy>
+            <Subsystem>
+               <ID>&lt;Root&gt;</ID>
+            </Subsystem>
+            <Subsystem>
+               <ID>&lt;S1&gt;</ID>
+               <Parent>&lt;Root&gt;</Parent>
+            </Subsystem>
+         </SubsystemHierarchy>
+         <DebugInfo>
+            <SourceFile>
+               <Name>simplePID.cpp</Name>
+               <Path>C:\Users\vibro\Documents\MATLAB\Aidan MATLAB\simplePID_tcgrt\simplePID.cpp</Path>
+               <CodeSection CommentStartLine="42" EndLine="49" Method="simplePID_step" StartLine="46">
+                  <Block>&lt;Root&gt;/Gain</Block>
+                  <Block>&lt;Root&gt;/Data Type Conversion1</Block>
+                  <Block>&lt;Root&gt;/Sum</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="50" EndLine="54" Method="simplePID_step" StartLine="53">
+                  <Block>&lt;S44&gt;/Sum</Block>
+                  <Block>&lt;S40&gt;/Proportional Gain</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="55" EndLine="57" Method="simplePID_step" StartLine="56">
+                  <Block>&lt;S35&gt;/Integrator</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="58" EndLine="62" Method="simplePID_step" StartLine="61">
+                  <Block>&lt;S30&gt;/SumD</Block>
+                  <Block>&lt;S28&gt;/Derivative Gain</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="63" EndLine="65" Method="simplePID_step" StartLine="64">
+                  <Block>&lt;S30&gt;/Filter</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="66" EndLine="68" Method="simplePID_step" StartLine="67">
+                  <Block>&lt;S30&gt;/SumD</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="69" EndLine="72" Method="simplePID_step" StartLine="70">
+                  <Block>&lt;S38&gt;/Filter Coefficient</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="73" EndLine="76" Method="simplePID_step" StartLine="74">
+                  <Block>&lt;S44&gt;/Sum</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="77" EndLine="78" Method="simplePID_step" StartLine="78">
+                  <Block>&lt;S42&gt;/Saturation</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="79" EndLine="81" Method="simplePID_step" StartLine="80">
+                  <Block>&lt;S42&gt;/Saturation</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="82" EndLine="84" Method="simplePID_step" StartLine="83">
+                  <Block>&lt;S42&gt;/Saturation</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="85" EndLine="88" Method="simplePID_step" StartLine="86">
+                  <Block>&lt;S42&gt;/Saturation</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="89" EndLine="90" Method="simplePID_step" StartLine="90">
+                  <Block>&lt;S42&gt;/Saturation</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="91" EndLine="94" Method="simplePID_step" StartLine="94">
+                  <Block>&lt;Root&gt;/Switch</Block>
+                  <Block>&lt;Root&gt;/Constant</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="95" EndLine="102" Method="simplePID_step" StartLine="96">
+                  <Block>&lt;Root&gt;/Data Type Conversion2</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="103" EndLine="108" Method="simplePID_step" StartLine="104">
+                  <Block>&lt;Root&gt;/Data Type Conversion2</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="109" EndLine="118" Method="simplePID_step" StartLine="110">
+                  <Block>&lt;Root&gt;/torque</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="119" EndLine="126" Method="simplePID_step" StartLine="122">
+                  <Block>&lt;Root&gt;/torque</Block>
+                  <Block>&lt;Root&gt;/Constant</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="127" EndLine="128" Method="simplePID_step" StartLine="128">
+                  <Block>&lt;Root&gt;/Switch</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="129" EndLine="131" Method="simplePID_step" StartLine="130">
+                  <Block>&lt;S32&gt;/Integral Gain</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="132" EndLine="135" Method="simplePID_step" StartLine="133">
+                  <Block>&lt;S35&gt;/Integrator</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="136" EndLine="140" Method="simplePID_step" StartLine="137">
+                  <Block>&lt;S30&gt;/Filter</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="146" EndLine="148" Method="simplePID_initialize" StartLine="147">
+                  <Block>&lt;S35&gt;/Integrator</Block>
+               </CodeSection>
+               <CodeSection CommentStartLine="149" EndLine="152" Method="simplePID_initialize" StartLine="150">
+                  <Block>&lt;S30&gt;/Filter</Block>
+               </CodeSection>
+            </SourceFile>
+         </DebugInfo>
+      </BlockDiagram>
+      <DefaultValues>
+         <Value>
+            <Name>TaskOid</Name>
+         </Value>
+         <Value>
+            <Name>TaskPriority</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>TaskCycleTimeNs</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>TaskPort</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>TaskSortOrder</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>TraceLevelMax</Name>
+            <EnumText>tlInfo</EnumText>
+         </Value>
+         <Value>
+            <Name>ModuleCaller</Name>
+            <EnumText>CyclicTask</EnumText>
+         </Value>
+         <Value>
+            <Name>CallerVerification</Name>
+            <EnumText>Default</EnumText>
+         </Value>
+         <Value>
+            <Name>StepSizeAdaptation</Name>
+            <EnumText>RequireMatchingTaskCycleTime</EnumText>
+         </Value>
+         <Value>
+            <Name>ExecutionSequence</Name>
+            <EnumText>UpdateBeforeOutputMapping</EnumText>
+         </Value>
+         <Value>
+            <Name>Execute</Name>
+            <EnumText>TRUE</EnumText>
+         </Value>
+         <Value>
+            <Name>AccessLockState</Name>
+            <EnumText>TCOM_STATE_OP</EnumText>
+         </Value>
+         <Value>
+            <Name>InitExceptionHandling</Name>
+            <EnumText>CallerExceptions</EnumText>
+         </Value>
+         <Value>
+            <Name>UpdateExceptionHandling</Name>
+            <EnumText>CallerExceptions</EnumText>
+         </Value>
+         <Value>
+            <Name>ModuleGeneratorInfo.MatlabVersion[0]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>ModuleGeneratorInfo.MatlabVersion[1]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>ModuleGeneratorInfo.MatlabVersion[2]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>ModuleGeneratorInfo.MatlabVersion[3]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>ModuleGeneratorInfo.TE140xVersion[0]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>ModuleGeneratorInfo.TE140xVersion[1]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>ModuleGeneratorInfo.TE140xVersion[2]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>ModuleGeneratorInfo.TE140xVersion[3]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>SimulinkModelInfo.ModelName</Name>
+         </Value>
+         <Value>
+            <Name>SimulinkModelInfo.SimulinkVersion[0]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>SimulinkModelInfo.SimulinkVersion[1]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>SimulinkModelInfo.SimulinkVersion[2]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>SimulinkModelInfo.SimulinkVersion[3]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>SimulinkModelInfo.ModelVersion[0]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>SimulinkModelInfo.ModelVersion[1]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>SimulinkModelInfo.ModelVersion[2]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>SimulinkModelInfo.ModelVersion[3]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>SimulinkModelInfo.ModelChecksum[0]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>SimulinkModelInfo.ModelChecksum[1]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>SimulinkModelInfo.ModelChecksum[2]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>SimulinkModelInfo.ModelChecksum[3]</Name>
+            <Value>0</Value>
+         </Value>
+         <Value>
+            <Name>simplePID_P_Sharing</Name>
+            <EnumText>Define</EnumText>
+         </Value>
+         <Value>
+            <Name>simplePID_P.PIDController_D</Name>
+            <Value>10.0</Value>
+         </Value>
+         <Value>
+            <Name>simplePID_P.PIDController_I</Name>
+            <Value>0.01</Value>
+         </Value>
+         <Value>
+            <Name>simplePID_P.PIDController_InitialConditionF</Name>
+            <Value>0.0</Value>
+         </Value>
+         <Value>
+            <Name>simplePID_P.PIDController_InitialConditio_d</Name>
+            <Value>0.0</Value>
+         </Value>
+         <Value>
+            <Name>simplePID_P.PIDController_LowerSaturationLi</Name>
+            <Value>-50</Value>
+         </Value>
+         <Value>
+            <Name>simplePID_P.PIDController_N</Name>
+            <Value>50.0</Value>
+         </Value>
+         <Value>
+            <Name>simplePID_P.PIDController_P</Name>
+            <Value>1.0</Value>
+         </Value>
+         <Value>
+            <Name>simplePID_P.PIDController_UpperSaturationLi</Name>
+            <Value>50.0</Value>
+         </Value>
+         <Value>
+            <Name>simplePID_P.Constant_Value</Name>
+            <Value>0.0</Value>
+         </Value>
+         <Value>
+            <Name>simplePID_P.Gain_Gain</Name>
+            <Value>0.01</Value>
+         </Value>
+         <Value>
+            <Name>simplePID_P.Integrator_gainval</Name>
+            <Value>0.005</Value>
+         </Value>
+         <Value>
+            <Name>simplePID_P.Filter_gainval</Name>
+            <Value>0.005</Value>
+         </Value>
+      </DefaultValues>
+      <ModuleParameters>
+         <Parameter DefaultValueAccess="READONLY" OnlineValueAccess="READONLY" StartupValueAccess="WRITE">
+            <Name>CallBy</Name>
+            <Category>Module parameters</Category>
+         </Parameter>
+         <Parameter DefaultValueAccess="READONLY" OnlineValueAccess="READONLY" StartupValueAccess="WRITE">
+            <Name>ExecutionSequence</Name>
+            <Category>Module parameters</Category>
+         </Parameter>
+         <Parameter DefaultValueAccess="READONLY" OnlineValueAccess="READONLY" StartupValueAccess="WRITE">
+            <Name>StepSizeAdaptation</Name>
+            <Category>Module parameters</Category>
+         </Parameter>
+         <Parameter DefaultValueAccess="READONLY" OnlineValueAccess="READONLY" StartupValueAccess="">
+            <Name>Initialized</Name>
+            <Category>Monitoring</Category>
+         </Parameter>
+         <Parameter DefaultValueAccess="READONLY" OnlineValueAccess="READONLY" StartupValueAccess="">
+            <Name>CycleUpdateExecuted</Name>
+            <Category>Monitoring</Category>
+         </Parameter>
+         <Parameter DefaultValueAccess="READONLY" OnlineValueAccess="" StartupValueAccess="">
+            <Name>ModuleInfo</Name>
+            <Category>Module identification</Category>
+         </Parameter>
+         <Parameter DefaultValueAccess="" OnlineValueAccess="READONLY" StartupValueAccess="">
+            <Name>ModuleBuildInfo</Name>
+            <Category>Module identification</Category>
+         </Parameter>
+         <Parameter DefaultValueAccess="READONLY" OnlineValueAccess="WRITE" StartupValueAccess="WRITE">
+            <Name>Execute</Name>
+            <Category>Module parameters</Category>
+         </Parameter>
+         <Parameter DefaultValueAccess="READONLY" OnlineValueAccess="READONLY" StartupValueAccess="">
+            <Name>SimulinkTime</Name>
+            <Category>Monitoring</Category>
+         </Parameter>
+         <Parameter DefaultValueAccess="READONLY" OnlineValueAccess="READONLY" StartupValueAccess="">
+            <Name>AccessLockState</Name>
+            <Category>Module parameters</Category>
+         </Parameter>
+      </ModuleParameters>
+      <BlockDesigns>
+         <BlockDesign>
+            <Type>Inport</Type>
+            <Border>
+               <svg height="30" id="svg3009" version="1.1" width="60">
+                  <defs id="defs3011"/>
+                  <metadata id="metadata3014"/>
+                  <g id="layer1" transform="translate(0,-1022.3622)">
+                     <rect height="28.121166" id="rect2996" ry="14.060583" style="fill:none;stroke:#000000;stroke-width:1.87883461;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" width="58.121166" x="0.9394173" y="1023.3016"/>
+                  </g>
+               </svg>
+            </Border>
+            <Image>
+               <svg height="30" id="svg3009" version="1.1" width="60">
+                  <defs id="defs3011"/>
+                  <metadata id="metadata3014"/>
+                  <text id="text3010" style="font-size:8px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans" x="30" xml:space="preserve" y="15"><tspan id="tspan3012" x="30" y="15">Block::Port</tspan></text></svg>
+            </Image>
+         </BlockDesign>
+         <BlockDesign>
+            <Type>Constant</Type>
+            <Image>
+               <svg height="100" id="svg3009" version="1.1" width="100">
+                  <defs id="defs3011"/>
+                  <metadata id="metadata3014"/>
+                  <g id="layer1">
+                     <text id="text3001" style="font-size:8px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans" x="50" xml:space="preserve" y="50"><tspan id="tspan3003" x="50" y="50">ADS::Value Block::Value</tspan></text></g>
+               </svg>
+            </Image>
+         </BlockDesign>
+         <BlockDesign>
+            <Type>Gain</Type>
+            <Border>
+               <svg height="100" id="svg3009" version="1.1" width="100">
+                  <defs id="defs3011"/>
+                  <metadata id="metadata3014"/>
+                  <g id="layer1" transform="translate(0,-952.36218)">
+                     <path d="M 0,100 0,0 100,50 0,100" id="path3005" style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" transform="translate(0,952.36218)"/>
+                  </g>
+               </svg>
+            </Border>
+            <Image>
+               <svg height="100" id="svg3009" version="1.1" width="100">
+                  <defs id="defs3011"/>
+                  <metadata id="metadata3014"/>
+                  <g id="layer1">
+                     <text id="text2991" style="font-size:8px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans" x="5" xml:space="preserve" y="50"><tspan id="tspan2993" x="5" y="50">ADS::Gain Block::Gain</tspan></text></g>
+               </svg>
+            </Image>
+         </BlockDesign>
+         <BlockDesign>
+            <Type>Sum</Type>
+            <Image>
+               <svg height="100" id="svg3009" version="1.1" width="100">
+                  <defs id="defs3011"/>
+                  <metadata id="metadata3014"/>
+                  <g id="layer1">
+                     <text id="text2991" style="font-size:8px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;text-anchor:middle;text-align:center;stroke:none;font-family:Sans" x="50" xml:space="preserve" y="50"><tspan id="tspan2993" x="50" y="50">+</tspan></text></g>
+               </svg>
+            </Image>
+         </BlockDesign>
+         <BlockDesign>
+            <Type>Switch</Type>
+            <Image>
+               <svg height="100" id="svg3009" version="1.1" width="100">
+                  <defs id="defs3011"/>
+                  <metadata id="metadata3014"/>
+                  <g id="layer1" transform="translate(0,-952.36218)">
+                     <rect height="6.1243801" id="rect3006" style="fill:none;stroke:#000000;stroke-width:0.58110338;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" width="6.1871104" x="41.154118" y="966.15198"/>
+                     <path d="m 41.423146,968.61373 c -13.666931,0 -27.333897,-2e-5 -41.0008279,0" id="path3776" style="fill:none;stroke:#000000;stroke-width:0.58110338;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"/>
+                     <path d="m 44.920178,968.55368 35.508632,34.52472 18.651024,0" id="path3778" style="fill:none;stroke:#000000;stroke-width:0.58110338;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"/>
+                     <path d="m 16.764368,993.41146 0,20.65474" id="path3780" style="fill:none;stroke:#000000;stroke-width:0.58110338;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"/>
+                     <path d="m 16.854023,1003.2585 -16.49895482,0" id="path3782" style="fill:none;stroke:#000000;stroke-width:0.58110338;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"/>
+                     <path d="m 0.35506818,1038.8039 41.15773282,0" id="path3784" style="fill:none;stroke:#000000;stroke-width:0.58110338;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"/>
+                     <rect height="6.1243801" id="rect3786" style="fill:none;stroke:#000000;stroke-width:0.58110338;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" width="5.9181056" x="41.423149" y="1035.1414"/>
+                  </g>
+               </svg>
+            </Image>
+         </BlockDesign>
+         <BlockDesign>
+            <Type>Outport</Type>
+            <Border>
+               <svg height="30" id="svg3009" version="1.1" width="60">
+                  <defs id="defs3011"/>
+                  <metadata id="metadata3014"/>
+                  <g id="layer1" transform="translate(0,-1022.3622)">
+                     <rect height="28.121166" id="rect2996" ry="14.060583" style="fill:none;stroke:#000000;stroke-width:1.87883461;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" width="58.121166" x="0.9394173" y="1023.3016"/>
+                  </g>
+               </svg>
+            </Border>
+            <Image>
+               <svg height="30" id="svg3009" version="1.1" width="60">
+                  <defs id="defs3011"/>
+                  <metadata id="metadata3014"/>
+                  <text id="text3010" style="font-size:8px;font-style:normal;font-weight:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans" x="30" xml:space="preserve" y="15"><tspan id="tspan3012" x="30" y="15">Block::Port</tspan></text></svg>
+            </Image>
+         </BlockDesign>
+      </BlockDesigns>
+   </ModuleInfo>
+</TctGeneratedModules>

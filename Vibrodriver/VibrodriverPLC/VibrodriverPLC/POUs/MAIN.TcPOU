@@ -4,7 +4,7 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
 
-	bRun : BOOL := FALSE; // main control	
+	bRun AT %Q* : BOOL := FALSE; // main control	
 
 	axes : ARRAY[0..3] OF AXIS_REF; // [BL BR TL TR] (linked in MOTION)
 	
@@ -35,7 +35,10 @@ VAR
 	arrTorqIns : ARRAY[0..3] OF INT;
 	arrTorques AT %Q* : ARRAY[0..3] OF INT;
 	
-	iMaxVel : INT := 3600; // max 10 hz
+	targetVel AT %Q* : LREAL := 2600;
+	arrVels AT %Q* : ARRAY[0..3] OF DINT;
+	
+	iMaxVel : INT := 5000; // max 10 hz
 	eDirec : MC_Direction := MC_Direction.MC_Negative_Direction;
 	iDirMult : INT := -1; // multiplier: actVel = setVel * mult (used to reverse default)
 END_VAR]]></Declaration>
@@ -44,6 +47,7 @@ END_VAR]]></Declaration>
 FOR i := iFirstIdx TO iEndIdx DO
 	// UPDATE AXES STATUS
 	axes[i].ReadStatus();
+	arrVels[i] := LREAL_TO_DINT(axes[i].NcToPlc.ActVelo);
 	// UPDATE HEX ERRORS
 	arrHexErrors[i] := WORD_TO_HEXSTR(in:=UDINT_TO_WORD(MAIN.axes[i].Status.ErrorID), iPrecision:=4, bLoCase:=FALSE);
 	// RESTRICT VELOCITY
@@ -139,6 +143,7 @@ END_IF]]></ST>
       <LineId Id="13417" Count="0" />
       <LineId Id="13008" Count="0" />
       <LineId Id="13779" Count="1" />
+      <LineId Id="14182" Count="0" />
       <LineId Id="13901" Count="1" />
       <LineId Id="13783" Count="0" />
       <LineId Id="13781" Count="1" />
