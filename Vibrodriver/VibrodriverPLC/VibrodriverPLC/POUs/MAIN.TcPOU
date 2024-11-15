@@ -9,7 +9,7 @@ VAR
 	axes : ARRAY[0..3] OF AXIS_REF; // [BL BR TL TR] (linked in MOTION)
 	
 	// indexes
-	iFirstIdx : INT := 0;
+	iFirstIdx : INT := 1;
 	iEndIdx : INT := 3;
 	
 	// motion control function blocks

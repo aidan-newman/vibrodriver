@@ -1491,18 +1491,17 @@ External Setpoint Generation:
 				<IoIdleTask CycleTime="20000"/>
 			</Settings>
 			<Tasks>
-				<Task Id="5" Priority="20" CycleTime="50000" AmsPort="350" AdtTasks="true">
+				<Task Id="5" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
 					<Name>PLC Task</Name>
 				</Task>
 				<Task Id="8" Priority="30" CycleTime="50000" AmsPort="353" DisableFpExceptions="true" AdtTasks="true">
 					<Name>Visualization Task</Name>
 				</Task>
-				<Task Id="9" Priority="1" CycleTime="50000" AmsPort="354" AdtTasks="true">
+				<Task Id="9" Priority="40" CycleTime="50000" AmsPort="354" AdtTasks="true">
 					<Name>TcCOM Task</Name>
 				</Task>
 			</Tasks>
 			<Modules>
-				<Module File="TorquePID.xti"/>
 				<Module File="TorquePID2.xti"/>
 			</Modules>
 		</System>
@@ -1523,10 +1522,12 @@ External Setpoint Generation:
 				<SvbTask Priority="8" CycleTime="100000" AmsPort="511">
 					<Name>NC-Task 1 SVB</Name>
 				</SvbTask>
-				<Axis Id="1" CreateSymbols="true" AxisType="1">
+				<Axis Id="1" Disabled="true" CreateSymbols="true" AxisType="1">
 					<Name>BL</Name>
 					<AxisPara>
 						<General UnitName="°"/>
+						<PositionAreaControl Enable="false"/>
+						<TargetPosControl Enable="false"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
 					<Encoder Name="Enc" EncType="19">
@@ -1665,10 +1666,12 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="2" CreateSymbols="true" AxisType="1">
+				<Axis Id="5" CreateSymbols="true" AxisType="1">
 					<Name>BR</Name>
 					<AxisPara>
 						<General UnitName="°"/>
+						<PositionAreaControl Enable="false"/>
+						<TargetPosControl Enable="false"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
 					<Encoder Name="Enc" EncType="19">
@@ -1807,10 +1810,12 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="3" CreateSymbols="true" AxisType="1">
+				<Axis Id="6" CreateSymbols="true" AxisType="1">
 					<Name>TL</Name>
 					<AxisPara>
 						<General UnitName="°"/>
+						<PositionAreaControl Enable="false"/>
+						<TargetPosControl Enable="false"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
 					<Encoder Name="Enc" EncType="19">
@@ -1873,7 +1878,7 @@ External Setpoint Generation:
 					</Encoder>
 					<Drive Name="Drive" DrvType="16">
 						<DrvPara MaxCount="#xffffffff" DriveControlDWord="#x00020000">
-							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="1"/>
+							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
@@ -1949,10 +1954,12 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="4" CreateSymbols="true" AxisType="1">
+				<Axis Id="7" CreateSymbols="true" AxisType="1">
 					<Name>TR</Name>
 					<AxisPara>
 						<General UnitName="°"/>
+						<PositionAreaControl Enable="false"/>
+						<TargetPosControl Enable="false"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
 					<Encoder Name="Enc" EncType="19">
@@ -2095,7 +2102,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{54D122D8-D4A2-435D-82A0-6E32046A178C}" Name="VibrodriverPLC" PrjFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.plcproj" TmcFilePath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{5DBA25C0-10D9-34F6-A346-F99AD8CC8627}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="VibrodriverPLC\VibrodriverPLC\VibrodriverPLC.tmc" TmcHash="{90D04588-3CFC-9446-6D47-AED9B7441F49}">
 					<Name>VibrodriverPLC Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -2238,7 +2245,7 @@ External Setpoint Generation:
 								<OTCID>#x02010050</OTCID>
 							</ManualConfig>
 							<Priority>20</Priority>
-							<CycleTime>5000000</CycleTime>
+							<CycleTime>10000000</CycleTime>
 						</Context>
 					</Contexts>
 					<TaskPouOids>
@@ -29907,8 +29914,8 @@ External Setpoint Generation:
 				</Box>
 				<EtherCAT DcSyncMode="3"/>
 			</Device>
-			<Device Id="3" DevType="111" DevFlags="#x0003" AmsPort="28675" AmsNetId="5.107.132.17.4.1" RemoteName="Motors" InfoImageId="5">
-				<Name>Motors</Name>
+			<Device Id="3" DevType="111" DevFlags="#x0003" AmsPort="28675" AmsNetId="5.107.132.17.4.1" RemoteName="Device 3 (EtherCAT)" InfoImageId="5">
+				<Name>Device 3 (EtherCAT)</Name>
 				<AddressInfo>
 					<Pnp>
 						<DeviceDesc>em0 (TwinCAT Intel Ethernet Adapter)</DeviceDesc>
@@ -29919,17 +29926,14 @@ External Setpoint Generation:
 				<Image Id="4" AddrType="9" ImageType="3">
 					<Name>Image</Name>
 				</Image>
-				<Image Id="2" AddrType="10" ImageType="3">
-					<Name>Image-2</Name>
-				</Image>
-				<Box Id="4" BoxType="9099" BoxFlags="#x00000020">
+				<Box Id="4" Disabled="true" BoxType="9099" BoxFlags="#x00000020">
 					<Name>BL</Name>
 					<ImageId>1003</ImageId>
 					<EtherCAT SlaveType="2" PdiType="#x0680" MboxDataLinkLayer="true" StateMBoxPolling="true" CycleMBoxPollingTime="0" CoeType="45" FoeType="1" VendorId="#x000000fb" ProductCode="#x61500000" RevisionNo="#x01700000" InfoDataAddr="true" InfoDataSoeDS401="true" InfoDataDcTimes="true" DownloadSlotCfg="true" PortPhys="17" MaxSlotCount="1" SlotPdoIncrement="1" Type="EPOS4 Module 50/5 EtherCAT" Desc="EPOS4" PortABoxInfo="#x00ffffff">
 						<SyncMan>001030002600010001000000300030003000001026010000</SyncMan>
 						<SyncMan>301030002200010002000000300030003000301022010000</SyncMan>
-						<SyncMan>601006006400010003000000000000000000601064010000</SyncMan>
-						<SyncMan>f0100d002000010004000000000000000000f01020010000</SyncMan>
+						<SyncMan>60100b006400010003000000000000000000601064010000</SyncMan>
+						<SyncMan>f01011002000010004000000000000000000f01020010000</SyncMan>
 						<Fmmu>0000000000000000601000020100000001000000000000000000000000000000</Fmmu>
 						<Fmmu>0000000000000000f01000010100000002000000000000000000000000000000</Fmmu>
 						<Fmmu>00000000000000000d0800010100000003000000000000000000000000000000</Fmmu>
@@ -29951,8 +29955,11 @@ External Setpoint Generation:
 							<Entry Name="Torque actual value" Index="#x6077">
 								<Type>INT</Type>
 							</Entry>
-							<Entry Name="Max rated torque" Index="#x6076">
-								<Type>USINT</Type>
+							<Entry Name="Mode of operation display" Index="#x6061">
+								<Type>SINT</Type>
+							</Entry>
+							<Entry Name="Digital inputs" Index="#x60fd">
+								<Type>UDINT</Type>
 							</Entry>
 						</Pdo>
 						<Pdo Name="CST Outputs" Index="#x1600" InOut="1" Flags="#x0080" SyncMan="2">
@@ -29964,6 +29971,12 @@ External Setpoint Generation:
 							</Entry>
 							<Entry Name="Torque offset" Index="#x60b2">
 								<Type>INT</Type>
+							</Entry>
+							<Entry Name="Mode of operation" Index="#x6060">
+								<Type>SINT</Type>
+							</Entry>
+							<Entry Name="Digital outputs" Index="#x60fe" Sub="#x01">
+								<Type>UDINT</Type>
 							</Entry>
 						</Pdo>
 						<CoeProfile ProfileNo="402"/>
@@ -29988,11 +30001,11 @@ External Setpoint Generation:
 				<Box Id="5" BoxType="9099" BoxFlags="#x00000020">
 					<Name>BR</Name>
 					<ImageId>1003</ImageId>
-					<EtherCAT SlaveType="2" PdiType="#x0680" MboxDataLinkLayer="true" StateMBoxPolling="true" CycleMBoxPollingTime="0" CoeType="45" FoeType="1" VendorId="#x000000fb" ProductCode="#x61500000" RevisionNo="#x01700000" InfoDataAddr="true" InfoDataSoeDS401="true" InfoDataDcTimes="true" DownloadSlotCfg="true" PortPhys="17" MaxSlotCount="1" SlotPdoIncrement="1" Type="EPOS4 Module 50/5 EtherCAT" Desc="EPOS4" PortABoxInfo="#x01000004">
+					<EtherCAT SlaveType="2" PdiType="#x0680" MboxDataLinkLayer="true" StateMBoxPolling="true" CycleMBoxPollingTime="0" CoeType="45" FoeType="1" VendorId="#x000000fb" ProductCode="#x61500000" RevisionNo="#x01700000" InfoDataAddr="true" InfoDataSoeDS401="true" InfoDataDcTimes="true" DownloadSlotCfg="true" PortPhys="17" MaxSlotCount="1" SlotPdoIncrement="1" Type="EPOS4 Module 50/5 EtherCAT" Desc="EPOS4" PortABoxInfo="#x00ffffff">
 						<SyncMan>001030002600010001000000300030003000001026010000</SyncMan>
 						<SyncMan>301030002200010002000000300030003000301022010000</SyncMan>
-						<SyncMan>601006006400010003000000000000000000601064010000</SyncMan>
-						<SyncMan>f0100e002000010004000000000000000000f01020010000</SyncMan>
+						<SyncMan>60100b006400010003000000000000000000601064010000</SyncMan>
+						<SyncMan>f01011002000010004000000000000000000f01020010000</SyncMan>
 						<Fmmu>0000000000000000601000020100000001000000000000000000000000000000</Fmmu>
 						<Fmmu>0000000000000000f01000010100000002000000000000000000000000000000</Fmmu>
 						<Fmmu>00000000000000000d0800010100000003000000000000000000000000000000</Fmmu>
@@ -30014,8 +30027,11 @@ External Setpoint Generation:
 							<Entry Name="Torque actual value" Index="#x6077">
 								<Type>INT</Type>
 							</Entry>
-							<Entry Name="Error code" Index="#x603f">
-								<Type>UINT</Type>
+							<Entry Name="Mode of operation display" Index="#x6061">
+								<Type>SINT</Type>
+							</Entry>
+							<Entry Name="Digital inputs" Index="#x60fd">
+								<Type>UDINT</Type>
 							</Entry>
 						</Pdo>
 						<Pdo Name="CST Outputs" Index="#x1600" InOut="1" Flags="#x0080" SyncMan="2">
@@ -30027,6 +30043,12 @@ External Setpoint Generation:
 							</Entry>
 							<Entry Name="Torque offset" Index="#x60b2">
 								<Type>INT</Type>
+							</Entry>
+							<Entry Name="Mode of operation" Index="#x6060">
+								<Type>SINT</Type>
+							</Entry>
+							<Entry Name="Digital outputs" Index="#x60fe" Sub="#x01">
+								<Type>UDINT</Type>
 							</Entry>
 						</Pdo>
 						<CoeProfile ProfileNo="402"/>
@@ -30054,8 +30076,8 @@ External Setpoint Generation:
 					<EtherCAT SlaveType="2" PdiType="#x0680" MboxDataLinkLayer="true" StateMBoxPolling="true" CycleMBoxPollingTime="0" CoeType="45" FoeType="1" VendorId="#x000000fb" ProductCode="#x61500000" RevisionNo="#x01700000" InfoDataAddr="true" InfoDataSoeDS401="true" InfoDataDcTimes="true" DownloadSlotCfg="true" PortPhys="17" MaxSlotCount="1" SlotPdoIncrement="1" Type="EPOS4 Module 50/5 EtherCAT" Desc="EPOS4" PortABoxInfo="#x01000005">
 						<SyncMan>001030002600010001000000300030003000001026010000</SyncMan>
 						<SyncMan>301030002200010002000000300030003000301022010000</SyncMan>
-						<SyncMan>601006006400010003000000000000000000601064010000</SyncMan>
-						<SyncMan>f0100c002000010004000000000000000000f01020010000</SyncMan>
+						<SyncMan>60100b006400010003000000000000000000601064010000</SyncMan>
+						<SyncMan>f01011002000010004000000000000000000f01020010000</SyncMan>
 						<Fmmu>0000000000000000601000020100000001000000000000000000000000000000</Fmmu>
 						<Fmmu>0000000000000000f01000010100000002000000000000000000000000000000</Fmmu>
 						<Fmmu>00000000000000000d0800010100000003000000000000000000000000000000</Fmmu>
@@ -30077,6 +30099,12 @@ External Setpoint Generation:
 							<Entry Name="Torque actual value" Index="#x6077">
 								<Type>INT</Type>
 							</Entry>
+							<Entry Name="Mode of operation display" Index="#x6061">
+								<Type>SINT</Type>
+							</Entry>
+							<Entry Name="Digital inputs" Index="#x60fd">
+								<Type>UDINT</Type>
+							</Entry>
 						</Pdo>
 						<Pdo Name="CST Outputs" Index="#x1600" InOut="1" Flags="#x0080" SyncMan="2">
 							<Entry Name="Controlword" Index="#x6040">
@@ -30087,6 +30115,12 @@ External Setpoint Generation:
 							</Entry>
 							<Entry Name="Torque offset" Index="#x60b2">
 								<Type>INT</Type>
+							</Entry>
+							<Entry Name="Mode of operation" Index="#x6060">
+								<Type>SINT</Type>
+							</Entry>
+							<Entry Name="Digital outputs" Index="#x60fe" Sub="#x01">
+								<Type>UDINT</Type>
 							</Entry>
 						</Pdo>
 						<CoeProfile ProfileNo="402"/>
@@ -30114,8 +30148,8 @@ External Setpoint Generation:
 					<EtherCAT SlaveType="2" PdiType="#x0680" MboxDataLinkLayer="true" StateMBoxPolling="true" CycleMBoxPollingTime="0" CoeType="45" FoeType="1" VendorId="#x000000fb" ProductCode="#x61500000" RevisionNo="#x01700000" InfoDataAddr="true" InfoDataSoeDS401="true" InfoDataDcTimes="true" DownloadSlotCfg="true" PortPhys="17" MaxSlotCount="1" SlotPdoIncrement="1" Type="EPOS4 Module 50/5 EtherCAT" Desc="EPOS4" PortABoxInfo="#x01000006">
 						<SyncMan>001030002600010001000000300030003000001026010000</SyncMan>
 						<SyncMan>301030002200010002000000300030003000301022010000</SyncMan>
-						<SyncMan>601006006400010003000000000000000000601064010000</SyncMan>
-						<SyncMan>f0100c002000010004000000000000000000f01020010000</SyncMan>
+						<SyncMan>60100b006400010003000000000000000000601064010000</SyncMan>
+						<SyncMan>f01011002000010004000000000000000000f01020010000</SyncMan>
 						<Fmmu>0000000000000000601000020100000001000000000000000000000000000000</Fmmu>
 						<Fmmu>0000000000000000f01000010100000002000000000000000000000000000000</Fmmu>
 						<Fmmu>00000000000000000d0800010100000003000000000000000000000000000000</Fmmu>
@@ -30137,6 +30171,12 @@ External Setpoint Generation:
 							<Entry Name="Torque actual value" Index="#x6077">
 								<Type>INT</Type>
 							</Entry>
+							<Entry Name="Mode of operation display" Index="#x6061">
+								<Type>SINT</Type>
+							</Entry>
+							<Entry Name="Digital inputs" Index="#x60fd">
+								<Type>UDINT</Type>
+							</Entry>
 						</Pdo>
 						<Pdo Name="CST Outputs" Index="#x1600" InOut="1" Flags="#x0080" SyncMan="2">
 							<Entry Name="Controlword" Index="#x6040">
@@ -30147,6 +30187,12 @@ External Setpoint Generation:
 							</Entry>
 							<Entry Name="Torque offset" Index="#x60b2">
 								<Type>INT</Type>
+							</Entry>
+							<Entry Name="Mode of operation" Index="#x6060">
+								<Type>SINT</Type>
+							</Entry>
+							<Entry Name="Digital outputs" Index="#x60fe" Sub="#x01">
+								<Type>UDINT</Type>
 							</Entry>
 						</Pdo>
 						<CoeProfile ProfileNo="402"/>
@@ -30173,29 +30219,23 @@ External Setpoint Generation:
 		</Io>
 	</Project>
 	<Mappings>
-		<MappingInfo Identifier="{00000000-2001-0850-0020-500830000403}" Id="#x02030040"/>
-		<MappingInfo Identifier="{00000000-0020-0304-1000-040321000403}" Id="#x02030050"/>
-		<MappingInfo Identifier="{00000000-0040-0304-2000-010140000403}" Id="#x02030010"/>
-		<MappingInfo Identifier="{00000000-0050-0304-1000-040352000403}" Id="#x02030070"/>
-		<MappingInfo Identifier="{08502001-0020-0304-0020-500820000403}" Id="#x02030060" Watchdog="00000000000000000000000000000000"/>
+		<MappingInfo Identifier="{00000000-2001-0850-0020-500830000403}" Id="#x02030050"/>
+		<MappingInfo Identifier="{00000000-0040-0304-1000-040340000403}" Id="#x02030010"/>
+		<MappingInfo Identifier="{00000000-0050-0304-1000-040351000403}" Id="#x02030020"/>
+		<MappingInfo Identifier="{08502001-0040-0304-0020-500840000403}" Id="#x02030040" Watchdog="00000000000000000000000000000000"/>
 		<MappingInfo Identifier="{05000010-2001-0850-1000-040300205008}" Id="#x02030030" Watchdog="0a000000040000000400000004000000"/>
-		<MappingInfo Identifier="{05000010-0040-0304-1000-040340000403}" Id="#x02030020" Watchdog="00000000000000000000000000000000"/>
-		<MappingInfo Identifier="{02010090-2001-0850-2000-010100205008}" Id="#x02030080" Watchdog="04000000040000000400000004000000"/>
-		<OwnerA Name="TIID^Motors">
-			<OwnerB Name="TIRC^TcCOM Objects^TorquePID2">
-				<Link VarA="TR^Module 1 (CST Mode)^CST Outputs^Target torque" VarB="simplePID2_Y^torque"/>
-			</OwnerB>
-		</OwnerA>
 		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^BL">
-			<OwnerB Name="TIID^Motors^BL">
+			<OwnerB Name="TIID^Device 3 (EtherCAT)^BL">
 				<Link VarA="Drive^Inputs^In^nDataIn3[0]" VarB="Module 1 (CST Mode)^CST Inputs^Torque actual value"/>
 				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
 				<Link VarA="Drive^Inputs^In^nState1" VarB="Module 1 (CST Mode)^CST Inputs^Statusword"/>
 				<Link VarA="Drive^Inputs^In^nState2" VarB="Module 1 (CST Mode)^CST Inputs^Statusword" Size="8" OffsB="8"/>
 				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
 				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
+				<Link VarA="Drive^Inputs^In^nState5" VarB="Module 1 (CST Mode)^CST Inputs^Mode of operation display"/>
 				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="Module 1 (CST Mode)^CST Outputs^Controlword"/>
 				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="Module 1 (CST Mode)^CST Outputs^Controlword" Size="8" OffsB="8"/>
+				<Link VarA="Drive^Outputs^Out^nCtrl5" VarB="Module 1 (CST Mode)^CST Outputs^Mode of operation"/>
 				<Link VarA="Drive^Outputs^Out^nDataOut3[0]" VarB="Module 1 (CST Mode)^CST Outputs^Torque offset"/>
 				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="Module 1 (CST Mode)^CST Inputs^Position actual value"/>
 				<Link VarA="Enc^Inputs^In^nDataIn7" VarB="Module 1 (CST Mode)^CST Inputs^Velocity actual value"/>
@@ -30205,15 +30245,17 @@ External Setpoint Generation:
 			</OwnerB>
 		</OwnerA>
 		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^BR">
-			<OwnerB Name="TIID^Motors^BR">
+			<OwnerB Name="TIID^Device 3 (EtherCAT)^BR">
 				<Link VarA="Drive^Inputs^In^nDataIn3[0]" VarB="Module 1 (CST Mode)^CST Inputs^Torque actual value"/>
 				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
 				<Link VarA="Drive^Inputs^In^nState1" VarB="Module 1 (CST Mode)^CST Inputs^Statusword"/>
 				<Link VarA="Drive^Inputs^In^nState2" VarB="Module 1 (CST Mode)^CST Inputs^Statusword" Size="8" OffsB="8"/>
 				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
 				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
+				<Link VarA="Drive^Inputs^In^nState5" VarB="Module 1 (CST Mode)^CST Inputs^Mode of operation display"/>
 				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="Module 1 (CST Mode)^CST Outputs^Controlword"/>
 				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="Module 1 (CST Mode)^CST Outputs^Controlword" Size="8" OffsB="8"/>
+				<Link VarA="Drive^Outputs^Out^nCtrl5" VarB="Module 1 (CST Mode)^CST Outputs^Mode of operation"/>
 				<Link VarA="Drive^Outputs^Out^nDataOut3[0]" VarB="Module 1 (CST Mode)^CST Outputs^Torque offset"/>
 				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="Module 1 (CST Mode)^CST Inputs^Position actual value"/>
 				<Link VarA="Enc^Inputs^In^nDataIn7" VarB="Module 1 (CST Mode)^CST Inputs^Velocity actual value"/>
@@ -30223,15 +30265,17 @@ External Setpoint Generation:
 			</OwnerB>
 		</OwnerA>
 		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^TL">
-			<OwnerB Name="TIID^Motors^TL">
+			<OwnerB Name="TIID^Device 3 (EtherCAT)^TL">
 				<Link VarA="Drive^Inputs^In^nDataIn3[0]" VarB="Module 1 (CST Mode)^CST Inputs^Torque actual value"/>
 				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
 				<Link VarA="Drive^Inputs^In^nState1" VarB="Module 1 (CST Mode)^CST Inputs^Statusword"/>
 				<Link VarA="Drive^Inputs^In^nState2" VarB="Module 1 (CST Mode)^CST Inputs^Statusword" Size="8" OffsB="8"/>
 				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
 				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
+				<Link VarA="Drive^Inputs^In^nState5" VarB="Module 1 (CST Mode)^CST Inputs^Mode of operation display"/>
 				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="Module 1 (CST Mode)^CST Outputs^Controlword"/>
 				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="Module 1 (CST Mode)^CST Outputs^Controlword" Size="8" OffsB="8"/>
+				<Link VarA="Drive^Outputs^Out^nCtrl5" VarB="Module 1 (CST Mode)^CST Outputs^Mode of operation"/>
 				<Link VarA="Drive^Outputs^Out^nDataOut3[0]" VarB="Module 1 (CST Mode)^CST Outputs^Torque offset"/>
 				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="Module 1 (CST Mode)^CST Inputs^Position actual value"/>
 				<Link VarA="Enc^Inputs^In^nDataIn7" VarB="Module 1 (CST Mode)^CST Inputs^Velocity actual value"/>
@@ -30241,15 +30285,17 @@ External Setpoint Generation:
 			</OwnerB>
 		</OwnerA>
 		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^TR">
-			<OwnerB Name="TIID^Motors^TR">
+			<OwnerB Name="TIID^Device 3 (EtherCAT)^TR">
 				<Link VarA="Drive^Inputs^In^nDataIn3[0]" VarB="Module 1 (CST Mode)^CST Inputs^Torque actual value"/>
 				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
 				<Link VarA="Drive^Inputs^In^nState1" VarB="Module 1 (CST Mode)^CST Inputs^Statusword"/>
 				<Link VarA="Drive^Inputs^In^nState2" VarB="Module 1 (CST Mode)^CST Inputs^Statusword" Size="8" OffsB="8"/>
 				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
 				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
+				<Link VarA="Drive^Inputs^In^nState5" VarB="Module 1 (CST Mode)^CST Inputs^Mode of operation display"/>
 				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="Module 1 (CST Mode)^CST Outputs^Controlword"/>
 				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="Module 1 (CST Mode)^CST Outputs^Controlword" Size="8" OffsB="8"/>
+				<Link VarA="Drive^Outputs^Out^nCtrl5" VarB="Module 1 (CST Mode)^CST Outputs^Mode of operation"/>
 				<Link VarA="Drive^Outputs^Out^nDataOut3[0]" VarB="Module 1 (CST Mode)^CST Outputs^Torque offset"/>
 				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="Module 1 (CST Mode)^CST Inputs^Position actual value"/>
 				<Link VarA="Enc^Inputs^In^nDataIn7" VarB="Module 1 (CST Mode)^CST Inputs^Velocity actual value"/>
@@ -30259,6 +30305,18 @@ External Setpoint Generation:
 			</OwnerB>
 		</OwnerA>
 		<OwnerA Name="TIPC^VibrodriverPLC^VibrodriverPLC Instance">
+			<OwnerB Name="TIID^Device 3 (EtherCAT)^BL">
+				<Link VarA="PlcTask Outputs^MAIN.arrTorques[0]" VarB="Module 1 (CST Mode)^CST Outputs^Target torque"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 3 (EtherCAT)^BR">
+				<Link VarA="PlcTask Outputs^MAIN.arrTorques[1]" VarB="Module 1 (CST Mode)^CST Outputs^Target torque"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 3 (EtherCAT)^TL">
+				<Link VarA="PlcTask Outputs^MAIN.arrTorques[2]" VarB="Module 1 (CST Mode)^CST Outputs^Target torque"/>
+			</OwnerB>
+			<OwnerB Name="TIID^Device 3 (EtherCAT)^TR">
+				<Link VarA="PlcTask Outputs^MAIN.arrTorques[3]" VarB="Module 1 (CST Mode)^CST Outputs^Target torque"/>
+			</OwnerB>
 			<OwnerB Name="TIID^EtherCAT Terminals^EtherCAT Coupler (EK1100)^Accelerometer Terminal (ELM3604-0000)">
 				<Link VarA="PlcTask Inputs^P_ReadSensors.readAcc.c1Sample" VarB="PAI Samples 1 Channel 1^Samples[0]"/>
 				<Link VarA="PlcTask Inputs^P_ReadSensors.readAcc.c2Sample" VarB="PAI Samples 1 Channel 2^Samples[0]"/>
@@ -30268,15 +30326,6 @@ External Setpoint Generation:
 				<Link VarA="PlcTask Inputs^P_ReadSensors.readGeo.c1Sample" VarB="PAI Samples 1 Channel 1^Samples[0]"/>
 				<Link VarA="PlcTask Inputs^P_ReadSensors.readGeo.c2Sample" VarB="PAI Samples 1 Channel 2^Samples[0]"/>
 				<Link VarA="PlcTask Inputs^P_ReadSensors.readGeo.c3Sample" VarB="PAI Samples 1 Channel 3^Samples[0]"/>
-			</OwnerB>
-			<OwnerB Name="TIID^Motors^BL">
-				<Link VarA="PlcTask Outputs^MAIN.arrTorques[0]" VarB="Module 1 (CST Mode)^CST Outputs^Target torque"/>
-			</OwnerB>
-			<OwnerB Name="TIID^Motors^BR">
-				<Link VarA="PlcTask Outputs^MAIN.arrTorques[1]" VarB="Module 1 (CST Mode)^CST Outputs^Target torque"/>
-			</OwnerB>
-			<OwnerB Name="TIID^Motors^TL">
-				<Link VarA="PlcTask Outputs^MAIN.arrTorques[2]" VarB="Module 1 (CST Mode)^CST Outputs^Target torque"/>
 			</OwnerB>
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^BL">
 				<Link VarA="PlcTask Inputs^MAIN.axes[0].NcToPlc" VarB="Outputs^ToPlc"/>
@@ -30293,11 +30342,6 @@ External Setpoint Generation:
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^TR">
 				<Link VarA="PlcTask Inputs^MAIN.axes[3].NcToPlc" VarB="Outputs^ToPlc"/>
 				<Link VarA="PlcTask Outputs^MAIN.axes[3].PlcToNc" VarB="Inputs^FromPlc"/>
-			</OwnerB>
-			<OwnerB Name="TIRC^TcCOM Objects^TorquePID2">
-				<Link VarA="PlcTask Outputs^MAIN.arrVels[3]" VarB="simplePID2_U^feedback"/>
-				<Link VarA="PlcTask Outputs^MAIN.bRun" VarB="simplePID2_U^execute"/>
-				<Link VarA="PlcTask Outputs^MAIN.targetVel" VarB="simplePID2_U^setpoint"/>
 			</OwnerB>
 		</OwnerA>
 	</Mappings>
