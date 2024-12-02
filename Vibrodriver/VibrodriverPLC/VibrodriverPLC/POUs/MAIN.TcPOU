@@ -59,10 +59,14 @@ VAR
 	iMaxVel : INT := 3600; // max 10 hz
 	eDirec : MC_Direction := MC_Direction.MC_Negative_Direction;
 	iDirMult : INT := -1; // multiplier: actVel = setVel * mult (used to reverse default)
+	
+	iFirstIdx : INT := 2;
+	iLastIdx : INT := 3;
+	
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-FOR i := 0 TO 3 DO
+FOR i := iFirstIdx TO iLastIdx DO
 	// UPDATE AXES STATUS
 	axes[i].ReadStatus();
 	// RESTRICT VELOCITY
@@ -75,13 +79,13 @@ END_FOR
 // STARTUP
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 IF NOT bStarted THEN
-	FOR i := 0 TO 3 DO
+	FOR i := iFirstIdx TO iLastIdx DO
 		// default to OFF despite variable values
 		M_SetState(0);
 		arrMCResets[i](Axis:=axes[i]);
 		arrMCPowers[i](Axis:=axes[i], Enable:= TRUE, Enable_Positive:=TRUE, Enable_Negative:=TRUE);
 		// if all motors powered, set to started
-		IF arrMCPowers[0].Status AND arrMCPowers[1].Status AND arrMCPowers[2].Status AND arrMCPowers[3].Status THEN
+		IF arrMCPowers[2].Status AND arrMCPowers[3].Status THEN
 			bStarted := TRUE;
 		END_IF
 	END_FOR
@@ -143,27 +147,27 @@ END_IF
 // COUPLING
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 // disallow coupling while in motion
-IF (axes[0].Status.Moving OR axes[1].Status.Moving OR axes[2].Status.Moving OR axes[3].Status.Moving) AND
+IF (axes[2].Status.Moving OR axes[3].Status.Moving) AND
 		bCouple AND NOT bCoupled THEN
 	bCouple := FALSE;
 END_IF
 
 // COUPLE/UNCOUPLE GEARS
-arrMCGearOuts[1](Slave:=axes[1], Execute:=NOT bCouple AND bCoupled);
-arrMCGearOuts[2](Slave:=axes[2], Execute:=NOT bCouple AND bCoupled);
+//arrMCGearOuts[1](Slave:=axes[1], Execute:=NOT bCouple AND bCoupled);
+//arrMCGearOuts[2](Slave:=axes[2], Execute:=NOT bCouple AND bCoupled);
 arrMCGearOuts[3](Slave:=axes[3], Execute:=NOT bCouple AND bCoupled);
-arrMCGearIns[1](Master:=axes[0], Slave:=axes[1], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=-1);
-arrMCGearIns[2](Master:=axes[0], Slave:=axes[2], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=-1);
+//arrMCGearIns[1](Master:=axes[0], Slave:=axes[1], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=-1);
+//arrMCGearIns[2](Master:=axes[0], Slave:=axes[2], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=-1);
 arrMCGearIns[3](Master:=axes[2], Slave:=axes[3], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=-1);
 
 // check if uncoupling done
-IF (NOT bCouple AND bCoupled) AND (arrMCGearOuts[1].Done AND arrMCGearOuts[2].Done AND arrMCGearOuts[3].Done) THEN
+IF (NOT bCouple AND bCoupled) AND (arrMCGearOuts[3].Done) THEN
 	iEndIdx := 3;
 	bCoupled := FALSE;
 END_IF
 // check if coupling done
-IF (bCouple AND NOT bCoupled) AND (arrMCGearIns[1].InGear AND arrMCGearIns[2].InGear AND arrMCGearIns[3].InGear) THEN
-	iEndIdx := 0;
+IF (bCouple AND NOT bCoupled) AND (arrMCGearIns[3].InGear) THEN
+	iEndIdx := 2;
 	bCoupled := TRUE;
 END_IF
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -179,17 +183,17 @@ IF bStarted THEN
 	// set phase, master = BL, slave = TL
 	// if uncoupled, allign the axes AT 0 phase again
 	IF iPrevPhs <> iPhs THEN
-		arrMCPhaseAbsolutes[1](Master:=axes[0], Slave:=axes[1], Execute:=FALSE); // set phase of BR w BL
-		arrMCPhaseAbsolutes[2](Master:=axes[0], Slave:=axes[2], Execute:=FALSE); // set phase of top w bottom
+		//arrMCPhaseAbsolutes[1](Master:=axes[0], Slave:=axes[1], Execute:=FALSE); // set phase of BR w BL
+		//arrMCPhaseAbsolutes[2](Master:=axes[0], Slave:=axes[2], Execute:=FALSE); // set phase of top w bottom
 		arrMCPhaseAbsolutes[3](Master:=axes[2], Slave:=axes[3], Execute:=FALSE); // set phase of TR w TL
 		iPrevPhs := iPhs;
 	END_IF
 	
 	IF bRun AND bCoupled THEN
 		 // set phase of BR w BL
-		arrMCPhaseAbsolutes[1](Master:=axes[0], Slave:=axes[1], Execute:=TRUE, PhaseShift:=0, Velocity:=iVel+180);
+		//arrMCPhaseAbsolutes[1](Master:=axes[0], Slave:=axes[1], Execute:=TRUE, PhaseShift:=0, Velocity:=iVel+180);
 		 // set phase of top w bottom
-		arrMCPhaseAbsolutes[2](Master:=axes[0], Slave:=axes[2], Execute:=TRUE, PhaseShift:=iPhs, Velocity:=iVel+180);
+		//arrMCPhaseAbsolutes[2](Master:=axes[0], Slave:=axes[2], Execute:=TRUE, PhaseShift:=iPhs, Velocity:=iVel+180);
 		 // set phase of TR w TL
 		arrMCPhaseAbsolutes[3](Master:=axes[2], Slave:=axes[3], Execute:=TRUE, PhaseShift:=0, Velocity:=iVel+180);
 	END_IF
@@ -198,7 +202,7 @@ IF bStarted THEN
 	
 	
 	// main motor looop
-	FOR i := 0 TO iEndIdx DO
+	FOR i := iFirstIdx TO iEndIdx DO
 		
 		// if values have been updated, unexecute relevant functions so that they can restart with correct values
 		IF (iPrevVel <> iVel) OR (iPrevAcc <> iAcc) THEN
@@ -220,12 +224,12 @@ IF bStarted THEN
 		// check if relative movement is done, set to stop
 		IF arrMCMoveRelatives[i].Done  THEN
 			arrRelsDone[i] := TRUE;
-			FOR j := 0 TO iEndIdx DO
+			FOR j := iFirstIdx TO iEndIdx DO
 				IF arrRelsDone[j] = FALSE THEN EXIT; END_IF
 				IF j = iEndIdx THEN
 					M_SetState(0);
-					arrRelsDone[0] := FALSE;
-					arrRelsDone[1] := FALSE;
+					//arrRelsDone[0] := FALSE;
+					//arrRelsDone[1] := FALSE;
 					arrRelsDone[2] := FALSE;
 					arrRelsDone[3] := FALSE;
 				END_IF
@@ -234,17 +238,17 @@ IF bStarted THEN
 		// check if relative movement is done, set to stop
 		IF arrMCMoveRelativesZero[i].Done  THEN
 			arrRelsDoneZero[i] := TRUE;
-			FOR j := 0 TO iEndIdx DO
+			FOR j := iFirstIdx TO iEndIdx DO
 				IF arrRelsDoneZero[j] = FALSE THEN EXIT; END_IF
 				IF j = iEndIdx THEN
 					M_SetState(0);
-					arrRelsDoneZero[0] := FALSE;
-					arrRelsDoneZero[1] := FALSE;
+					//arrRelsDoneZero[0] := FALSE;
+					//arrRelsDoneZero[1] := FALSE;
 					arrRelsDoneZero[2] := FALSE;
 					arrRelsDoneZero[3] := FALSE;
 					IF iMode=3 THEN
-						arrZeroPoss[0] := 0;
-						arrZeroPoss[1] := 0;
+						//arrZeroPoss[0] := 0;
+						//arrZeroPoss[1] := 0;
 						arrZeroPoss[2] := 0;
 						arrZeroPoss[3] := 0;
 						M_SetMode(2);
@@ -393,7 +397,10 @@ END_CASE
       <LineId Id="13401" Count="0" />
       <LineId Id="13075" Count="2" />
       <LineId Id="13296" Count="0" />
-      <LineId Id="13078" Count="20" />
+      <LineId Id="13078" Count="2" />
+      <LineId Id="13903" Count="1" />
+      <LineId Id="13081" Count="0" />
+      <LineId Id="13084" Count="14" />
       <LineId Id="13100" Count="0" />
       <LineId Id="13325" Count="0" />
       <LineId Id="13121" Count="0" />
@@ -418,7 +425,7 @@ END_CASE
       <LineId Id="13323" Count="0" />
       <LineId Id="13159" Count="5" />
       <LineId Id="13167" Count="1" />
-      <LineId Id="13429" Count="0" />
+      <LineId Id="13905" Count="0" />
       <LineId Id="13428" Count="0" />
       <LineId Id="13427" Count="0" />
       <LineId Id="13176" Count="7" />
