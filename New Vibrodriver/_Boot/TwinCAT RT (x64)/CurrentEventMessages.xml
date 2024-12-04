@@ -1,0 +1,272 @@
+<?xml version="1.0"?>
+<TcEventSources Version="2">
+	<Source>
+		<GUID>{28111931-0002-0000-09CC-8E3600001100}</GUID>
+		<Name LcId="1031">AMI8000-0000 Servo motor 48 V DC</Name>
+		<Name LcId="1033">AMI8000-0000 Servo motor 48 V DC</Name>
+		<Event>
+			<Id>16641</Id>
+			<Message LcId="1031">Verstärker-Übertemperatur</Message>
+			<Message LcId="1033">Amplifier-Overtemperature</Message>
+		</Event>
+		<Event>
+			<Id>16642</Id>
+			<Message LcId="1031">PDO-Konfiguration ist zur gewählten Betriebsart nicht kompatibel</Message>
+			<Message LcId="1033">PDO-configuration is incompatible to the selected mode of operation</Message>
+		</Event>
+		<Event>
+			<Id>16643</Id>
+			<Message LcId="1031">Unterspannung Us</Message>
+			<Message LcId="1033">Undervoltage Us</Message>
+		</Event>
+		<Event>
+			<Id>16644</Id>
+			<Message LcId="1031">Überspannung Us</Message>
+			<Message LcId="1033">Overvoltage Us</Message>
+		</Event>
+		<Event>
+			<Id>16651</Id>
+			<Message LcId="1031">Ausmaskierter Fehler erkannt</Message>
+			<Message LcId="1033">Error detected, but disabled by suppression mask</Message>
+		</Event>
+		<Event>
+			<Id>17153</Id>
+			<Message LcId="1031">Feedback-Warnung</Message>
+			<Message LcId="1033">Feedback-Warning</Message>
+		</Event>
+		<Event>
+			<Id>17408</Id>
+			<Message LcId="1031">Abgleichsdaten fehlerhaft/nicht vorhanden</Message>
+			<Message LcId="1033">Calibration data corrupted or missing</Message>
+		</Event>
+		<Event>
+			<Id>17425</Id>
+			<Message LcId="1031">Unterspannung DC-Zwischenkreis</Message>
+			<Message LcId="1033">DC-Link undervoltage</Message>
+		</Event>
+		<Event>
+			<Id>17426</Id>
+			<Message LcId="1031">Überspannung DC-Zwischenkreis</Message>
+			<Message LcId="1033">DC-Link overvoltage</Message>
+		</Event>
+		<Event>
+			<Id>17427</Id>
+			<Message LcId="1031">I2T-Modell Verstärker Überlast</Message>
+			<Message LcId="1033">I2T Amplifier overload</Message>
+		</Event>
+		<Event>
+			<Id>17428</Id>
+			<Message LcId="1031">I2T-Modell Motor Überlast</Message>
+			<Message LcId="1033">I2T Motor overload</Message>
+		</Event>
+		<Event>
+			<Id>17431</Id>
+			<Message LcId="1031">Motor-Übertemperatur</Message>
+			<Message LcId="1033">Motor-Overtemperature</Message>
+		</Event>
+		<Event>
+			<Id>17433</Id>
+			<Message LcId="1031">Limit: Verstärker I2T-Modell übersteigt 100%</Message>
+			<Message LcId="1033">Limit: Amplifier I2T-model exceeds 100%</Message>
+		</Event>
+		<Event>
+			<Id>17434</Id>
+			<Message LcId="1031">Limit: Motor I2T-Modell übersteigt 100%</Message>
+			<Message LcId="1033">Limit: Motor I2T-model exceeds 100%</Message>
+		</Event>
+		<Event>
+			<Id>17436</Id>
+			<Message LcId="1031">Achse über STO abgeschaltet</Message>
+			<Message LcId="1033">Axis disabled via STO</Message>
+		</Event>
+		<Event>
+			<Id>17437</Id>
+			<Message LcId="1031">Interner Hardwarefehler</Message>
+			<Message LcId="1033">Internal hardware error</Message>
+		</Event>
+		<Event>
+			<Id>17438</Id>
+			<Message LcId="1031">Ungültige Konfiguration der Touchprobe-Eingänge</Message>
+			<Message LcId="1033">Invalid configuration of touchprobe inputs</Message>
+		</Event>
+		<Event>
+			<Id>17444</Id>
+			<Message LcId="1031">Ungültiger Wert für Modes of operation</Message>
+			<Message LcId="1033">Modes of operation invalid</Message>
+		</Event>
+		<Event>
+			<Id>17941</Id>
+			<Message LcId="1031">Überlast an Digitalausgang {0}</Message>
+			<Message LcId="1033">Overload on digital output {0}</Message>
+		</Event>
+		<Event>
+			<Id>33026</Id>
+			<Message LcId="1031">Ungültige Kombination von In- und Output PDOs</Message>
+			<Message LcId="1033">Invalid combination of Inputs and Outputs PDOs</Message>
+		</Event>
+		<Event>
+			<Id>33027</Id>
+			<Message LcId="1031">Unterspannung Us</Message>
+			<Message LcId="1033">Undervoltage Us</Message>
+		</Event>
+		<Event>
+			<Id>33028</Id>
+			<Message LcId="1031">Verstärker-Übertemperatur</Message>
+			<Message LcId="1033">Amplifier-Overtemperature</Message>
+		</Event>
+		<Event>
+			<Id>33029</Id>
+			<Message LcId="1031">PD-Watchdog</Message>
+			<Message LcId="1033">PD-Watchdog</Message>
+		</Event>
+		<Event>
+			<Id>33033</Id>
+			<Message LcId="1031">Überspannung Us</Message>
+			<Message LcId="1033">Overvoltage Us</Message>
+		</Event>
+		<Event>
+			<Id>33077</Id>
+			<Message LcId="1031">Zykluszeit muss ein vielfaches von 125 µs sein</Message>
+			<Message LcId="1033">Cycletime has to be a multiple of 125 µs</Message>
+		</Event>
+		<Event>
+			<Id>33079</Id>
+			<Message LcId="1031">Elektronisches Typenschild: CRC-Fehler</Message>
+			<Message LcId="1033">Electronic name plate: CRC error</Message>
+		</Event>
+		<Event>
+			<Id>33092</Id>
+			<Message LcId="1031">Hardwarefehler ({0})</Message>
+			<Message LcId="1033">Hardware fault ({0})</Message>
+		</Event>
+		<Event>
+			<Id>33093</Id>
+			<Message LcId="1031">Abgleichsdaten konnten nicht gespeichert werden</Message>
+			<Message LcId="1033">Store calibration data failed</Message>
+		</Event>
+		<Event>
+			<Id>33151</Id>
+			<Message LcId="1031">Fehler: 0x{0,X}, 0x{1,X}, 0x{2,X}</Message>
+			<Message LcId="1033">Error: 0x{0,X}, 0x{1,X}, 0x{2,X}</Message>
+		</Event>
+		<Event>
+			<Id>33281</Id>
+			<Message LcId="1031">Keine Kommunikation zur Feldseite ( Hilfsspannung fehlt)</Message>
+			<Message LcId="1033">No communication to field-side (Auxiliary voltage missing)</Message>
+		</Event>
+		<Event>
+			<Id>33538</Id>
+			<Message LcId="1031">Feedback-Fehler</Message>
+			<Message LcId="1033">Feedback-Error</Message>
+		</Event>
+		<Event>
+			<Id>33545</Id>
+			<Message LcId="1031">Encoder-Fehler (CRC)</Message>
+			<Message LcId="1033">Encoder-Error (CRC)</Message>
+		</Event>
+		<Event>
+			<Id>33555</Id>
+			<Message LcId="1031">Feedback-Konfiguration fehlt</Message>
+			<Message LcId="1033">Feedback configuraiton missing</Message>
+		</Event>
+		<Event>
+			<Id>33796</Id>
+			<Message LcId="1031">Überstrom auf Phase U, V oder W</Message>
+			<Message LcId="1033">Overcurrent</Message>
+		</Event>
+		<Event>
+			<Id>33798</Id>
+			<Message LcId="1031">Unterspannung DC-Zwischenkreis</Message>
+			<Message LcId="1033">Undervoltage DC-Link</Message>
+		</Event>
+		<Event>
+			<Id>33799</Id>
+			<Message LcId="1031">Überspannung DC-Zwischenkreis</Message>
+			<Message LcId="1033">Overvoltage DC-Link</Message>
+		</Event>
+		<Event>
+			<Id>33800</Id>
+			<Message LcId="1031">I2T-Modell Verstärker Überlast</Message>
+			<Message LcId="1033">I2T-Model Amplifier overload</Message>
+		</Event>
+		<Event>
+			<Id>33801</Id>
+			<Message LcId="1031">I2T-Modell Motor Überlast</Message>
+			<Message LcId="1033">I2T-Model motor overload</Message>
+		</Event>
+		<Event>
+			<Id>33803</Id>
+			<Message LcId="1031">Kommutierungsfehler</Message>
+			<Message LcId="1033">Commutation error</Message>
+		</Event>
+		<Event>
+			<Id>33804</Id>
+			<Message LcId="1031">Kabelbruch Motoranschluss</Message>
+			<Message LcId="1033">Motor not connected</Message>
+		</Event>
+		<Event>
+			<Id>33814</Id>
+			<Message LcId="1031">Motor-Übertemperatur</Message>
+			<Message LcId="1033">Motor-Overtemperature</Message>
+		</Event>
+		<Event>
+			<Id>33815</Id>
+			<Message LcId="1031">Maximale Drehfeldfrequenz überschritten</Message>
+			<Message LcId="1033">Maximum rotating field velocity exceeded</Message>
+		</Event>
+		<Event>
+			<Id>33820</Id>
+			<Message LcId="1031">STO ist bei aktiver Achse aufgetreten</Message>
+			<Message LcId="1033">STO while the axis was enabled</Message>
+		</Event>
+		<Event>
+			<Id>33821</Id>
+			<Message LcId="1031">Interner Hardwarefehler</Message>
+			<Message LcId="1033">Internal hardware error</Message>
+		</Event>
+		<Event>
+			<Id>33823</Id>
+			<Message LcId="1031">Drehmomentbegrenzung zu gering</Message>
+			<Message LcId="1033">Torque limitation too low</Message>
+		</Event>
+		<Event>
+			<Id>33824</Id>
+			<Message LcId="1031">Teach-In Prozess {0} fehlgeschlagen</Message>
+			<Message LcId="1033">Teach-In Process ({0}) failed</Message>
+		</Event>
+		<Event>
+			<Id>33825</Id>
+			<Message LcId="1031">Teach-In Prozess Timeout (STO, Zwischenkreis, ...)</Message>
+			<Message LcId="1033">Teach-In Process Timeout (STO, DC-Link, ...)</Message>
+		</Event>
+		<Event>
+			<Id>33826</Id>
+			<Message LcId="1031">Antriebs-Konfiguration fehlt</Message>
+			<Message LcId="1033">Drive configuration missing</Message>
+		</Event>
+		<Event>
+			<Id>33827</Id>
+			<Message LcId="1031">Prozessdatenformat ungültig (Anzahl Singleturnbits+Multiturnbits != 32)</Message>
+			<Message LcId="1033">Invalid process data format (number of singleturn bits+multiturn bits != 32)</Message>
+		</Event>
+		<Event>
+			<Id>33857</Id>
+			<Message LcId="1031">Maximaler Schleppfehlerabstand überschritten</Message>
+			<Message LcId="1033">Maximum following error distance exceeded</Message>
+		</Event>
+		<Event>
+			<Id>33858</Id>
+			<Message LcId="1031">Encoder-Auflösung nicht ausreichend</Message>
+			<Message LcId="1033">Encoder-Resolution insufficient</Message>
+		</Event>
+		<Event>
+			<Id>33859</Id>
+			<Message LcId="1031">Kombination aus Mode of Operation und Commutation Type ist nicht zulässig</Message>
+			<Message LcId="1033">Combination of Mode of Operation and Commutation Type is invalid</Message>
+		</Event>
+		<Property>
+			<Name>DisplayTxtId</Name>
+			<Value>true</Value>
+		</Property>
+	</Source>
+</TcEventSources>
