@@ -1,0 +1,581 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="MAIN" Id="{3fa504f6-db2b-4889-a5d5-d9357cd86edc}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+
+	bRun : BOOL := FALSE; // main control	
+
+	axes : ARRAY[0..3] OF AXIS_REF; // [BL BR TL TR] (linked in MOTION)
+	
+	// motion control function blocks
+	arrMCResets        		: ARRAY[0..3] OF MC_Reset;
+	arrMCPowers				: ARRAY[0..3] OF MC_Power;
+	arrMCSetPositions		: ARRAY[0..3] OF MC_SetPosition;
+	arrMCMoveAbsolutes		: ARRAY[0..3] OF MC_MoveAbsolute;
+	arrMCMoveRelatives		: ARRAY[0..3] OF MC_MoveRelative;
+	arrMCMoveVelocitys 		: ARRAY[0..3] OF MC_MoveVelocity;
+	arrMCHalts				: ARRAY[0..3] OF MC_Halt;
+	arrMCGearIns			: ARRAY[1..3] OF MC_GearIn;
+	arrMCGearOuts			: ARRAY[1..3] OF MC_GearOut;
+	arrMCPhaseAbsolutes     : ARRAY[1..3] OF MC_PhasingAbsolute;
+	
+	arrRelsDone : ARRAY[0..3] OF BOOL; // keep track of if each motor is done its relative movement
+	arrRelsDoneZero : ARRAY[0..3] OF BOOL; // keep track of if each motor is done its relative movement
+	arrMCMoveRelativesZero	: ARRAY[0..3] OF MC_MoveRelative;
+	arrZeroPoss : ARRAY[0..3] OF LREAL;
+	
+	arrHexErrors : ARRAY[0..3] OF T_MaxString; // store hex format of axes errors
+	
+	i: INT; // generic loop index 1
+	j: INT; // generic loop index 2
+	k: INT; // generic loop index 3
+	
+	bStarted : BOOL := FALSE; // if started is complete
+	bCoupled : BOOL := FALSE;
+	iMode : INT := 2; // 0 = move abs, 1 = move rel, 2 = move vel, 3 = zero nearest
+	
+	// button bools
+	bStart  : BOOL := FALSE;
+	bStop   : BOOL := TRUE;
+	bCouple : BOOL := FALSE;
+	bAbsPos : BOOL := FALSE;
+	bRelPos	: BOOL := FALSE;
+	bVel	: BOOL := TRUE;
+	
+	// taps
+	bZeroNear : BOOL := FALSE;
+	bResetFaults :BOOL := FALSE;
+	
+	// values in HMI
+	iPos : INT := 0;
+	iVel : INT := 1440;
+	iAcc : INT := 720;
+	iPhs : INT := 0;
+	
+	// track previous values for updating function blocks
+	iPrevPos : INT := iPos;
+	iPrevVel : INT := iVel;
+	iPrevAcc : INT := iAcc;
+	iPrevPhs : INT := iPhs;
+	
+	iMaxVel : INT := 3600; // max 10 hz
+	eDirec : MC_Direction := MC_Direction.MC_Negative_Direction;
+	iDirMult : INT := -1; // multiplier: actVel = setVel * mult (used to reverse default)
+	
+	// outside first and last are ignored
+	iFirstIdx : INT := 2; // first motor index to control
+	iLastIdx : INT := 3; // last motor index to control
+	
+	iEndIdx : INT := 3; // used to ignore other indices when the motors are coupled, set such that only the iFirstIdx index motor is controlled 
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// test
+FOR i := iFirstIdx TO iLastIdx DO
+	// UPDATE AXES STATUS
+	axes[i].ReadStatus();
+	// UPDATE HEX ERRORS
+	arrHexErrors[i] := WORD_TO_HEXSTR(in:=UDINT_TO_WORD(MAIN.axes[i].Status.ErrorID), iPrecision:=4, bLoCase:=FALSE);
+	// RESTRICT VELOCITY
+	IF ABS(axes[i].NcToPlc.ActVelo) > iMaxVel THEN
+		M_SetState(0);
+	END_IF
+END_FOR
+
+
+// STARTUP
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+IF NOT bStarted THEN
+	// start each motor
+	FOR i := iFirstIdx TO iLastIdx DO
+		// default to OFF despite variable values
+		M_SetState(0);
+		arrMCResets[i](Axis:=axes[i]);
+		arrMCPowers[i](Axis:=axes[i], Enable:= TRUE, Enable_Positive:=TRUE, Enable_Negative:=TRUE);
+	END_FOR
+	
+	// if all motors powered, set to started
+	FOR i:=iFirstIdx TO iLastIdx DO
+		IF NOT arrMCPowers[i].Status THEN
+			EXIT;
+		ELSIF i=iLastIdx THEN
+			bStarted := TRUE;
+			M_SetMode(2);
+		END_IF
+	END_FOR
+END_IF
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+// MODE SELECTION
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// prevent no mode selection
+IF NOT bAbsPos AND iMode = 0 THEN
+	bAbsPos := TRUE;
+ELSIF NOT bRelPos AND iMode = 1 THEN
+	bRelPos := TRUE;
+ELSIF NOT bVel AND iMode = 2 THEN
+	bVel := TRUE;
+END_IF
+
+// switch modes
+IF iMode = 3 THEN
+	M_SetMode(3);
+ELSIF iMode = 4 THEN
+	M_SetMode(4);
+ELSIF bAbsPos AND iMode <> 0 THEN
+	M_SetMode(0);
+ELSIF bRelPos AND iMode <> 1 THEN
+	M_SetMode(1);
+ELSIF bVel AND iMode <> 2 THEN
+	M_SetMode(2);
+END_IF
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+// RUN STATE SELECTION
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// prevent turning off a button, only swapping allowed
+IF bRun AND NOT bStop THEN
+	bStart := TRUE;
+ELSIF NOT bRun AND NOT bStart THEN
+	bStop := TRUE;
+ELSE // invalid state
+	bStop := TRUE;
+END_IF
+
+// on off logic
+IF NOT bRun AND bStart THEN
+	M_SetState(1);
+END_IF
+IF bStop THEN
+	M_SetState(0);
+END_IF
+
+// handle zeroing button
+IF bZeroNear AND NOT bRun THEN
+	M_SetState(1);
+	M_SetMode(3);
+ELSIF bResetFaults AND NOT bRun THEN
+	M_SetState(0);
+	M_SetMode(4);
+END_IF
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+// COUPLING
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// disallow coupling while in motion
+IF bCouple AND NOT bCoupled THEN
+	FOR i:=iFirstIdx TO iLastIdx DO
+		IF axes[i].Status.Moving THEN
+			bCouple := FALSE;
+			EXIT;
+		END_IF
+	END_FOR
+END_IF
+
+// COUPLE/UNCOUPLE GEARS
+//arrMCGearOuts[1](Slave:=axes[1], Execute:=NOT bCouple AND bCoupled);
+//arrMCGearOuts[2](Slave:=axes[2], Execute:=NOT bCouple AND bCoupled);
+arrMCGearOuts[3](Slave:=axes[3], Execute:=NOT bCouple AND bCoupled);
+//arrMCGearIns[1](Master:=axes[0], Slave:=axes[1], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=-1);
+//arrMCGearIns[2](Master:=axes[0], Slave:=axes[2], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=-1);
+arrMCGearIns[3](Master:=axes[2], Slave:=axes[3], Execute:=bCouple AND NOT bCoupled, RatioNumerator:=-1);
+
+// check if uncoupling done
+IF (NOT bCouple AND bCoupled)THEN
+	FOR i:=iFirstIdx+1 TO iLastIdx DO
+		IF NOT arrMCGearOuts[i].Done THEN
+			EXIT;
+		ELSIF i=iLastIdx THEN
+			// if all out of gear, set the end index to the last index so that all the motors are controlled seperately again
+			iEndIdx := iLastIdx;
+			bCoupled := TRUE;
+		END_IF;
+	END_FOR
+END_IF
+// check if coupling done
+IF (bCouple AND NOT bCoupled) THEN
+	FOR i:=iFirstIdx+1 TO iLastIdx DO
+		IF NOT arrMCGearIns[i].InGear THEN
+			EXIT;
+		ELSIF i=iLastIdx THEN
+			// if all in gear, set the end index to the first index so that only the master is controlled
+			iEndIdx := iFirstIdx;
+			bCoupled := TRUE;
+		END_IF;
+	END_FOR
+END_IF
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+
+
+// operations to do only after startup
+IF bStarted THEN
+	
+
+	// PHASING
+	// set phase, master = BL, slave = TL
+	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	
+	IF iPrevPhs <> iPhs THEN
+		//arrMCPhaseAbsolutes[1](Master:=axes[0], Slave:=axes[1], Execute:=FALSE); // set phase of BR w BL
+		//arrMCPhaseAbsolutes[2](Master:=axes[0], Slave:=axes[2], Execute:=FALSE); // set phase of top w bottom
+		arrMCPhaseAbsolutes[3](Master:=axes[2], Slave:=axes[3], Execute:=FALSE); // set phase of TR w TL
+		iPrevPhs := iPhs;
+	END_IF
+	
+	IF bRun AND bCoupled THEN
+		// set phase of BR w BL
+		//arrMCPhaseAbsolutes[1](Master:=axes[0], Slave:=axes[1], Execute:=TRUE, PhaseShift:=0, Velocity:=iVel+180);
+		// set phase of top w bottom
+		//arrMCPhaseAbsolutes[2](Master:=axes[0], Slave:=axes[2], Execute:=TRUE, PhaseShift:=iPhs, Velocity:=iVel+180);
+		// set phase of TR w TL
+		arrMCPhaseAbsolutes[3](Master:=axes[2], Slave:=axes[3], Execute:=TRUE, PhaseShift:=0, Velocity:=iVel+180);
+	END_IF
+	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	
+	
+	
+	
+	// MAIN COMMAND LOOP
+	FOR i := iFirstIdx TO iEndIdx DO
+		
+	
+		// CHANGE RESETING
+		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		
+		// if values have been updated, unexecute relevant functions so that they can restart with correct values
+		IF (iPrevVel <> iVel) OR (iPrevAcc <> iAcc) THEN
+			arrMCMoveAbsolutes[i](Axis:=axes[i], Execute:=FALSE);
+			arrMCMoveRelatives[i](Axis:=axes[i], Execute:=FALSE);
+			arrMCMoveVelocitys[i](Axis:=axes[i], Execute:=FALSE);
+		ELSIF iPrevPos <> iPos THEN
+			arrMCMoveAbsolutes[i](Axis:=axes[i], Execute:=FALSE);
+			arrMCMoveRelatives[i](Axis:=axes[i], Execute:=FALSE);
+		END_IF
+		
+		// if end index then set the previous values for change checks above ^
+		IF i = iEndIdx THEN
+			iPrevPos := iPos;
+			iPrevVel := iVel;
+			iPrevAcc := iAcc;
+		END_IF
+		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		
+		
+		// RELATIVE MOVEMENT OPERATION
+		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		
+		// check if relative movement is done, set to stop
+		IF arrMCMoveRelatives[i].Done  THEN
+			arrRelsDone[i] := TRUE;
+			FOR j := iFirstIdx TO iEndIdx DO
+				IF arrRelsDone[j] = FALSE THEN EXIT; END_IF
+				IF j = iEndIdx THEN
+					M_SetState(0);
+					FOR k := iFirstIdx TO iLastIdx DO
+						arrRelsDone[k] := FALSE;
+					END_FOR
+				END_IF
+			END_FOR
+		END_IF
+		// check if relative movement is done, set to stop (SPECIFIC FOR ZEROING)
+		IF arrMCMoveRelativesZero[i].Done  THEN
+			arrRelsDoneZero[i] := TRUE;
+			FOR j := iFirstIdx TO iEndIdx DO
+				IF arrRelsDoneZero[j] = FALSE THEN EXIT; END_IF
+				IF j = iEndIdx THEN
+					M_SetState(0);
+					FOR k := iFirstIdx TO iLastIdx DO
+						arrRelsDoneZero[k] := FALSE;
+					END_FOR
+					IF iMode=3 THEN
+						FOR k := iFirstIdx TO iLastIdx DO
+							arrZeroPoss[k] := 0;
+						END_FOR
+						M_SetMode(2);
+					END_IF
+				END_IF
+			END_FOR
+		END_IF
+		
+		// calculate distance to nearest zero
+		IF iMode = 3 AND arrZeroPoss[i] = 0 THEN
+			IF axes[i].NcToPlc.ModuloActPos > 180 THEN
+				arrZeroPoss[i] := 360 - axes[i].NcToPlc.ModuloActPos;
+			ELSE
+				arrZeroPoss[i] := -axes[i].NcToPlc.ModuloActPos;
+			END_IF
+		END_IF
+		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>	
+		
+		
+		
+		
+		// run MAIN OPERATIONS, execute values based on various bools
+		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		
+		arrMCSetPositions[i](Axis:=axes[i], Execute:=TRUE, Position:=0); // very important for some reason
+		
+		arrMCMoveAbsolutes[i](Axis:=axes[i], Execute:= iMode=0 AND bRun,
+								Position:=iPos*iDirMult, Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
+								
+		arrMCMoveRelatives[i](Axis:=axes[i], Execute:= iMode=1 AND bRun AND NOT arrRelsDone[i],
+								Distance:=iPos*iDirMult, Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
+								
+		arrMCMoveVelocitys[i](Axis:=axes[i], Execute:= iMode=2 AND bRun, Direction:=eDirec,
+								Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
+								
+		arrMCMoveRelativesZero[i](Axis:=axes[i], Execute:= iMode=3 AND bRun AND NOT arrRelsDoneZero[i],
+								Distance:=arrZeroPoss[i], Velocity:=iVel, Acceleration:=iAcc, Deceleration:=iAcc);
+		
+		// NEVER MOVE FROM LAST CALL
+		arrMCHalts[i](Axis:=axes[i],Execute:=NOT bRun, Deceleration:=400);
+		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>	
+	END_FOR
+END_IF
+]]></ST>
+    </Implementation>
+    <Method Name="M_SetMode" Id="{35424578-132b-4116-862c-bee1bc6aa9d2}">
+      <Declaration><![CDATA[METHOD PRIVATE M_SetMode
+VAR_INPUT
+	iModeSet : INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE iModeSet OF
+	0 : // move absolute
+		bAbsPos := TRUE;
+		bRelPos := FALSE;
+		bVel := FALSE;
+		iMode := 0;
+	1 : // move relative
+		bAbsPos := FALSE;
+		bRelPos := TRUE;
+		bVel := FALSE;
+		iMode := 1;
+	2 : // move velocity
+		bAbsPos := FALSE;
+		bRelPos := FALSE;
+		bVel := TRUE;
+		iMode := 2;
+	3 : // move to nearest zero
+		bAbsPos := FALSE;
+		bRelPos := FALSE;
+		bVel := FALSE;
+		iMode := 3;
+	
+	4 : // reset faults
+		bAbsPos := FALSE;
+		bRelPos := FALSE;
+		bVel := FALSE;
+		iMode := 4;
+		bStarted := FALSE;
+	ELSE
+		ADSLOGSTR(
+			msgCtrlMask := ADSLOG_MSGTYPE_ERROR, 
+			msgFmtStr   := 'Invalid Mode%s', 
+			strArg      := ''
+		); 
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="M_SetState" Id="{3016c449-8a40-44e1-81c5-5a3b4d25c33b}">
+      <Declaration><![CDATA[METHOD PRIVATE M_SetState
+VAR_INPUT
+	iState: INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE iState OF
+	0 :
+		bRun := FALSE;
+		bStart := FALSE;
+		bStop := TRUE;
+	1 :
+		bRun := TRUE;
+		bStart := TRUE;
+		bStop := FALSE;
+	ELSE
+		ADSLOGSTR(
+			msgCtrlMask := ADSLOG_MSGTYPE_ERROR, 
+			msgFmtStr   := 'Invalid State%s', 
+			strArg      := ''
+		); 
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="MAIN">
+      <LineId Id="13417" Count="0" />
+      <LineId Id="13008" Count="0" />
+      <LineId Id="13779" Count="1" />
+      <LineId Id="13901" Count="1" />
+      <LineId Id="13783" Count="0" />
+      <LineId Id="13781" Count="1" />
+      <LineId Id="13009" Count="0" />
+      <LineId Id="13326" Count="0" />
+      <LineId Id="13660" Count="0" />
+      <LineId Id="13659" Count="0" />
+      <LineId Id="13413" Count="0" />
+      <LineId Id="13341" Count="0" />
+      <LineId Id="13327" Count="0" />
+      <LineId Id="14031" Count="0" />
+      <LineId Id="13328" Count="1" />
+      <LineId Id="13332" Count="2" />
+      <LineId Id="13336" Count="4" />
+      <LineId Id="13010" Count="0" />
+      <LineId Id="13414" Count="0" />
+      <LineId Id="13411" Count="0" />
+      <LineId Id="13408" Count="1" />
+      <LineId Id="13035" Count="10" />
+      <LineId Id="13232" Count="0" />
+      <LineId Id="13049" Count="0" />
+      <LineId Id="13965" Count="0" />
+      <LineId Id="13967" Count="0" />
+      <LineId Id="13374" Count="0" />
+      <LineId Id="13462" Count="0" />
+      <LineId Id="13376" Count="0" />
+      <LineId Id="13463" Count="0" />
+      <LineId Id="13378" Count="0" />
+      <LineId Id="13465" Count="0" />
+      <LineId Id="13062" Count="0" />
+      <LineId Id="13400" Count="0" />
+      <LineId Id="13410" Count="0" />
+      <LineId Id="13399" Count="0" />
+      <LineId Id="13383" Count="0" />
+      <LineId Id="13406" Count="1" />
+      <LineId Id="13384" Count="10" />
+      <LineId Id="13397" Count="0" />
+      <LineId Id="13840" Count="0" />
+      <LineId Id="13398" Count="0" />
+      <LineId Id="13382" Count="0" />
+      <LineId Id="13599" Count="0" />
+      <LineId Id="13063" Count="2" />
+      <LineId Id="13071" Count="1" />
+      <LineId Id="13968" Count="0" />
+      <LineId Id="13970" Count="0" />
+      <LineId Id="13969" Count="0" />
+      <LineId Id="13404" Count="1" />
+      <LineId Id="13402" Count="0" />
+      <LineId Id="13401" Count="0" />
+      <LineId Id="13075" Count="2" />
+      <LineId Id="14008" Count="1" />
+      <LineId Id="14013" Count="0" />
+      <LineId Id="14011" Count="1" />
+      <LineId Id="14010" Count="0" />
+      <LineId Id="13079" Count="1" />
+      <LineId Id="13903" Count="1" />
+      <LineId Id="13081" Count="0" />
+      <LineId Id="13084" Count="6" />
+      <LineId Id="13995" Count="2" />
+      <LineId Id="14006" Count="0" />
+      <LineId Id="14034" Count="0" />
+      <LineId Id="14007" Count="0" />
+      <LineId Id="14000" Count="1" />
+      <LineId Id="13092" Count="3" />
+      <LineId Id="13985" Count="1" />
+      <LineId Id="13988" Count="1" />
+      <LineId Id="14033" Count="0" />
+      <LineId Id="13993" Count="0" />
+      <LineId Id="13990" Count="1" />
+      <LineId Id="13097" Count="1" />
+      <LineId Id="13100" Count="0" />
+      <LineId Id="13325" Count="0" />
+      <LineId Id="13121" Count="0" />
+      <LineId Id="13418" Count="0" />
+      <LineId Id="13443" Count="0" />
+      <LineId Id="13123" Count="1" />
+      <LineId Id="13320" Count="0" />
+      <LineId Id="14043" Count="0" />
+      <LineId Id="14038" Count="1" />
+      <LineId Id="13127" Count="0" />
+      <LineId Id="14037" Count="0" />
+      <LineId Id="13128" Count="7" />
+      <LineId Id="13299" Count="0" />
+      <LineId Id="13136" Count="0" />
+      <LineId Id="13298" Count="0" />
+      <LineId Id="13137" Count="1" />
+      <LineId Id="13297" Count="0" />
+      <LineId Id="13139" Count="0" />
+      <LineId Id="13316" Count="0" />
+      <LineId Id="13140" Count="0" />
+      <LineId Id="13449" Count="0" />
+      <LineId Id="13451" Count="0" />
+      <LineId Id="14042" Count="0" />
+      <LineId Id="13321" Count="0" />
+      <LineId Id="13141" Count="1" />
+      <LineId Id="14055" Count="0" />
+      <LineId Id="14044" Count="1" />
+      <LineId Id="14052" Count="0" />
+      <LineId Id="14054" Count="0" />
+      <LineId Id="13144" Count="7" />
+      <LineId Id="14056" Count="0" />
+      <LineId Id="13152" Count="5" />
+      <LineId Id="14046" Count="0" />
+      <LineId Id="13158" Count="0" />
+      <LineId Id="14047" Count="1" />
+      <LineId Id="13323" Count="0" />
+      <LineId Id="14051" Count="0" />
+      <LineId Id="14050" Count="0" />
+      <LineId Id="13160" Count="4" />
+      <LineId Id="13167" Count="0" />
+      <LineId Id="13982" Count="1" />
+      <LineId Id="13427" Count="0" />
+      <LineId Id="13176" Count="7" />
+      <LineId Id="13187" Count="0" />
+      <LineId Id="13600" Count="0" />
+      <LineId Id="13979" Count="1" />
+      <LineId Id="13434" Count="0" />
+      <LineId Id="13192" Count="0" />
+      <LineId Id="13968" Count="0" />
+      <LineId Id="13972" Count="0" />
+      <LineId Id="13431" Count="0" />
+      <LineId Id="13601" Count="0" />
+      <LineId Id="13195" Count="3" />
+      <LineId Id="14058" Count="8" />
+      <LineId Id="13324" Count="0" />
+      <LineId Id="13351" Count="0" />
+      <LineId Id="13314" Count="0" />
+      <LineId Id="14067" Count="1" />
+      <LineId Id="14071" Count="0" />
+      <LineId Id="14070" Count="0" />
+      <LineId Id="14072" Count="0" />
+      <LineId Id="13201" Count="0" />
+      <LineId Id="13300" Count="0" />
+      <LineId Id="13202" Count="0" />
+      <LineId Id="13302" Count="0" />
+      <LineId Id="13306" Count="0" />
+      <LineId Id="13203" Count="0" />
+      <LineId Id="13303" Count="0" />
+      <LineId Id="13307" Count="0" />
+      <LineId Id="13204" Count="0" />
+      <LineId Id="13304" Count="0" />
+      <LineId Id="13308" Count="0" />
+      <LineId Id="13210" Count="0" />
+      <LineId Id="13305" Count="0" />
+      <LineId Id="13212" Count="0" />
+      <LineId Id="13231" Count="0" />
+      <LineId Id="13213" Count="0" />
+      <LineId Id="14069" Count="0" />
+      <LineId Id="13214" Count="1" />
+      <LineId Id="452" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.M_SetMode">
+      <LineId Id="14" Count="19" />
+      <LineId Id="44" Count="1" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="46" Count="2" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="35" Count="5" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="MAIN.M_SetState">
+      <LineId Id="6" Count="15" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
