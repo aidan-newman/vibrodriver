@@ -25,6 +25,8 @@ VAR
 	arrMCMoveRelativesZero	: ARRAY[0..3] OF MC_MoveRelative;
 	arrZeroPoss : ARRAY[0..3] OF LREAL;
 	
+	arrHexErrors : ARRAY[0..3] OF T_MaxString; // store hex format of axes errors
+	
 	i: INT; // generic loop index 1
 	j: INT; // generic loop index 2
 	k: INT; // generic loop index 3
@@ -43,6 +45,7 @@ VAR
 	
 	// taps
 	bZeroNear : BOOL := FALSE;
+	bResetFaults :BOOL := FALSE;
 	
 	// values in HMI
 	iPos : INT := 0;
@@ -71,6 +74,8 @@ END_VAR]]></Declaration>
 FOR i := iFirstIdx TO iLastIdx DO
 	// UPDATE AXES STATUS
 	axes[i].ReadStatus();
+	// UPDATE HEX ERRORS
+	arrHexErrors[i] := WORD_TO_HEXSTR(in:=UDINT_TO_WORD(MAIN.axes[i].Status.ErrorID), iPrecision:=4, bLoCase:=FALSE);
 	// RESTRICT VELOCITY
 	IF ABS(axes[i].NcToPlc.ActVelo) > iMaxVel THEN
 		M_SetState(0);
@@ -95,7 +100,8 @@ IF NOT bStarted THEN
 			EXIT;
 		ELSIF i=iLastIdx THEN
 			bStarted := TRUE;
-		END_IF;
+			M_SetMode(2);
+		END_IF
 	END_FOR
 END_IF
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -115,6 +121,8 @@ END_IF
 // switch modes
 IF iMode = 3 THEN
 	M_SetMode(3);
+ELSIF iMode = 4 THEN
+	M_SetMode(4);
 ELSIF bAbsPos AND iMode <> 0 THEN
 	M_SetMode(0);
 ELSIF bRelPos AND iMode <> 1 THEN
@@ -148,6 +156,9 @@ END_IF
 IF bZeroNear AND NOT bRun THEN
 	M_SetState(1);
 	M_SetMode(3);
+ELSIF bResetFaults AND NOT bRun THEN
+	M_SetState(0);
+	M_SetMode(4);
 END_IF
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -356,6 +367,13 @@ END_VAR]]></Declaration>
 		bRelPos := FALSE;
 		bVel := FALSE;
 		iMode := 3;
+	
+	4 : // reset faults
+		bAbsPos := FALSE;
+		bRelPos := FALSE;
+		bVel := FALSE;
+		iMode := 4;
+		bStarted := FALSE;
 	ELSE
 		ADSLOGSTR(
 			msgCtrlMask := ADSLOG_MSGTYPE_ERROR, 
@@ -394,6 +412,7 @@ END_CASE
       <LineId Id="13417" Count="0" />
       <LineId Id="13008" Count="0" />
       <LineId Id="13779" Count="1" />
+      <LineId Id="13901" Count="1" />
       <LineId Id="13783" Count="0" />
       <LineId Id="13781" Count="1" />
       <LineId Id="13009" Count="0" />
@@ -406,11 +425,7 @@ END_CASE
       <LineId Id="14031" Count="0" />
       <LineId Id="13328" Count="1" />
       <LineId Id="13332" Count="2" />
-      <LineId Id="13340" Count="0" />
-      <LineId Id="14032" Count="0" />
-      <LineId Id="14030" Count="0" />
-      <LineId Id="14024" Count="5" />
-      <LineId Id="14023" Count="0" />
+      <LineId Id="13336" Count="4" />
       <LineId Id="13010" Count="0" />
       <LineId Id="13414" Count="0" />
       <LineId Id="13411" Count="0" />
@@ -418,6 +433,8 @@ END_CASE
       <LineId Id="13035" Count="10" />
       <LineId Id="13232" Count="0" />
       <LineId Id="13049" Count="0" />
+      <LineId Id="13965" Count="0" />
+      <LineId Id="13967" Count="0" />
       <LineId Id="13374" Count="0" />
       <LineId Id="13462" Count="0" />
       <LineId Id="13376" Count="0" />
@@ -438,6 +455,9 @@ END_CASE
       <LineId Id="13599" Count="0" />
       <LineId Id="13063" Count="2" />
       <LineId Id="13071" Count="1" />
+      <LineId Id="13968" Count="0" />
+      <LineId Id="13970" Count="0" />
+      <LineId Id="13969" Count="0" />
       <LineId Id="13404" Count="1" />
       <LineId Id="13402" Count="0" />
       <LineId Id="13401" Count="0" />
@@ -465,7 +485,7 @@ END_CASE
       <LineId Id="13100" Count="0" />
       <LineId Id="13325" Count="0" />
       <LineId Id="13121" Count="0" />
-      <LineId Id="14040" Count="1" />
+      <LineId Id="13418" Count="0" />
       <LineId Id="13443" Count="0" />
       <LineId Id="13123" Count="1" />
       <LineId Id="13320" Count="0" />
@@ -544,7 +564,13 @@ END_CASE
       <LineId Id="452" Count="0" />
     </LineIds>
     <LineIds Name="MAIN.M_SetMode">
-      <LineId Id="14" Count="26" />
+      <LineId Id="14" Count="19" />
+      <LineId Id="44" Count="1" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="46" Count="2" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="35" Count="5" />
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="MAIN.M_SetState">

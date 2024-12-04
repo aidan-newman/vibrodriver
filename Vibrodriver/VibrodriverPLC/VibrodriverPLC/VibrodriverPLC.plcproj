@@ -57,6 +57,7 @@
   <ItemGroup>
     <PlaceholderReference Include="SimpleTempCtrl">
       <DefaultResolution>SimpleTempCtrl, * (TE140x Module Vendor)</DefaultResolution>
+      <Namespace>SimpleTempCtrl</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="System_VisuElemMeter">
       <DefaultResolution>VisuElemMeter, 3.5.13.0 (System)</DefaultResolution>
@@ -141,6 +142,10 @@
           <Value>FALSE</Value>
         </Parameter>
       </Parameters>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_Utilities">
+      <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Utilities</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
