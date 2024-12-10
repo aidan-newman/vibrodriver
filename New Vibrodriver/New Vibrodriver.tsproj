@@ -1489,7 +1489,8 @@ External Setpoint Generation:
 						<General UnitName="°"/>
 						<Dynamic Acceleration="3600" Deceleration="1200" Jerk="36000"/>
 						<Velo RefSearch="90" RefSync="90" SlowManual="360" FastManual="3600" Fast="9200" Maximum="10000"/>
-						<TargetPosControl Range="0.02"/>
+						<PositionAreaControl Enable="false"/>
+						<TargetPosControl Enable="false" Range="0.1"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
 					<Encoder Name="Enc" EncType="19">
@@ -1608,8 +1609,7 @@ External Setpoint Generation:
 					</Drive>
 					<Controller Name="Ctrl" CtrType="1">
 						<CtrPara PriorControlFactor="1">
-							<PosDiffControl Range="15"/>
-							<PID PosKp="0.5"/>
+							<PosDiffControl Range="10"/>
 							<Observer BandWidth="20"/>
 						</CtrPara>
 					</Controller>
@@ -1634,7 +1634,8 @@ External Setpoint Generation:
 						<General UnitName="°"/>
 						<Dynamic Acceleration="3600" Deceleration="1200" Jerk="36000"/>
 						<Velo RefSearch="90" RefSync="90" SlowManual="360" FastManual="3600" Fast="9200" Maximum="10000"/>
-						<TargetPosControl Range="0.02"/>
+						<PositionAreaControl Enable="false"/>
+						<TargetPosControl Enable="false" Range="0.1"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
 					<Encoder Name="Enc" EncType="19">
@@ -1753,8 +1754,7 @@ External Setpoint Generation:
 					</Drive>
 					<Controller Name="Ctrl" CtrType="1">
 						<CtrPara PriorControlFactor="1">
-							<PosDiffControl Range="15"/>
-							<PID PosKp="0.5"/>
+							<PosDiffControl Range="10"/>
 							<Observer BandWidth="20"/>
 						</CtrPara>
 					</Controller>
@@ -1777,7 +1777,7 @@ External Setpoint Generation:
 		</Motion>
 		<Plc>
 			<Project GUID="{6756F96C-8411-49AE-84E5-4B5434119490}" Name="Control" PrjFilePath="Control\Control.plcproj" TmcFilePath="Control\Control.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Control\Control.tmc" TmcHash="{BEFFB56B-5401-5FBA-E7F4-BFEA0D4FFBE6}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="Control\Control.tmc" TmcHash="{0233FEA2-32C9-1284-7531-576B1B02DADA}">
 					<Name>Control Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">

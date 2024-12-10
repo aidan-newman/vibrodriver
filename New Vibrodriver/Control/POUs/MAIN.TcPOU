@@ -59,7 +59,7 @@ VAR
 	iPrevAcc : INT := iAcc;
 	iPrevPhs : INT := iPhs;
 	
-	iMaxVel : INT := 3600; // max 10 hz
+	iMaxVel : INT := 10000; // max 10 hz
 	eDirec : MC_Direction := MC_Direction.MC_Negative_Direction;
 	iDirMult : INT := -1; // multiplier: actVel = setVel * mult (used to reverse default)
 	
@@ -212,7 +212,6 @@ END_IF
 
 
 
-
 // operations to do only after startup
 IF bStarted THEN
 	
@@ -302,7 +301,6 @@ IF bStarted THEN
 				END_IF
 			END_FOR
 		END_IF
-		
 		// calculate distance to nearest zero
 		IF iMode = 3 AND arrZeroPoss[i] = 0 THEN
 			IF axes[i].NcToPlc.ModuloActPos > 180 THEN
@@ -409,7 +407,15 @@ END_CASE
       </Implementation>
     </Method>
     <LineIds Name="MAIN">
-      <LineId Id="73" Count="268" />
+      <LineId Id="73" Count="138" />
+      <LineId Id="428" Count="0" />
+      <LineId Id="214" Count="26" />
+      <LineId Id="650" Count="1" />
+      <LineId Id="243" Count="23" />
+      <LineId Id="654" Count="45" />
+      <LineId Id="267" Count="0" />
+      <LineId Id="653" Count="0" />
+      <LineId Id="316" Count="25" />
     </LineIds>
     <LineIds Name="MAIN.M_SetMode">
       <LineId Id="14" Count="19" />
