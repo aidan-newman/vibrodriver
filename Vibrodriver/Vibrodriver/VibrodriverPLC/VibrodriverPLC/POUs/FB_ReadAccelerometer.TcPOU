@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.13">
+  <POU Name="FB_ReadAccelerometer" Id="{b269e3fb-3af3-4ef8-9302-3d60b57b492d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ReadAccelerometer
+VAR_INPUT // input inputs to function
+	// none
+END_VAR
+VAR_OUTPUT // outputs of function
+	accX : LREAL;
+	accY : LREAL;
+	accZ : LREAL := 0;
+END_VAR
+VAR
+	c1Sample AT %I* : DINT; // channel 1 voltage (mV) -  x axis
+	c2Sample AT %I* : DINT; // channel 2 voltage (mV) -  y axis (+y = down)
+	c3Sample AT %I* : DINT; // channel 3 voltage (mV) -  z axis
+	
+	// ELM3604 defined resolution:
+	// FSV (10V) / 7812500
+	
+	// under/overrange (if bit set): FSV / 8388607 
+	
+	// NOTE:
+	//	The input voltage must NOT fall below -5 V with respect TO GND, the measuring accuracy is THEN no longer
+	//	given. THIS means a measurement down TO -10 V with respect TO GND is only possible IF AT the same TIME an
+	//	offset of at least +5 V is applied, as is usual with IEPE supply.
+	
+	// voltage sensitivity: 100 ± 5%  mV/g
+	// range: -60 g  ->  60 g
+	g : REAL := 9.80665;
+	peakVal : REAL := 10;
+	maxInt : REAL := 7812500;
+	sens : REAL := 0.1; //  V/g
+	mult : REAL := g * peakVal / maxInt / sens;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[accX := DINT_TO_REAL(c1Sample) * mult; // m/s^2
+accY := DINT_TO_REAL(c2Sample) * mult; // m/s^2]]></ST>
+    </Implementation>
+    <LineIds Name="FB_ReadAccelerometer">
+      <LineId Id="71" Count="0" />
+      <LineId Id="37" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
